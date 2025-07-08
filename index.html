@@ -10,7 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-</head>
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
             background: #1a1a1a;
@@ -340,7 +340,7 @@
             background: #e64a19;
         }
 
-        /* Status połączenia */
+        /* Status połączenia - usunięto, ale zostawiam placeholder styl, jeśli będzie potrzebne w przyszłości */
         .connection-status {
             position: fixed;
             top: 20px;
@@ -431,18 +431,52 @@
             .item-primary { font-size: 26px; }
             .item-secondary { font-size: 22px; }
         }
+
+        /* Style dla pól edycyjnych */
+        .edit-fields {
+            display: none; /* Domyślnie ukryte */
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .edit-fields.active {
+            display: flex; /* Widoczne po odblokowaniu */
+        }
+
+        .edit-fields label {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .edit-fields textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            min-height: 80px;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .code-section {
+            margin-bottom: 20px;
+        }
+
+        .code-section.hidden {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
-    <!-- Status połączenia -->
-    <div class="connection-status status-disconnected" id="connectionStatus">
+    <div class="connection-status status-disconnected" id="connectionStatus" style="display: none;">
         <span class="status-dot"></span>
-        <span id="statusText">Nie połączono z Google Sheets</span>
+        <span id="statusText"></span>
     </div>
 
-    <!-- Główny dashboard -->
     <div class="dashboard">
-        <!-- Nagłówek -->
         <header class="header">
             <h1 class="school-name" id="schoolName">Tablica Informacyjna</h1>
             <div class="date-time">
@@ -451,17 +485,14 @@
             </div>
         </header>
 
-        <!-- Pasek informacyjny -->
         <div class="ticker-wrapper">
             <div class="ticker-content" id="tickerContent">
-                <span class="ticker-item">Podłącz Google Sheets aby rozpocząć wyświetlanie informacji</span>
-                <span class="ticker-item">Podłącz Google Sheets aby rozpocząć wyświetlanie informacji</span>
+                <span class="ticker-item">Wpisz tekst paska informacyjnego w panelu konfiguracji, aby wyświetlić bieżące wiadomości.</span>
+                <span class="ticker-item">Wpisz tekst paska informacyjnego w panelu konfiguracji, aby wyświetlić bieżące wiadomości.</span>
             </div>
         </div>
 
-        <!-- Główna siatka -->
         <div class="content-grid">
-            <!-- Dyżury -->
             <div class="card">
                 <div class="card-header duties-header">
                     <span class="card-icon">👥</span>
@@ -477,7 +508,6 @@
                 </div>
             </div>
 
-            <!-- Zastępstwa -->
             <div class="card">
                 <div class="card-header substitutes-header">
                     <span class="card-icon">🔄</span>
@@ -493,7 +523,6 @@
                 </div>
             </div>
 
-            <!-- Ogłoszenia -->
             <div class="card">
                 <div class="card-header announcements-header">
                     <span class="card-icon">📢</span>
@@ -511,45 +540,57 @@
         </div>
     </div>
 
-    <!-- Przycisk konfiguracji -->
     <button class="config-toggle" onclick="toggleConfig()" id="configToggle">⚙️</button>
 
-    <!-- Panel konfiguracji -->
     <div class="config-panel" id="configPanel">
-        <h3 class="config-header">🔗 Połącz z Google Sheets</h3>
+        <h3 class="config-header">⚙️ Konfiguracja Tablicy</h3>
         
         <div class="config-info">
-            <h4>📊 Jak to działa?</h4>
-            <p>1. Stwórz arkusz Google Sheets</p>
-            <p>2. Udostępnij go publicznie</p>
-            <p>3. Wklej ID arkusza poniżej</p>
-            <p>4. Tablica będzie automatycznie pobierać dane!</p>
+            <h4>Zarządzanie treścią</h4>
+            <p>Wprowadź kod, aby odblokować edycję treści.</p>
         </div>
 
-        <input type="text" class="config-input" id="sheetsId" 
-               placeholder="Wklej tutaj ID arkusza Google Sheets"
-               value="">
+        <div class="code-section" id="codeSection">
+            <input type="password" class="config-input" id="accessCode" placeholder="Wprowadź kod dostępu">
+            <button class="btn btn-connect" onclick="unlockEditing()">
+                🔑 Odblokuj Edycję
+            </button>
+        </div>
+
+        <div class="edit-fields" id="editFields">
+            <label for="editSchoolName">Nazwa Szkoły:</label>
+            <textarea id="editSchoolName" class="config-input" placeholder="Wpisz nazwę szkoły"></textarea>
+
+            <label for="editTicker">Pasek informacyjny (oddzielaj średnikami ';'):</label>
+            <textarea id="editTicker" class="config-input" placeholder="Wpisz tekst paska informacyjnego"></textarea>
+
+            <label for="editDuties">Dyżury nauczycieli (format: 'Imię Nazwisko;Miejsce' każda linia):</label>
+            <textarea id="editDuties" class="config-input" placeholder="Np. Jan Kowalski;Korytarz główny"></textarea>
+
+            <label for="editSubstitutes">Zastępstwa (format: 'Klasa;Szczegóły' każda linia):</label>
+            <textarea id="editSubstitutes" class="config-input" placeholder="Np. 5a;Zastępstwo z matematyki"></textarea>
+
+            <label for="editAnnouncements">Ogłoszenia (każda linia to nowe ogłoszenie):</label>
+            <textarea id="editAnnouncements" class="config-input" placeholder="Wpisz ogłoszenia"></textarea>
+
+            <button class="btn btn-connect" onclick="saveContent()">
+                💾 Zapisz Zmiany
+            </button>
+        </div>
 
         <div class="config-buttons">
-            <button class="btn btn-connect" onclick="connectSheets()">
-                🔌 Połącz arkusz
-            </button>
-            <button class="btn btn-help" onclick="showHelp()">
+             <button class="btn btn-help" onclick="showHelp()">
                 ❓ Pomoc
             </button>
         </div>
     </div>
 
-    <!-- Loader -->
     <div class="loader" id="loader">
         <div class="loader-spinner"></div>
     </div>
 
     <script>
-        // Konfiguracja
-        let sheetsId = '';
-        let refreshInterval = null;
-        const API_KEY = 'AIzaSyBNlYH01_9Hc5S1J9vuFmu2nUqBZJNAXxs'; // Publiczny klucz API dla demo
+        const EDIT_CODE = 'admin123';
 
         // Aktualizacja czasu
         function updateDateTime() {
@@ -576,123 +617,78 @@
 
         // Pokazanie pomocy
         function showHelp() {
-            window.open('https://docs.google.com/document/d/1fQ7aTpjLBqFqYfTJrBQCUxY2DaGSoWJQM3tGVhNXxHc/edit?usp=sharing', '_blank');
+            // Można dodać link do zewnętrznego dokumentu pomocy lub wyświetlić modal
+            alert('Funkcja pomocy nie jest jeszcze zaimplementowana. W przyszłości znajdziesz tu szczegółowe instrukcje dotyczące obsługi tablicy.');
         }
 
-        // Połączenie z arkuszem
-        async function connectSheets() {
-            sheetsId = document.getElementById('sheetsId').value.trim();
-            
-            if (!sheetsId) {
-                alert('❌ Proszę wkleić ID arkusza Google Sheets!');
-                return;
-            }
-
-            // Zapisz ID w localStorage
-            localStorage.setItem('sheetsId', sheetsId);
-            
-            // Schowaj panel
-            toggleConfig();
-            
-            // Załaduj dane
-            await loadDataFromSheets();
-            
-            // Ustaw automatyczne odświeżanie co 30 sekund
-            if (refreshInterval) clearInterval(refreshInterval);
-            refreshInterval = setInterval(loadDataFromSheets, 30000);
-        }
-
-        // Ładowanie danych z Google Sheets
-        async function loadDataFromSheets() {
-            if (!sheetsId) return;
-
+        // Odblokowanie edycji
+        function unlockEditing() {
+            const accessCodeInput = document.getElementById('accessCode');
+            const codeSection = document.getElementById('codeSection');
+            const editFields = document.getElementById('editFields');
             const loader = document.getElementById('loader');
+
             loader.classList.add('show');
 
-            try {
-                // Pobierz dane z arkusza
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetsId}/values/A:B?key=${API_KEY}`;
-                const response = await fetch(url);
-                
-                if (!response.ok) {
-                    throw new Error('Nie można pobrać danych z arkusza');
+            setTimeout(() => { // Symulacja opóźnienia
+                if (accessCodeInput.value === EDIT_CODE) {
+                    codeSection.classList.add('hidden');
+                    editFields.classList.add('active');
+                    alert('✅ Edycja odblokowana!');
+                } else {
+                    alert('❌ Nieprawidłowy kod dostępu!');
+                    accessCodeInput.value = ''; // Wyczyść pole po błędnym kodzie
                 }
-
-                const data = await response.json();
-                const rows = data.values || [];
-
-                // Parsuj dane
-                let schoolName = '';
-                let ticker = '';
-                const duties = [];
-                const substitutes = [];
-                const announcements = [];
-
-                let currentSection = '';
-                rows.forEach(row => {
-                    const [col1, col2] = row;
-                    
-                    // Sprawdź czy to nagłówek sekcji
-                    if (col1 && !col2) {
-                        currentSection = col1.toUpperCase();
-                        return;
-                    }
-                    
-                    // Przetwarzaj dane w zależności od sekcji
-                    switch(currentSection) {
-                        case 'NAZWA SZKOŁY':
-                            if (col1) schoolName = col1;
-                            break;
-                        case 'PASEK INFORMACYJNY':
-                            if (col1) ticker = col1;
-                            break;
-                        case 'DYŻURY':
-                            if (col1 && col2) duties.push({ name: col1, location: col2 });
-                            break;
-                        case 'ZASTĘPSTWA':
-                            if (col1 && col2) substitutes.push({ class: col1, details: col2 });
-                            break;
-                        case 'OGŁOSZENIA':
-                            if (col1) announcements.push(col1);
-                            break;
-                    }
-                });
-
-                // Aktualizuj interfejs
-                updateUI(schoolName, ticker, duties, substitutes, announcements);
-                
-                // Aktualizuj status
-                updateConnectionStatus(true);
-
-            } catch (error) {
-                console.error('Błąd:', error);
-                updateConnectionStatus(false);
-                alert(`❌ Błąd połączenia z arkuszem!\n\nSprawdź czy:\n1. Arkusz jest udostępniony publicznie\n2. ID arkusza jest poprawne\n3. Struktura arkusza jest zgodna z instrukcją`);
-            } finally {
                 loader.classList.remove('show');
-            }
+            }, 500);
         }
 
-        // Aktualizacja interfejsu
-        function updateUI(schoolName, ticker, duties, substitutes, announcements) {
-            // Nazwa szkoły
-            if (schoolName) {
-                document.getElementById('schoolName').textContent = schoolName;
-            }
+        // Zapisywanie treści do localStorage
+        function saveContent() {
+            const schoolName = document.getElementById('editSchoolName').value;
+            const ticker = document.getElementById('editTicker').value;
+            const duties = document.getElementById('editDuties').value;
+            const substitutes = document.getElementById('editSubstitutes').value;
+            const announcements = document.getElementById('editAnnouncements').value;
 
-            // Pasek informacyjny
-            if (ticker) {
-                const tickerContent = document.getElementById('tickerContent');
-                tickerContent.innerHTML = `
-                    <span class="ticker-item">${ticker}</span>
-                    <span class="ticker-item">${ticker}</span>
-                `;
-            }
+            localStorage.setItem('schoolName', schoolName);
+            localStorage.setItem('tickerContent', ticker);
+            localStorage.setItem('dutiesContent', duties);
+            localStorage.setItem('substitutesContent', substitutes);
+            localStorage.setItem('announcementsContent', announcements);
+            
+            displayContent(); // Odśwież widok
+            toggleConfig(); // Schowaj panel po zapisie
+            alert('✅ Zmiany zostały zapisane!');
+        }
+
+        // Wyświetlanie treści z localStorage lub domyślnych wartości
+        function displayContent() {
+            const schoolName = localStorage.getItem('schoolName') || 'Tablica Informacyjna';
+            const ticker = localStorage.getItem('tickerContent') || 'Wpisz tekst paska informacyjnego w panelu konfiguracji, aby wyświetlić bieżące wiadomości.';
+            const dutiesRaw = localStorage.getItem('dutiesContent') || '';
+            const substitutesRaw = localStorage.getItem('substitutesContent') || '';
+            const announcementsRaw = localStorage.getItem('announcementsContent') || '';
+
+            document.getElementById('schoolName').textContent = schoolName;
+            document.getElementById('editSchoolName').value = schoolName;
+
+            const tickerContentElement = document.getElementById('tickerContent');
+            tickerContentElement.innerHTML = `
+                <span class="ticker-item">${ticker}</span>
+                <span class="ticker-item">${ticker}</span>
+            `;
+            document.getElementById('editTicker').value = ticker;
 
             // Dyżury
             const dutyList = document.getElementById('dutyList');
-            if (duties.length > 0) {
-                dutyList.innerHTML = '';
+            dutyList.innerHTML = '';
+            const duties = dutiesRaw.split('\n').filter(line => line.trim() !== '').map(line => {
+                const parts = line.split(';');
+                return { name: parts[0] ? parts[0].trim() : '', location: parts[1] ? parts[1].trim() : '' };
+            });
+
+            if (duties.length > 0 && duties[0].name !== '') { // Check if there's actual data after splitting
                 duties.forEach(duty => {
                     const li = document.createElement('li');
                     li.className = 'item duty-item';
@@ -704,12 +700,26 @@
                     `;
                     dutyList.appendChild(li);
                 });
+            } else {
+                dutyList.innerHTML = `
+                    <li class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <div class="empty-state-text">Brak danych o dyżurach</div>
+                    </li>
+                `;
             }
+            document.getElementById('editDuties').value = dutiesRaw;
+
 
             // Zastępstwa
             const substituteList = document.getElementById('substituteList');
-            if (substitutes.length > 0) {
-                substituteList.innerHTML = '';
+            substituteList.innerHTML = '';
+            const substitutes = substitutesRaw.split('\n').filter(line => line.trim() !== '').map(line => {
+                const parts = line.split(';');
+                return { class: parts[0] ? parts[0].trim() : '', details: parts[1] ? parts[1].trim() : '' };
+            });
+
+            if (substitutes.length > 0 && substitutes[0].class !== '') { // Check if there's actual data after splitting
                 substitutes.forEach(sub => {
                     const li = document.createElement('li');
                     li.className = 'item substitute-item';
@@ -719,34 +729,39 @@
                     `;
                     substituteList.appendChild(li);
                 });
+            } else {
+                substituteList.innerHTML = `
+                    <li class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <div class="empty-state-text">Brak zastępstw</div>
+                    </li>
+                `;
             }
+            document.getElementById('editSubstitutes').value = substitutesRaw;
 
             // Ogłoszenia
             const announcementList = document.getElementById('announcementList');
+            announcementList.innerHTML = '';
+            const announcements = announcementsRaw.split('\n').filter(line => line.trim() !== '');
+
             if (announcements.length > 0) {
-                announcementList.innerHTML = '';
                 announcements.forEach(announcement => {
                     const li = document.createElement('li');
                     li.className = 'item announcement-item';
                     li.innerHTML = `<div class="item-primary">${announcement}</div>`;
                     announcementList.appendChild(li);
                 });
+            } else {
+                announcementList.innerHTML = `
+                    <li class="empty-state">
+                        <div class="empty-state-icon">📣</div>
+                        <div class="empty-state-text">Brak ogłoszeń</div>
+                    </li>
+                `;
             }
+            document.getElementById('editAnnouncements').value = announcementsRaw;
         }
 
-        // Aktualizacja statusu połączenia
-        function updateConnectionStatus(connected) {
-            const status = document.getElementById('connectionStatus');
-            const statusText = document.getElementById('statusText');
-            
-            if (connected) {
-                status.className = 'connection-status status-connected';
-                statusText.textContent = 'Połączono z Google Sheets';
-            } else {
-                status.className = 'connection-status status-disconnected';
-                statusText.textContent = 'Nie połączono z Google Sheets';
-            }
-        }
 
         // Inicjalizacja
         window.onload = function() {
@@ -754,13 +769,8 @@
             updateDateTime();
             setInterval(updateDateTime, 1000);
 
-            // Sprawdź zapisane ID arkusza
-            const savedSheetsId = localStorage.getItem('sheetsId');
-            if (savedSheetsId) {
-                sheetsId = savedSheetsId;
-                document.getElementById('sheetsId').value = savedSheetsId;
-                connectSheets();
-            }
+            // Załaduj i wyświetl dane z localStorage
+            displayContent();
 
             // Pełny ekran po kliknięciu F11
             document.addEventListener('keydown', (e) => {
