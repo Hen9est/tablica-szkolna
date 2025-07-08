@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablica Informacyjna - Szkoła</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Główny kontener */
+        .dashboard {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+
+        /* Nagłówek */
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .school-name {
+            font-size: 42px;
+            font-weight: 300;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .date-time {
+            font-size: 28px;
+            font-weight: 300;
+            opacity: 0.9;
+            text-align: right;
+        }
+
+        .time {
+            font-size: 36px;
+            font-weight: 400;
+        }
+
+        /* Pasek informacyjny */
+        .ticker-wrapper {
+            background: #ff5722;
+            padding: 15px 0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .ticker-content {
+            display: flex;
+            animation: scroll 30s linear infinite;
+            padding-left: 100%;
+        }
+
+        .ticker-item {
+            white-space: nowrap;
+            padding: 0 100px;
+            font-size: 24px;
+            font-weight: 400;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Główna siatka */
+        .content-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        /* Karty */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .duties-header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .substitutes-header {
+            background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+        }
+
+        .announcements-header {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .card-icon {
+            font-size: 36px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .card-title {
+            font-size: 26px;
+            font-weight: 500;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .card-body {
+            padding: 25px;
+            flex: 1;
+            overflow-y: auto;
+            color: #333;
+        }
+
+        /* Lista elementów */
+        .item-list {
+            list-style: none;
+        }
+
+        .item {
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid;
+            transition: all 0.3s;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .duty-item {
+            border-left-color: #11998e;
+        }
+
+        .duty-item:hover {
+            background: #e8f5e9;
+            transform: translateX(5px);
+        }
+
+        .substitute-item {
+            border-left-color: #fc466b;
+        }
+
+        .substitute-item:hover {
+            background: #fce4ec;
+            transform: translateX(5px);
+        }
+
+        .announcement-item {
+            border-left-color: #fa709a;
+        }
+
+        .announcement-item:hover {
+            background: #fff3e0;
+            transform: translateX(5px);
+        }
+
+        /* Teksty w elementach */
+        .item-primary {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .item-secondary {
+            font-size: 18px;
+            color: #546e7a;
+            line-height: 1.5;
+        }
+
+        .item-icon {
+            display: inline-block;
+            margin-right: 8px;
+            font-size: 20px;
+        }
+
+        /* Panel konfiguracji */
+        .config-panel {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 400px;
+            color: #333;
+            transform: translateY(200%);
+            transition: transform 0.3s;
+        }
+
+        .config-panel.show {
+            transform: translateY(0);
+        }
+
+        .config-header {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .config-info {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .config-info h4 {
+            margin: 0 0 10px 0;
+            color: #1976d2;
+        }
+
+        .config-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .config-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .config-input:focus {
+            outline: none;
+            border-color: #1976d2;
+        }
+
+        .config-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-connect {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-connect:hover {
+            background: #45a049;
+        }
+
+        .btn-help {
+            background: #2196f3;
+            color: white;
+        }
+
+        .btn-help:hover {
+            background: #1976d2;
+        }
+
+        /* Przycisk konfiguracji */
+        .config-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #ff5722;
+            color: white;
+            border: none;
+            font-size: 32px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .config-toggle:hover {
+            transform: scale(1.1);
+            background: #e64a19;
+        }
+
+        /* Status połączenia */
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .status-connected {
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+        }
+
+        .status-disconnected {
+            background: rgba(244, 67, 54, 0.9);
+            color: white;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Loader */
+        .loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .loader.show {
+            display: block;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Komunikat o braku danych */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 18px;
+        }
+
+        /* Responsywność dla dużych ekranów */
+        @media (min-width: 1920px) {
+            .school-name { font-size: 48px; }
+            .date-time { font-size: 32px; }
+            .time { font-size: 42px; }
+            .ticker-item { font-size: 28px; }
+            .card-title { font-size: 30px; }
+            .item-primary { font-size: 26px; }
+            .item-secondary { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Status połączenia -->
+    <div class="connection-status status-disconnected" id="connectionStatus">
+        <span class="status-dot"></span>
+        <span id="statusText">Nie połączono z Google Sheets</span>
+    </div>
+
+    <!-- Główny dashboard -->
+    <div class="dashboard">
+        <!-- Nagłówek -->
+        <header class="header">
+            <h1 class="school-name" id="schoolName">Tablica Informacyjna</h1>
+            <div class="date-time">
+                <div id="dateText"></div>
+                <div class="time" id="timeText"></div>
+            </div>
+        </header>
+
+        <!-- Pasek informacyjny -->
+        <div class="ticker-wrapper">
+            <div class="ticker-content" id="tickerContent">
+                <span class="ticker-item">Podłącz Google Sheets aby rozpocząć wyświetlanie informacji</span>
+                <span class="ticker-item">Podłącz Google Sheets aby rozpocząć wyświetlanie informacji</span>
+            </div>
+        </div>
+
+        <!-- Główna siatka -->
+        <div class="content-grid">
+            <!-- Dyżury -->
+            <div class="card">
+                <div class="card-header duties-header">
+                    <span class="card-icon">👥</span>
+                    <h2 class="card-title">Dyżury nauczycieli</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="item-list" id="dutyList">
+                        <li class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <div class="empty-state-text">Brak danych o dyżurach</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Zastępstwa -->
+            <div class="card">
+                <div class="card-header substitutes-header">
+                    <span class="card-icon">🔄</span>
+                    <h2 class="card-title">Zastępstwa na dziś</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="item-list" id="substituteList">
+                        <li class="empty-state">
+                            <div class="empty-state-icon">📝</div>
+                            <div class="empty-state-text">Brak zastępstw</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Ogłoszenia -->
+            <div class="card">
+                <div class="card-header announcements-header">
+                    <span class="card-icon">📢</span>
+                    <h2 class="card-title">Ogłoszenia</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="item-list" id="announcementList">
+                        <li class="empty-state">
+                            <div class="empty-state-icon">📣</div>
+                            <div class="empty-state-text">Brak ogłoszeń</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Przycisk konfiguracji -->
+    <button class="config-toggle" onclick="toggleConfig()" id="configToggle">⚙️</button>
+
+    <!-- Panel konfiguracji -->
+    <div class="config-panel" id="configPanel">
+        <h3 class="config-header">🔗 Połącz z Google Sheets</h3>
+        
+        <div class="config-info">
+            <h4>📊 Jak to działa?</h4>
+            <p>1. Stwórz arkusz Google Sheets</p>
+            <p>2. Udostępnij go publicznie</p>
+            <p>3. Wklej ID arkusza poniżej</p>
+            <p>4. Tablica będzie automatycznie pobierać dane!</p>
+        </div>
+
+        <input type="text" class="config-input" id="sheetsId" 
+               placeholder="Wklej tutaj ID arkusza Google Sheets"
+               value="">
+
+        <div class="config-buttons">
+            <button class="btn btn-connect" onclick="connectSheets()">
+                🔌 Połącz arkusz
+            </button>
+            <button class="btn btn-help" onclick="showHelp()">
+                ❓ Pomoc
+            </button>
+        </div>
+    </div>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <script>
+        // Konfiguracja
+        let sheetsId = '';
+        let refreshInterval = null;
+        const API_KEY = 'AIzaSyBNlYH01_9Hc5S1J9vuFmu2nUqBZJNAXxs'; // Publiczny klucz API dla demo
+
+        // Aktualizacja czasu
+        function updateDateTime() {
+            const now = new Date();
+            const days = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+            const months = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 
+                           'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
+            
+            const dayName = days[now.getDay()];
+            const day = now.getDate();
+            const month = months[now.getMonth()];
+            const year = now.getFullYear();
+            
+            document.getElementById('dateText').textContent = `${dayName}, ${day} ${month} ${year}`;
+            document.getElementById('timeText').textContent = now.toLocaleTimeString('pl-PL', 
+                { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        // Toggle panel konfiguracji
+        function toggleConfig() {
+            const panel = document.getElementById('configPanel');
+            panel.classList.toggle('show');
+        }
+
+        // Pokazanie pomocy
+        function showHelp() {
+            window.open('https://docs.google.com/document/d/1fQ7aTpjLBqFqYfTJrBQCUxY2DaGSoWJQM3tGVhNXxHc/edit?usp=sharing', '_blank');
+        }
+
+        // Połączenie z arkuszem
+        async function connectSheets() {
+            sheetsId = document.getElementById('sheetsId').value.trim();
+            
+            if (!sheetsId) {
+                alert('❌ Proszę wkleić ID arkusza Google Sheets!');
+                return;
+            }
+
+            // Zapisz ID w localStorage
+            localStorage.setItem('sheetsId', sheetsId);
+            
+            // Schowaj panel
+            toggleConfig();
+            
+            // Załaduj dane
+            await loadDataFromSheets();
+            
+            // Ustaw automatyczne odświeżanie co 30 sekund
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(loadDataFromSheets, 30000);
+        }
+
+        // Ładowanie danych z Google Sheets
+        async function loadDataFromSheets() {
+            if (!sheetsId) return;
+
+            const loader = document.getElementById('loader');
+            loader.classList.add('show');
+
+            try {
+                // Pobierz dane z arkusza
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetsId}/values/A:B?key=${API_KEY}`;
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error('Nie można pobrać danych z arkusza');
+                }
+
+                const data = await response.json();
+                const rows = data.values || [];
+
+                // Parsuj dane
+                let schoolName = '';
+                let ticker = '';
+                const duties = [];
+                const substitutes = [];
+                const announcements = [];
+
+                let currentSection = '';
+                rows.forEach(row => {
+                    const [col1, col2] = row;
+                    
+                    // Sprawdź czy to nagłówek sekcji
+                    if (col1 && !col2) {
+                        currentSection = col1.toUpperCase();
+                        return;
+                    }
+                    
+                    // Przetwarzaj dane w zależności od sekcji
+                    switch(currentSection) {
+                        case 'NAZWA SZKOŁY':
+                            if (col1) schoolName = col1;
+                            break;
+                        case 'PASEK INFORMACYJNY':
+                            if (col1) ticker = col1;
+                            break;
+                        case 'DYŻURY':
+                            if (col1 && col2) duties.push({ name: col1, location: col2 });
+                            break;
+                        case 'ZASTĘPSTWA':
+                            if (col1 && col2) substitutes.push({ class: col1, details: col2 });
+                            break;
+                        case 'OGŁOSZENIA':
+                            if (col1) announcements.push(col1);
+                            break;
+                    }
+                });
+
+                // Aktualizuj interfejs
+                updateUI(schoolName, ticker, duties, substitutes, announcements);
+                
+                // Aktualizuj status
+                updateConnectionStatus(true);
+
+            } catch (error) {
+                console.error('Błąd:', error);
+                updateConnectionStatus(false);
+                alert(`❌ Błąd połączenia z arkuszem!\n\nSprawdź czy:\n1. Arkusz jest udostępniony publicznie\n2. ID arkusza jest poprawne\n3. Struktura arkusza jest zgodna z instrukcją`);
+            } finally {
+                loader.classList.remove('show');
+            }
+        }
+
+        // Aktualizacja interfejsu
+        function updateUI(schoolName, ticker, duties, substitutes, announcements) {
+            // Nazwa szkoły
+            if (schoolName) {
+                document.getElementById('schoolName').textContent = schoolName;
+            }
+
+            // Pasek informacyjny
+            if (ticker) {
+                const tickerContent = document.getElementById('tickerContent');
+                tickerContent.innerHTML = `
+                    <span class="ticker-item">${ticker}</span>
+                    <span class="ticker-item">${ticker}</span>
+                `;
+            }
+
+            // Dyżury
+            const dutyList = document.getElementById('dutyList');
+            if (duties.length > 0) {
+                dutyList.innerHTML = '';
+                duties.forEach(duty => {
+                    const li = document.createElement('li');
+                    li.className = 'item duty-item';
+                    li.innerHTML = `
+                        <div class="item-primary">${duty.name}</div>
+                        <div class="item-secondary">
+                            <span class="item-icon">📍</span>${duty.location}
+                        </div>
+                    `;
+                    dutyList.appendChild(li);
+                });
+            }
+
+            // Zastępstwa
+            const substituteList = document.getElementById('substituteList');
+            if (substitutes.length > 0) {
+                substituteList.innerHTML = '';
+                substitutes.forEach(sub => {
+                    const li = document.createElement('li');
+                    li.className = 'item substitute-item';
+                    li.innerHTML = `
+                        <div class="item-primary">Klasa ${sub.class}</div>
+                        <div class="item-secondary">${sub.details}</div>
+                    `;
+                    substituteList.appendChild(li);
+                });
+            }
+
+            // Ogłoszenia
+            const announcementList = document.getElementById('announcementList');
+            if (announcements.length > 0) {
+                announcementList.innerHTML = '';
+                announcements.forEach(announcement => {
+                    const li = document.createElement('li');
+                    li.className = 'item announcement-item';
+                    li.innerHTML = `<div class="item-primary">${announcement}</div>`;
+                    announcementList.appendChild(li);
+                });
+            }
+        }
+
+        // Aktualizacja statusu połączenia
+        function updateConnectionStatus(connected) {
+            const status = document.getElementById('connectionStatus');
+            const statusText = document.getElementById('statusText');
+            
+            if (connected) {
+                status.className = 'connection-status status-connected';
+                statusText.textContent = 'Połączono z Google Sheets';
+            } else {
+                status.className = 'connection-status status-disconnected';
+                statusText.textContent = 'Nie połączono z Google Sheets';
+            }
+        }
+
+        // Inicjalizacja
+        window.onload = function() {
+            // Aktualizuj czas
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+
+            // Sprawdź zapisane ID arkusza
+            const savedSheetsId = localStorage.getItem('sheetsId');
+            if (savedSheetsId) {
+                sheetsId = savedSheetsId;
+                document.getElementById('sheetsId').value = savedSheetsId;
+                connectSheets();
+            }
+
+            // Pełny ekran po kliknięciu F11
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'F11') {
+                    e.preventDefault();
+                    if (!document.fullscreenElement) {
+                        document.documentElement.requestFullscreen();
+                    } else {
+                        document.exitFullscreen();
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
