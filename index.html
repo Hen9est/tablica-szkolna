@@ -3,50 +3,692 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tablica Testowa</title>
+    <title>Tablica Informacyjna - Szkoła</title>
     <style>
-        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
-        #message { font-size: 24px; color: green; }
-        .loader { display: none; margin: 20px auto; border: 5px solid #f3f3f3; border-top: 5px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 2s linear infinite; }
-        .loader.show { display: block; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* Import Google Fonts for a Google-like feel */
+        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+            background: #f8f9fa; /* Bardzo jasne tło, prawie białe */
+            color: #3c4043; /* Ciemniejszy szary dla głównego tekstu */
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Główny kontener */
+        .dashboard {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa; /* Jasne tło */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* Lekki cień, aby wyglądało jak "strona" */
+        }
+
+        /* Nagłówek */
+        .header {
+            background: #ffffff; /* Białe tło nagłówka */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Delikatny cień */
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: none; /* Usunięcie dolnej linii */
+            z-index: 10; /* Aby cień był widoczny */
+        }
+
+        .school-name {
+            font-size: 42px;
+            font-weight: 400; /* Google Sans default weight */
+            letter-spacing: -0.5px;
+            color: #1a73e8; /* Google blue */
+            text-shadow: none;
+        }
+
+        .date-time {
+            font-size: 28px;
+            font-weight: 300;
+            opacity: 0.9;
+            text-align: right;
+            color: #5f6368; /* Ciemnoszary */
+        }
+
+        .time {
+            font-size: 36px;
+            font-weight: 400;
+            color: #202124; /* Prawie czarny */
+        }
+
+        /* Pasek informacyjny */
+        .ticker-wrapper {
+            background: #e8f0fe; /* Bardzo jasny niebieski */
+            padding: 15px 0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.1); /* Delikatny cień */
+            margin-top: -1px; /* Aby cień nagłówka ładnie się łączył */
+        }
+
+        .ticker-content {
+            display: flex;
+            animation: scroll 30s linear infinite;
+            padding-left: 100%;
+        }
+
+        .ticker-item {
+            white-space: nowrap;
+            padding: 0 100px;
+            font-size: 24px;
+            font-weight: 500; /* Lżejsza czcionka */
+            color: #1a73e8; /* Google blue */
+            text-shadow: none;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Główna siatka */
+        .content-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Zmieniono na 3 kolumny */
+            gap: 20px; /* Zmniejszono odstęp */
+            padding: 20px;
+            overflow-y: auto;
+            background: transparent; /* Przezroczyste, aby tło body było widoczne */
+        }
+
+        /* Karty */
+        .card {
+            background: #ffffff; /* Białe tło kart */
+            border-radius: 8px; /* Mniejsze zaokrąglenie */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Delikatny cień */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-3px); /* Mniejszy ruch */
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12); /* Większy, ale wciąż delikatny cień */
+        }
+
+        .card-header {
+            background: #ffffff; /* Białe tło nagłówka karty */
+            color: #202124; /* Ciemny tekst */
+            padding: 18px 25px; /* Mniejszy padding */
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #f0f0f0; /* Delikatna linia pod nagłówkiem */
+        }
+
+        .substitutes-header, .announcements-header {
+            /* Nowe kolory dla nagłówka zastępstw i ogłoszeń, nawiązujące do Google */
+            background: #ffffff;
+            color: #202124;
+        }
+
+        .card-icon {
+            font-size: 36px;
+            color: #1a73e8; /* Google blue */
+            filter: none; /* Usunięcie cienia */
+        }
+
+        .card-title {
+            font-size: 22px; /* Mniejszy rozmiar */
+            font-weight: 500;
+            text-shadow: none;
+        }
+
+        .card-body {
+            padding: 20px 25px;
+            flex: 1;
+            overflow-y: auto;
+            color: #3c4043; /* Ciemniejszy szary */
+        }
+
+        /* Lista elementów */
+        .item-list {
+            list-style: none;
+        }
+
+        /* Grupa zastępstw wg daty */
+        .substitute-date-group {
+            margin-bottom: 20px;
+            border-bottom: 1px dashed #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .substitute-date-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .substitute-date-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a73e8;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .item {
+            padding: 12px 15px; /* Mniejszy padding dla kompaktowości */
+            margin-bottom: 8px; /* Mniejszy margines */
+            background: #ffffff; /* Białe tło elementów */
+            border-radius: 6px; /* Mniejsze zaokrąglenie */
+            border: 1px solid #e0e0e0; /* Delikatna ramka */
+            border-left: 5px solid; /* Kolorowy pasek */
+            transition: all 0.2s ease-in-out; /* Szybsza animacja */
+            animation: none; /* Usunięcie animacji slideIn */
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap; /* WAŻNE: Zapobiega zawijaniu */
+            justify-content: space-between;
+            min-height: 48px; /* Minimalna wysokość, żeby zawsze była jedna linia */
+        }
+
+        .substitute-item {
+            border-left-color: #fbbc05; /* Google żółty/pomarańczowy */
+        }
+        .substitute-item:hover {
+            background: #fffde7; /* Bardzo jasny żółty hover */
+            transform: translateX(3px);
+        }
+
+        /* Nowe style dla zastępstw w jednym wierszu */
+        .substitute-item-content {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            font-size: 16px; /* Ogólny rozmiar tekstu w wierszu */
+            color: #202124;
+            gap: 8px; /* Zmniejszone odstępy między segmentami */
+            min-width: 0; /* Pozwala elementom shrinkować */
+        }
+
+        .substitute-item-content > span {
+            white-space: nowrap; /* Upewnij się, że tekst w spanach się nie zawija */
+            overflow: hidden; /* Ukryj nadmiar tekstu */
+            text-overflow: ellipsis; /* Dodaj trzy kropki */
+            flex-shrink: 1; /* Pozwól im się zmniejszać */
+        }
+
+        .substitute-item-content .lesson-info {
+            font-size: 15px;
+            font-weight: 700;
+            color: #c5221f;
+            background-color: #ffe0b2;
+            padding: 3px 6px;
+            border-radius: 3px;
+            flex-shrink: 0; /* Ten element nie powinien się zmniejszać, jeśli to możliwe */
+            min-width: 40px; /* Minimalna szerokość dla "Lekcja X" */
+            text-align: center;
+        }
+
+        .substitute-item-content .teachers-info {
+            font-weight: 500;
+            flex-grow: 2; /* Daj więcej miejsca nauczycielom */
+            min-width: 150px; /* Minimalna szerokość, żeby nie był za mały */
+        }
+
+        .substitute-item-content .class-info {
+            font-weight: 500;
+            color: #5f6368;
+            flex-grow: 0; /* Niech zajmuje tyle miejsca, ile potrzebuje */
+            flex-shrink: 0; /* Niech się nie zmniejsza */
+            min-width: 50px; /* Minimalna szerokość dla klasy */
+        }
+
+        .substitute-item-content .notes-info {
+            font-style: italic;
+            color: #5f6368;
+            flex-grow: 1; /* Pozwól notatkom zająć pozostałe miejsce */
+            min-width: 50px; /* Minimalna szerokość dla notatek */
+        }
+
+        /* Ogłoszenia */
+        .announcement-item {
+            border-left-color: #34a853; /* Google zielony */
+        }
+
+        .announcement-item:hover {
+            background: #e6f4ea; /* Bardzo jasny zielony hover */
+            transform: translateX(3px);
+        }
+
+        /* Teksty w elementach - dostosowanie ogólne */
+        .item-primary {
+            font-size: 18px;
+            font-weight: 600;
+            color: #202124;
+            /* Usunięto margin-bottom, bo całe content jest teraz flex */
+        }
+
+        .item-secondary {
+            font-size: 14px;
+            color: #5f6368;
+            line-height: 1.5;
+        }
+
+        .item-icon {
+            display: inline-block;
+            margin-right: 8px;
+            font-size: 20px;
+            color: #1a73e8;
+        }
+
+        /* NOWY STYL DLA SZCZĘŚLIWEGO NUMERKA */
+        .lucky-number-card {
+            background-color: #202124; /* Czarne tło */
+            color: #ffffff; /* Biały tekst */
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden; /* Na wypadek bardzo dużej liczby */
+            padding: 20px; /* Dodatkowy padding wewnętrzny */
+        }
+
+        .lucky-number-card .card-header {
+            background: none; /* Brak tła w nagłówku, by tło karty było widoczne */
+            border-bottom: none;
+            color: #ffffff; /* Biały tekst nagłówka */
+            padding-bottom: 0; /* Bez paddingu na dole nagłówka */
+        }
+
+        .lucky-number-card .card-icon {
+            color: #fbbc05; /* Złota gwiazdka dla numerka */
+        }
+
+        .lucky-number-display {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 120px; /* Duży rozmiar liczby */
+            font-weight: 700;
+            line-height: 1; /* Kompaktowy line-height */
+            margin-top: 10px; /* Mały margines od nagłówka */
+            flex-grow: 1; /* Pozwala numerkowi zająć dostępną przestrzeń */
+            display: flex; /* Centrowanie w pionie */
+            align-items: center;
+            justify-content: center;
+            width: 100%; /* Rozciągnij na całą szerokość */
+            overflow: hidden; /* Ukryj, jeśli numer jest za duży */
+            text-overflow: ellipsis; /* Dodaj kropki, jeśli numer jest za duży */
+        }
+        
+        /* Loader - pozostaje, aby pokazywać ładowanie danych */
+        .loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 1001;
+        }
+
+        .loader.show {
+            display: block;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(0, 0, 0, 0.1);
+            border-top: 5px solid #1a73e8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Komunikat o braku danych */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #9aa0a6;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+            opacity: 0.6;
+            color: #dadce0;
+        }
+
+        .empty-state-text {
+            font-size: 18px;
+        }
+
+        /* Responsywność dla dużych ekranów */
+        @media (min-width: 1920px) {
+            .school-name { font-size: 48px; }
+            .date-time { font-size: 32px; }
+            .time { font-size: 42px; }
+            .ticker-item { font-size: 28px; }
+            .card-title { font-size: 26px; }
+            .item-primary { font-size: 20px; }
+            .item-secondary { font-size: 16px; }
+            .substitute-item .lesson-info { font-size: 20px; }
+            .substitute-item .teachers-info { font-size: 18px; }
+            .substitute-item .class-info, .substitute-item .notes-info { font-size: 16px; }
+            .lucky-number-display { font-size: 150px; } /* Jeszcze większy na dużych ekranach */
+        }
+
     </style>
 </head>
 <body>
-    <h1>Test połączenia z Apps Script</h1>
-    <p>Sprawdź konsolę przeglądarki (F12) oraz dzienniki "Uruchomienia" w Apps Script.</p>
-    <div id="message">Ładowanie...</div>
-    <div class="loader" id="loader"></div>
+    <div class="connection-status status-disconnected" id="connectionStatus" style="display: none;">
+        <span class="status-dot"></span>
+        <span id="statusText"></span>
+    </div>
+
+    <div class="dashboard">
+        <header class="header">
+            <h1 class="school-name" id="schoolName">Tablica Informacyjna</h1>
+            <div class="date-time">
+                <div id="dateText"></div>
+                <div class="time" id="timeText"></div>
+            </div>
+        </header>
+
+        <div class="ticker-wrapper">
+            <div class="ticker-content" id="tickerContent">
+                <span class="ticker-item">Ładowanie danych...</span>
+                <span class="ticker-item">Ładowanie danych...</span>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <div class="card-header substitutes-header">
+                    <span class="card-icon">🔄</span>
+                    <h2 class="card-title">Zastępstwa</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="item-list" id="substituteList">
+                        <li class="empty-state">
+                            <div class="empty-state-icon">📝</div>
+                            <div class="empty-state-text">Ładowanie zastępstw...</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header announcements-header">
+                    <span class="card-icon">📢</span>
+                    <h2 class="card-title">Ogłoszenia</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="item-list" id="announcementList">
+                        <li class="empty-state">
+                            <div class="empty-state-icon">📣</div>
+                            <div class="empty-state-text">Ładowanie ogłoszeń...</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card lucky-number-card">
+                <div class="card-header">
+                    <span class="card-icon">⭐</span>
+                    <h2 class="card-title">Szczęśliwy Numerek</h2>
+                </div>
+                <div class="lucky-number-display" id="luckyNumberDisplay">
+                    Ładowanie...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+    </div>
 
     <script>
-        // WAŻNE: Wklej tutaj dokładny URL Twojej aplikacji Apps Script
+        // URL Twojej aplikacji Google Apps Script
         const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxfjyGp7LkXsBXM53InKCeGEveCLz2K6J85Q6IGVL3y__eXXwV_4gG_TGv5EWCcIHF8/exec'; 
 
-        async function testAppsScriptConnection() {
+        // Funkcja pomocnicza do formatowania daty na potrzeby wyświetlania
+        function formatDateToDisplay(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString + 'T00:00:00'); // Dodaj T00:00:00, aby uniknąć problemów ze strefą czasową
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            const dayAfterTomorrow = new Date(today);
+            dayAfterTomorrow.setDate(today.getDate() + 2);
+
+            date.setHours(0,0,0,0); // Ustaw na początek dnia dla porównania
+
+            if (date.getTime() === today.getTime()) {
+                return 'Dziś';
+            } else if (date.getTime() === tomorrow.getTime()) {
+                return 'Jutro';
+            } else if (date.getTime() === dayAfterTomorrow.getTime()) {
+                return 'Pojutrze';
+            } else {
+                return date.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' });
+            }
+        }
+
+        // Aktualizacja czasu
+        function updateDateTime() {
+            const now = new Date();
+            const days = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+            const months = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 
+                           'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
+            
+            const dayName = days[now.getDay()];
+            const day = now.getDate();
+            const month = months[now.getMonth()];
+            const year = now.getFullYear();
+            
+            document.getElementById('dateText').textContent = `${dayName}, ${day} ${month} ${year}`;
+            document.getElementById('timeText').textContent = now.toLocaleTimeString('pl-PL', 
+                { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        // Pobieranie treści z Google Apps Script
+        async function fetchDataFromAppsScript() {
             const loader = document.getElementById('loader');
-            const messageDiv = document.getElementById('message');
             loader.classList.add('show');
-            messageDiv.textContent = 'Trwa próba połączenia...';
 
             try {
-                const response = await fetch(GOOGLE_APP_SCRIPT_URL);
-                if (response.ok) {
-                    const text = await response.text();
-                    messageDiv.textContent = `Sukces! Otrzymano: "${text}"`;
-                    console.log('Odpowiedź z Apps Script:', text);
-                } else {
-                    messageDiv.textContent = `Błąd HTTP: ${response.status} ${response.statusText}`;
-                    console.error('Błąd HTTP podczas połączenia:', response.status, response.statusText);
+                const response = await fetch(GOOGLE_APP_SCRIPT_URL + '?action=getData', {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+
+                const data = await response.json(); 
+
+                // Sprawdź, czy Apps Script zwrócił błąd
+                if (data.error) {
+                    console.error('Błąd z Apps Script:', data.error, data.stack);
+                    alert('❌ Błąd z Apps Script: ' + data.message + ' Sprawdź dzienniki Apps Script.');
+                    // Pokaż domyślne komunikaty o błędzie
+                    displayDefaultErrorContent(data.message);
+                    return;
+                }
+
+                // Wyświetl dane
+                displayContent(data);
+
             } catch (error) {
-                messageDiv.textContent = `Błąd połączenia: ${error.message}`;
-                console.error('Błąd połączenia:', error);
+                console.error('Błąd podczas pobierania danych z Apps Script:', error);
+                alert('❌ Wystąpił błąd podczas pobierania danych. Spróbuj ponownie lub sprawdź konsolę.');
+                displayDefaultErrorContent(); // Pokaż domyślne komunikaty o błędzie
             } finally {
                 loader.classList.remove('show');
             }
         }
 
-        window.onload = testAppsScriptConnection;
+        // Wyświetlanie domyślnych komunikatów o błędzie
+        function displayDefaultErrorContent(errorMessage = "Błąd ładowania danych") {
+            document.getElementById('schoolName').textContent = "BŁĄD ŁADOWANIA";
+            document.getElementById('tickerContent').innerHTML = `
+                <span class="ticker-item">${errorMessage}. Odśwież stronę lub skontaktuj się z administratorem.</span>
+                <span class="ticker-item">${errorMessage}. Odśwież stronę lub skontaktuj się z administratorem.</span>
+            `;
+            document.getElementById('substituteList').innerHTML = `
+                <li class="empty-state">
+                    <div class="empty-state-icon">❌</div>
+                    <div class="empty-state-text">${errorMessage}</div>
+                </li>
+            `;
+            document.getElementById('announcementList').innerHTML = `
+                <li class="empty-state">
+                    <div class="empty-state-icon">❌</div>
+                    <div class="empty-state-text">${errorMessage}</div>
+                </li>
+            `;
+            document.getElementById('luckyNumberDisplay').textContent = "BŁĄD"; // Dla szczęśliwego numerka
+        }
+
+        // Wyświetlanie treści (teraz przyjmuje bezpośrednio obiekt danych)
+        function displayContent(data) {
+            const schoolName = data.schoolName || 'Tablica Informacyjna';
+            const ticker = data.tickerContent || 'Brak danych na pasku informacyjnym.';
+            const substitutes = data.substitutesContent || [];
+            const announcementsRaw = data.announcementsContent || '';
+            const announcements = announcementsRaw.split('\n').filter(line => line.trim() !== '');
+            const luckyNumber = data.luckyNumber || '??'; // Nowe pole dla szczęśliwego numerka
+
+            document.getElementById('schoolName').textContent = schoolName;
+            document.getElementById('luckyNumberDisplay').textContent = luckyNumber; // Wyświetl numerek
+
+            const tickerContentElement = document.getElementById('tickerContent');
+            tickerContentElement.innerHTML = `
+                <span class="ticker-item">${ticker}</span>
+                <span class="ticker-item">${ticker}</span>
+            `;
+
+            // Zastępstwa
+            const substituteList = document.getElementById('substituteList');
+            substituteList.innerHTML = '';
+            
+            if (substitutes.length > 0) {
+                // Grupuj zastępstwa według daty
+                const groupedSubstitutes = substitutes.reduce((acc, sub) => {
+                    const dateKey = sub.date; // Użyj daty jako klucza
+                    if (!acc[dateKey]) {
+                        acc[dateKey] = [];
+                    }
+                    acc[dateKey].push(sub);
+                    return acc;
+                }, {});
+
+                // Wyświetl grupy zastępstw
+                for (const dateKey in groupedSubstitutes) {
+                    const dateTitle = formatDateToDisplay(dateKey);
+                    
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'substitute-date-group';
+                    groupDiv.innerHTML = `<h3 class="substitute-date-title">${dateTitle}</h3><ul class="item-list"></ul>`; // Dodaj ul dla listy
+                    
+                    groupedSubstitutes[dateKey].forEach(sub => {
+                        const li = document.createElement('li');
+                        li.className = 'item substitute-item';
+                        // Sprawdzamy, czy sub.lessonHour to faktycznie godzina, a nie data
+                        const isLessonHourValid = sub.lessonHour && !isNaN(parseInt(sub.lessonHour.split('-')[0]));
+
+                        li.innerHTML = `
+                            <div class="substitute-item-content">
+                                ${isLessonHourValid ? `<span class="lesson-info">Lekcja ${sub.lessonHour}</span>` : ''}
+                                <span class="teachers-info">
+                                    ${sub.replacedTeacher ? `Za: ${sub.replacedTeacher}` : ''}
+                                    ${sub.substitutingTeacher ? `&nbsp;&nbsp;➡️&nbsp;&nbsp; ${sub.substitutingTeacher}` : ''}
+                                    ${sub.class ? `&nbsp;&nbsp;(${sub.class})` : ''}
+                                </span>
+                                ${sub.notes ? `<span class="notes-info">${sub.notes}</span>` : ''}
+                            </div>
+                        `;
+                        groupDiv.querySelector('.item-list').appendChild(li); // Dodaj do ul w grupie
+                    });
+                    substituteList.appendChild(groupDiv);
+                }
+            } else {
+                substituteList.innerHTML = `
+                    <li class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <div class="empty-state-text">Brak zastępstw na najbliższe dni</div>
+                    </li>
+                `;
+            }
+
+            // Ogłoszenia
+            const announcementList = document.getElementById('announcementList');
+            announcementList.innerHTML = '';
+            
+            if (announcements.length > 0) {
+                announcements.forEach(announcement => {
+                    const li = document.createElement('li');
+                    li.className = 'item announcement-item';
+                    li.innerHTML = `<div class="item-primary">${announcement}</div>`;
+                    announcementList.appendChild(li);
+                });
+            } else {
+                announcementList.innerHTML = `
+                    <li class="empty-state">
+                        <div class="empty-state-icon">📣</div>
+                        <div class="empty-state-text">Brak ogłoszeń</div>
+                    </li>
+                `;
+            }
+        }
+
+
+        // Inicjalizacja
+        window.onload = function() {
+            // Aktualizuj czas
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+
+            // Po załadowaniu strony, spróbuj pobrać dane z Apps Script
+            fetchDataFromAppsScript();
+            // Ustaw automatyczne odświeżanie co 30 sekund
+            setInterval(fetchDataFromAppsScript, 30000); 
+            
+            // Pełny ekran po kliknięciu F11
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'F11') {
+                    e.preventDefault();
+                    if (!document.fullscreenElement) {
+                        document.documentElement.requestFullscreen();
+                    } else {
+                        document.exitFullscreen();
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
