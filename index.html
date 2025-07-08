@@ -824,21 +824,28 @@
             };
 
             try {
+                // Użycie mode: 'cors' zamiast 'no-cors' dla pełnej kontroli i odpowiedzi
                 const response = await fetch(GOOGLE_APP_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors', // Wymagane dla Apps Script, jeśli nie ustawiasz CORS
+                    mode: 'cors', 
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(dataToSend)
                 });
 
-                // Apps Script z no-cors zawsze zwróci ok: true, więc musimy polegać na logice Apps Script.
-                // Na potrzeby demo, zakładamy sukces jeśli request przeszedł bez błędu sieci.
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert('✅ Zmiany zostały zapisane!');
+                } else {
+                    alert('⚠️ Zapisano, ale Apps Script zgłosił problem: ' + (result.message || 'Nieznany błąd.'));
+                }
                 
-                alert('✅ Zmiany zostały wysłane do zapisania!');
-                // Odśwież dane z serwera po zapisie
-                await fetchDataFromAppsScript(); 
+                await fetchDataFromAppsScript(); // Odśwież dane z serwera po zapisie
 
             } catch (error) {
                 console.error('Błąd podczas wysyłania danych:', error);
@@ -849,7 +856,7 @@
             }
         }
 
-        // Pobieranie treści z Google Apps Script
+        // Pobieranie treści z Google Apps Script (teraz z mode: 'cors')
         async function fetchDataFromAppsScript() {
             if (!GOOGLE_APP_SCRIPT_URL || GOOGLE_APP_SCRIPT_URL === 'TWOJ_URL_APPS_SCRIPT_TUTAJ') {
                 console.warn("URL Google Apps Script nie został skonfigurowany. Dane będą ładowane z localStorage.");
@@ -861,8 +868,17 @@
             loader.classList.add('show');
 
             try {
-                const response = await fetch(GOOGLE_APP_SCRIPT_URL + '?action=getData'); // Dodaj parametr, aby Apps Script wiedział, że ma pobrać dane
-                const data = await response.json(); // Apps Script powinien zwrócić JSON
+                // Użycie mode: 'cors' dla pobierania
+                const response = await fetch(GOOGLE_APP_SCRIPT_URL + '?action=getData', {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json(); 
 
                 // Zapisz pobrane dane do localStorage na wypadek, gdyby Apps Script był niedostępny offline
                 localStorage.setItem('schoolName', data.schoolName || '');
