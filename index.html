@@ -12,9 +12,9 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: #1a1a1a;
-            color: #fff;
+            font-family: 'Google Sans', 'Roboto', Arial, sans-serif; /* Bardziej Google-like font-family */
+            background: #f8f9fa; /* Jasne tło */
+            color: #333; /* Ciemny tekst na jasnym tle */
             overflow: hidden;
             height: 100vh;
         }
@@ -25,25 +25,26 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: #f8f9fa; /* Jasne tło */
         }
 
         /* Nagłówek */
         .header {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
+            background: #ffffff; /* Białe tło nagłówka */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Delikatny cień */
             padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: none; /* Usunięcie dolnej linii */
         }
 
         .school-name {
             font-size: 42px;
             font-weight: 300;
             letter-spacing: -1px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: #1a73e8; /* Google blue */
+            text-shadow: none; /* Usunięcie cienia */
         }
 
         .date-time {
@@ -51,20 +52,22 @@
             font-weight: 300;
             opacity: 0.9;
             text-align: right;
+            color: #5f6368; /* Ciemnoszary */
         }
 
         .time {
             font-size: 36px;
             font-weight: 400;
+            color: #202124; /* Prawie czarny */
         }
 
         /* Pasek informacyjny */
         .ticker-wrapper {
-            background: #ff5722;
+            background: #e8f0fe; /* Bardzo jasny niebieski */
             padding: 15px 0;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 1px 6px rgba(0,0,0,0.1); /* Delikatny cień */
         }
 
         .ticker-content {
@@ -77,8 +80,9 @@
             white-space: nowrap;
             padding: 0 100px;
             font-size: 24px;
-            font-weight: 400;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            font-weight: 500; /* Lżejsza czcionka */
+            color: #1a73e8; /* Google blue */
+            text-shadow: none; /* Usunięcie cienia */
         }
 
         @keyframes scroll {
@@ -90,63 +94,68 @@
         .content-grid {
             flex: 1;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            padding: 30px;
+            grid-template-columns: repeat(2, 1fr); /* Zmieniono na 2 kolumny */
+            gap: 20px; /* Zmniejszono odstęp */
+            padding: 20px;
             overflow-y: auto;
+            background: transparent; /* Przezroczyste, aby tło body było widoczne */
         }
 
         /* Karty */
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: #ffffff; /* Białe tło kart */
+            border-radius: 8px; /* Mniejsze zaokrąglenie */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Delikatny cień */
             display: flex;
             flex-direction: column;
             overflow: hidden;
             transform: translateY(0);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            transform: translateY(-3px); /* Mniejszy ruch */
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12); /* Większy, ale wciąż delikatny cień */
         }
 
         .card-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
+            background: #ffffff; /* Białe tło nagłówka karty */
+            color: #202124; /* Ciemny tekst */
+            padding: 18px 25px; /* Mniejszy padding */
             display: flex;
             align-items: center;
             gap: 15px;
+            border-bottom: 1px solid #f0f0f0; /* Delikatna linia pod nagłówkiem */
         }
 
-        .duties-header {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-        }
+        /* Usunięto .duties-header */
 
         .substitutes-header {
-            background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            /* Nowe kolory dla nagłówka zastępstw, nawiązujące do Google */
+            background: #ffffff;
+            color: #202124;
         }
 
         .announcements-header {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            /* Nowe kolory dla nagłówka ogłoszeń, nawiązujące do Google */
+            background: #ffffff;
+            color: #202124;
         }
 
         .card-icon {
             font-size: 36px;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+            color: #1a73e8; /* Google blue */
+            filter: none; /* Usunięcie cienia */
         }
 
         .card-title {
-            font-size: 26px;
+            font-size: 22px; /* Mniejszy rozmiar */
             font-weight: 500;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            text-shadow: none;
         }
 
         .card-body {
-            padding: 25px;
+            padding: 20px 25px;
             flex: 1;
             overflow-y: auto;
             color: #333;
@@ -158,64 +167,88 @@
         }
 
         .item {
-            padding: 20px;
-            margin-bottom: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 5px solid;
-            transition: all 0.3s;
-            animation: slideIn 0.5s ease-out;
+            padding: 15px; /* Mniejszy padding */
+            margin-bottom: 10px;
+            background: #ffffff; /* Białe tło elementów */
+            border-radius: 6px; /* Mniejsze zaokrąglenie */
+            border: 1px solid #e0e0e0; /* Delikatna ramka */
+            border-left: 5px solid; /* Kolorowy pasek */
+            transition: all 0.2s ease-in-out; /* Szybsza animacja */
+            animation: none; /* Usunięcie animacji slideIn */
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .duty-item {
-            border-left-color: #11998e;
-        }
-
-        .duty-item:hover {
-            background: #e8f5e9;
-            transform: translateX(5px);
-        }
+        /* Usunięto .duty-item */
 
         .substitute-item {
-            border-left-color: #fc466b;
+            border-left-color: #fbbc05; /* Google żółty/pomarańczowy */
+        }
+        .substitute-item:hover {
+            background: #fffde7; /* Bardzo jasny żółty hover */
+            transform: translateX(3px);
         }
 
-        .substitute-item:hover {
-            background: #fce4ec;
-            transform: translateX(5px);
+        .substitute-item .item-primary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 5px;
         }
+
+        .substitute-item .lesson-info {
+            font-size: 18px; /* Mniejszy rozmiar */
+            font-weight: 700;
+            color: #c5221f; /* Ciemny czerwony */
+            background-color: #ffe0b2; /* Jasnopomarańczowy */
+            padding: 4px 8px; /* Mniejszy padding */
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .substitute-item .teachers-info {
+            font-size: 16px; /* Mniejszy rozmiar */
+            font-weight: 500;
+            color: #202124;
+            flex-grow: 1;
+        }
+
+        .substitute-item .class-info {
+            font-size: 14px; /* Mniejszy rozmiar */
+            font-weight: 500;
+            color: #5f6368;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .substitute-item .notes-info {
+            font-size: 14px; /* Mniejszy rozmiar */
+            color: #5f6368;
+            line-height: 1.4;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
 
         .announcement-item {
-            border-left-color: #fa709a;
+            border-left-color: #34a853; /* Google zielony */
         }
 
         .announcement-item:hover {
-            background: #fff3e0;
-            transform: translateX(5px);
+            background: #e6f4ea; /* Bardzo jasny zielony hover */
+            transform: translateX(3px);
         }
 
         /* Teksty w elementach */
         .item-primary {
-            font-size: 22px;
+            font-size: 18px; /* Zmniejszony rozmiar */
             font-weight: 600;
-            color: #2c3e50;
+            color: #202124;
             margin-bottom: 8px;
         }
 
         .item-secondary {
-            font-size: 18px;
-            color: #546e7a;
+            font-size: 14px; /* Zmniejszony rozmiar */
+            color: #5f6368;
             line-height: 1.5;
         }
 
@@ -223,6 +256,7 @@
             display: inline-block;
             margin-right: 8px;
             font-size: 20px;
+            color: #1a73e8; /* Google blue */
         }
 
         /* Panel konfiguracji */
@@ -230,14 +264,17 @@
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
+            background: #ffffff; /* Białe tło */
+            border-radius: 12px; /* Większe zaokrąglenie */
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            max-width: 400px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15); /* Większy cień */
+            max-width: 450px;
             color: #333;
             transform: translateY(200%);
-            transition: transform 0.3s;
+            transition: transform 0.3s ease-out; /* Płynniejsza animacja */
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 1000;
         }
 
         .config-panel.show {
@@ -248,73 +285,78 @@
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 20px;
-            color: #2c3e50;
+            color: #202124;
         }
 
         .config-info {
-            background: #e3f2fd;
+            background: #f1f3f4; /* Jasnoszare tło */
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 20px;
+            color: #5f6368;
         }
 
         .config-info h4 {
             margin: 0 0 10px 0;
-            color: #1976d2;
+            color: #1a73e8; /* Google blue */
         }
 
         .config-info p {
             margin: 5px 0;
             font-size: 14px;
-            color: #555;
+            color: #5f6368;
         }
 
         .config-input {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e0e0e0;
+            border: 1px solid #dadce0; /* Delikatna ramka */
             border-radius: 8px;
             font-size: 16px;
             margin-bottom: 15px;
+            background: #f8f9fa; /* Bardzo jasne tło inputu */
+            color: #202124;
         }
 
         .config-input:focus {
             outline: none;
-            border-color: #1976d2;
+            border-color: #1a73e8; /* Google blue na focus */
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2); /* Delikatny cień focus */
         }
 
         .config-buttons {
             display: flex;
             gap: 10px;
+            margin-top: 15px;
         }
 
         .btn {
             flex: 1;
             padding: 12px;
             border: none;
-            border-radius: 8px;
+            border-radius: 5px; /* Mniejsze zaokrąglenie */
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 400; /* Lżejsza czcionka */
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease-in-out;
         }
 
         .btn-connect {
-            background: #4caf50;
+            background: #1a73e8; /* Google blue */
             color: white;
         }
 
         .btn-connect:hover {
-            background: #45a049;
+            background: #185abc; /* Ciemniejszy niebieski na hover */
         }
 
         .btn-help {
-            background: #2196f3;
+            background: #5f6368; /* Ciemnoszary */
             color: white;
         }
 
         .btn-help:hover {
-            background: #1976d2;
+            background: #3c4043; /* Ciemniejszy szary na hover */
         }
 
         /* Przycisk konfiguracji */
@@ -322,59 +364,27 @@
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 70px;
-            height: 70px;
+            width: 60px; /* Mniejszy rozmiar */
+            height: 60px;
             border-radius: 50%;
-            background: #ff5722;
+            background: #1a73e8; /* Google blue */
             color: white;
             border: none;
-            font-size: 32px;
+            font-size: 28px; /* Mniejszy rozmiar ikony */
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: all 0.3s;
+            transition: all 0.3s ease-in-out;
             z-index: 1000;
         }
 
         .config-toggle:hover {
-            transform: scale(1.1);
-            background: #e64a19;
+            transform: scale(1.05); /* Mniejsze powiększenie */
+            background: #185abc; /* Ciemniejszy niebieski */
         }
 
-        /* Status połączenia - usunięto, ale zostawiam placeholder styl, jeśli będzie potrzebne w przyszłości */
+        /* Status połączenia - utrzymano, ale będzie niewidoczne, bo usunęliśmy integrację GS */
         .connection-status {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .status-connected {
-            background: rgba(76, 175, 80, 0.9);
-            color: white;
-        }
-
-        .status-disconnected {
-            background: rgba(244, 67, 54, 0.9);
-            color: white;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: white;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            display: none !important; /* Całkowite ukrycie */
         }
 
         /* Loader */
@@ -384,6 +394,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             display: none;
+            z-index: 1001;
         }
 
         .loader.show {
@@ -393,8 +404,8 @@
         .loader-spinner {
             width: 60px;
             height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-top: 5px solid white;
+            border: 5px solid rgba(0, 0, 0, 0.1); /* Ciemniejsza ramka */
+            border-top: 5px solid #1a73e8; /* Google blue spinner */
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -408,13 +419,14 @@
         .empty-state {
             text-align: center;
             padding: 40px;
-            color: #999;
+            color: #9aa0a6; /* Szary */
         }
 
         .empty-state-icon {
             font-size: 48px;
             margin-bottom: 10px;
-            opacity: 0.5;
+            opacity: 0.6; /* Lekko ciemniejsza ikona */
+            color: #dadce0; /* Jaśniejszy szary */
         }
 
         .empty-state-text {
@@ -427,9 +439,12 @@
             .date-time { font-size: 32px; }
             .time { font-size: 42px; }
             .ticker-item { font-size: 28px; }
-            .card-title { font-size: 30px; }
-            .item-primary { font-size: 26px; }
-            .item-secondary { font-size: 22px; }
+            .card-title { font-size: 26px; } /* Dostosowany rozmiar */
+            .item-primary { font-size: 20px; }
+            .item-secondary { font-size: 16px; }
+            .substitute-item .lesson-info { font-size: 20px; }
+            .substitute-item .teachers-info { font-size: 18px; }
+            .substitute-item .class-info, .substitute-item .notes-info { font-size: 16px; }
         }
 
         /* Style dla pól edycyjnych */
@@ -446,18 +461,38 @@
 
         .edit-fields label {
             font-weight: 500;
-            color: #2c3e50;
+            color: #202124; /* Ciemny tekst */
             margin-bottom: 5px;
+            font-size: 14px;
         }
 
         .edit-fields textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid #dadce0; /* Delikatna ramka */
             border-radius: 5px;
             min-height: 80px;
             font-size: 14px;
             resize: vertical;
+            box-sizing: border-box;
+            background: #f8f9fa; /* Bardzo jasne tło inputu */
+            color: #202124;
+        }
+
+        .config-input-small {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #dadce0;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: #f8f9fa;
+            color: #202124;
+        }
+
+        .config-input-small:focus {
+             border-color: #1a73e8;
+             box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
         }
 
         .code-section {
@@ -466,6 +501,66 @@
 
         .code-section.hidden {
             display: none;
+        }
+
+        /* Style dla pojedynczego wpisu zastępstwa w panelu edycji */
+        .substitute-entry {
+            background: #f1f3f4; /* Jasnoszare tło dla pojedynczego wpisu */
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .substitute-entry .entry-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .substitute-entry .entry-row label {
+            flex-basis: 90px;
+            min-width: 80px;
+            margin-bottom: 0;
+            font-size: 14px;
+            color: #5f6368;
+        }
+
+        .substitute-entry .entry-row input[type="text"] {
+            flex-grow: 1;
+            margin-bottom: 0;
+        }
+
+        .substitute-entry .entry-row .btn-remove {
+            background-color: #ea4335; /* Google czerwony */
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            flex-shrink: 0;
+            width: auto;
+            font-size: 14px;
+        }
+        .substitute-entry .entry-row .btn-remove:hover {
+            background-color: #d93025; /* Ciemniejszy czerwony */
+        }
+
+        .add-substitution-btn {
+            background-color: #1a73e8; /* Google blue */
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            text-align: center;
+            font-weight: 500;
+        }
+        .add-substitution-btn:hover {
+            background-color: #185abc;
         }
 
     </style>
@@ -493,21 +588,6 @@
         </div>
 
         <div class="content-grid">
-            <div class="card">
-                <div class="card-header duties-header">
-                    <span class="card-icon">👥</span>
-                    <h2 class="card-title">Dyżury nauczycieli</h2>
-                </div>
-                <div class="card-body">
-                    <ul class="item-list" id="dutyList">
-                        <li class="empty-state">
-                            <div class="empty-state-icon">📋</div>
-                            <div class="empty-state-text">Brak danych o dyżurach</div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
             <div class="card">
                 <div class="card-header substitutes-header">
                     <span class="card-icon">🔄</span>
@@ -564,13 +644,12 @@
             <label for="editTicker">Pasek informacyjny (oddzielaj średnikami ';'):</label>
             <textarea id="editTicker" class="config-input" placeholder="Wpisz tekst paska informacyjnego"></textarea>
 
-            <label for="editDuties">Dyżury nauczycieli (format: 'Imię Nazwisko;Miejsce' każda linia):</label>
-            <textarea id="editDuties" class="config-input" placeholder="Np. Jan Kowalski;Korytarz główny"></textarea>
-
-            <label for="editSubstitutes">Zastępstwa (format: 'Klasa;Szczegóły' każda linia):</label>
-            <textarea id="editSubstitutes" class="config-input" placeholder="Np. 5a;Zastępstwo z matematyki"></textarea>
-
-            <label for="editAnnouncements">Ogłoszenia (każda linia to nowe ogłoszenie):</label>
+            <h4 style="margin-top: 20px; color: #202124; font-weight: 500;">Edycja Zastępstw:</h4>
+            <div id="editSubstitutesSection">
+                </div>
+            <button class="btn add-substitution-btn" onclick="addSubstitutionEntry()">+ Dodaj nowe zastępstwo</button>
+            
+            <label for="editAnnouncements" style="margin-top: 20px;">Ogłoszenia (każda linia to nowe ogłoszenie):</label>
             <textarea id="editAnnouncements" class="config-input" placeholder="Wpisz ogłoszenia"></textarea>
 
             <button class="btn btn-connect" onclick="saveContent()">
@@ -613,11 +692,14 @@
         function toggleConfig() {
             const panel = document.getElementById('configPanel');
             panel.classList.toggle('show');
+            if (panel.classList.contains('show')) {
+                // Gdy panel się otwiera, załaduj dane do pól edycyjnych zastępstw
+                loadSubstitutionsForEditing();
+            }
         }
 
         // Pokazanie pomocy
         function showHelp() {
-            // Można dodać link do zewnętrznego dokumentu pomocy lub wyświetlić modal
             alert('Funkcja pomocy nie jest jeszcze zaimplementowana. W przyszłości znajdziesz tu szczegółowe instrukcje dotyczące obsługi tablicy.');
         }
 
@@ -635,6 +717,7 @@
                     codeSection.classList.add('hidden');
                     editFields.classList.add('active');
                     alert('✅ Edycja odblokowana!');
+                    loadSubstitutionsForEditing(); // Załaduj zastępstwa do edycji po odblokowaniu
                 } else {
                     alert('❌ Nieprawidłowy kod dostępu!');
                     accessCodeInput.value = ''; // Wyczyść pole po błędnym kodzie
@@ -643,21 +726,92 @@
             }, 500);
         }
 
+        // Dodawanie nowego wiersza zastępstwa w panelu edycji
+        function addSubstitutionEntry(substitute = {}) {
+            const container = document.getElementById('editSubstitutesSection');
+            const entryDiv = document.createElement('div');
+            entryDiv.className = 'substitute-entry';
+
+            entryDiv.innerHTML = `
+                <div class="entry-row">
+                    <label>Godz. lekcyjna:</label>
+                    <input type="text" class="config-input-small" value="${substitute.lessonHour || ''}" placeholder="Np. 1-2">
+                    <button class="btn btn-remove" onclick="removeSubstitutionEntry(this)">Usuń</button>
+                </div>
+                <div class="entry-row">
+                    <label>Za kogo:</label>
+                    <input type="text" class="config-input-small" value="${substitute.replacedTeacher || ''}" placeholder="Nazwisko">
+                </div>
+                <div class="entry-row">
+                    <label>Kto zastępuje:</label>
+                    <input type="text" class="config-input-small" value="${substitute.substitutingTeacher || ''}" placeholder="Nazwisko">
+                </div>
+                <div class="entry-row">
+                    <label>Klasa:</label>
+                    <input type="text" class="config-input-small" value="${substitute.class || ''}" placeholder="Np. 5a">
+                </div>
+                <div class="entry-row">
+                    <label>Uwagi:</label>
+                    <input type="text" class="config-input-small" value="${substitute.notes || ''}" placeholder="Dodatkowe informacje">
+                </div>
+            `;
+            container.appendChild(entryDiv);
+        }
+
+        // Usuwanie wiersza zastępstwa z panelu edycji
+        function removeSubstitutionEntry(buttonElement) {
+            buttonElement.closest('.substitute-entry').remove();
+        }
+
+        // Ładowanie zastępstw do edycji
+        function loadSubstitutionsForEditing() {
+            const substitutesRaw = localStorage.getItem('substitutesContent');
+            const container = document.getElementById('editSubstitutesSection');
+            container.innerHTML = ''; // Wyczyść istniejące pola
+
+            if (substitutesRaw) {
+                try {
+                    const substitutes = JSON.parse(substitutesRaw);
+                    if (Array.isArray(substitutes)) {
+                        substitutes.forEach(sub => addSubstitutionEntry(sub));
+                    }
+                } catch (e) {
+                    console.error("Błąd parsowania zastępstw z localStorage:", e);
+                }
+            }
+            // Zapewnij przynajmniej jedno puste pole, jeśli nie ma żadnych danych
+            if (container.children.length === 0) {
+                addSubstitutionEntry();
+            }
+        }
+
+
         // Zapisywanie treści do localStorage
         function saveContent() {
             const schoolName = document.getElementById('editSchoolName').value;
             const ticker = document.getElementById('editTicker').value;
-            const duties = document.getElementById('editDuties').value;
-            const substitutes = document.getElementById('editSubstitutes').value;
             const announcements = document.getElementById('editAnnouncements').value;
+
+            // Zbieranie danych z zastępstw
+            const substituteEntries = document.querySelectorAll('#editSubstitutesSection .substitute-entry');
+            const substitutesData = [];
+            substituteEntries.forEach(entry => {
+                const inputs = entry.querySelectorAll('input[type="text"]');
+                substitutesData.push({
+                    lessonHour: inputs[0].value.trim(),
+                    replacedTeacher: inputs[1].value.trim(),
+                    substitutingTeacher: inputs[2].value.trim(),
+                    class: inputs[3].value.trim(),
+                    notes: inputs[4].value.trim()
+                });
+            });
 
             localStorage.setItem('schoolName', schoolName);
             localStorage.setItem('tickerContent', ticker);
-            localStorage.setItem('dutiesContent', duties);
-            localStorage.setItem('substitutesContent', substitutes);
             localStorage.setItem('announcementsContent', announcements);
+            localStorage.setItem('substitutesContent', JSON.stringify(substitutesData)); // Zapisz jako JSON
             
-            displayContent(); // Odśwież widok
+            displayContent(); // Odśwież widok tablicy
             toggleConfig(); // Schowaj panel po zapisie
             alert('✅ Zmiany zostały zapisane!');
         }
@@ -666,8 +820,7 @@
         function displayContent() {
             const schoolName = localStorage.getItem('schoolName') || 'Tablica Informacyjna';
             const ticker = localStorage.getItem('tickerContent') || 'Wpisz tekst paska informacyjnego w panelu konfiguracji, aby wyświetlić bieżące wiadomości.';
-            const dutiesRaw = localStorage.getItem('dutiesContent') || '';
-            const substitutesRaw = localStorage.getItem('substitutesContent') || '';
+            const substitutesRaw = localStorage.getItem('substitutesContent') || '[]'; // Domyślnie pusta tablica JSON
             const announcementsRaw = localStorage.getItem('announcementsContent') || '';
 
             document.getElementById('schoolName').textContent = schoolName;
@@ -680,52 +833,37 @@
             `;
             document.getElementById('editTicker').value = ticker;
 
-            // Dyżury
-            const dutyList = document.getElementById('dutyList');
-            dutyList.innerHTML = '';
-            const duties = dutiesRaw.split('\n').filter(line => line.trim() !== '').map(line => {
-                const parts = line.split(';');
-                return { name: parts[0] ? parts[0].trim() : '', location: parts[1] ? parts[1].trim() : '' };
-            });
-
-            if (duties.length > 0 && duties[0].name !== '') { // Check if there's actual data after splitting
-                duties.forEach(duty => {
-                    const li = document.createElement('li');
-                    li.className = 'item duty-item';
-                    li.innerHTML = `
-                        <div class="item-primary">${duty.name}</div>
-                        <div class="item-secondary">
-                            <span class="item-icon">📍</span>${duty.location}
-                        </div>
-                    `;
-                    dutyList.appendChild(li);
-                });
-            } else {
-                dutyList.innerHTML = `
-                    <li class="empty-state">
-                        <div class="empty-state-icon">📋</div>
-                        <div class="empty-state-text">Brak danych o dyżurach</div>
-                    </li>
-                `;
-            }
-            document.getElementById('editDuties').value = dutiesRaw;
-
-
             // Zastępstwa
             const substituteList = document.getElementById('substituteList');
             substituteList.innerHTML = '';
-            const substitutes = substitutesRaw.split('\n').filter(line => line.trim() !== '').map(line => {
-                const parts = line.split(';');
-                return { class: parts[0] ? parts[0].trim() : '', details: parts[1] ? parts[1].trim() : '' };
-            });
+            let substitutes = [];
+            try {
+                substitutes = JSON.parse(substitutesRaw);
+                // Filtrowanie pustych wpisów
+                substitutes = substitutes.filter(sub => 
+                    sub.lessonHour || sub.replacedTeacher || sub.substitutingTeacher || sub.class || sub.notes
+                );
+            } catch (e) {
+                console.error("Błąd parsowania zastępstw z localStorage (wyświetlanie):", e);
+            }
 
-            if (substitutes.length > 0 && substitutes[0].class !== '') { // Check if there's actual data after splitting
-                substitutes.forEach(sub => {
+            if (substitutes.length > 0) {
+                // Wyświetl tylko do 5 zastępstw
+                substitutes.slice(0, 5).forEach(sub => {
                     const li = document.createElement('li');
                     li.className = 'item substitute-item';
                     li.innerHTML = `
-                        <div class="item-primary">Klasa ${sub.class}</div>
-                        <div class="item-secondary">${sub.details}</div>
+                        <div class="item-primary">
+                            ${sub.lessonHour ? `<span class="lesson-info">Lekcja ${sub.lessonHour}</span>` : ''}
+                            <span class="teachers-info">
+                                ${sub.replacedTeacher ? `Za: ${sub.replacedTeacher}` : ''}
+                                ${sub.substitutingTeacher ? `&nbsp;&nbsp;➡️&nbsp;&nbsp; ${sub.substitutingTeacher}` : ''}
+                            </span>
+                        </div>
+                        <div class="item-secondary">
+                            ${sub.class ? `<span class="class-info">Klasa: ${sub.class}</span>` : ''}
+                            ${sub.notes ? `<span class="notes-info">Uwagi: ${sub.notes}</span>` : ''}
+                        </div>
                     `;
                     substituteList.appendChild(li);
                 });
@@ -737,7 +875,6 @@
                     </li>
                 `;
             }
-            document.getElementById('editSubstitutes').value = substitutesRaw;
 
             // Ogłoszenia
             const announcementList = document.getElementById('announcementList');
@@ -771,7 +908,7 @@
 
             // Załaduj i wyświetl dane z localStorage
             displayContent();
-
+            
             // Pełny ekran po kliknięciu F11
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'F11') {
