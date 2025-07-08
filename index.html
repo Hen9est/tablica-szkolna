@@ -97,7 +97,7 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* Główna siatka treści (DWIE KOLUMNY) */
+        /* Główna siatka treści (2 kolumny) */
         .content-grid {
             flex: 1;
             display: grid;
@@ -490,10 +490,8 @@
             const substitutes = data.substitutesContent || [];
             const announcementsRaw = data.announcementsContent || '';
             const announcements = announcementsRaw.split('\n').filter(line => line.trim() !== '');
-            // Usunięto odczyt luckyNumber
 
             document.getElementById('schoolName').textContent = schoolName;
-            // Usunięto wyświetlanie luckyNumber
 
             const tickerContentElement = document.getElementById('tickerContent');
             tickerContentElement.innerHTML = `
@@ -527,6 +525,7 @@
                     groupedSubstitutes[dateKey].forEach(sub => {
                         const li = document.createElement('li');
                         li.className = 'item substitute-item';
+                        // Sprawdzamy, czy sub.lessonHour to faktycznie godzina, a nie data
                         const isLessonHourValid = sub.lessonHour && !isNaN(parseInt(sub.lessonHour.split('-')[0]));
 
                         li.innerHTML = `
