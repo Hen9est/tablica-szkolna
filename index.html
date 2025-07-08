@@ -168,15 +168,40 @@
             list-style: none;
         }
 
-        .item {
-            padding: 15px; /* Mniejszy padding */
+        /* Grupa zastępstw wg daty */
+        .substitute-date-group {
+            margin-bottom: 20px;
+            border-bottom: 1px dashed #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .substitute-date-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .substitute-date-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a73e8;
             margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .item {
+            padding: 12px 15px; /* Mniejszy padding dla kompaktowości */
+            margin-bottom: 8px; /* Mniejszy margines */
             background: #ffffff; /* Białe tło elementów */
             border-radius: 6px; /* Mniejsze zaokrąglenie */
             border: 1px solid #e0e0e0; /* Delikatna ramka */
             border-left: 5px solid; /* Kolorowy pasek */
             transition: all 0.2s ease-in-out; /* Szybsza animacja */
             animation: none; /* Usunięcie animacji slideIn */
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap; /* Pozwala na zawijanie elementów, jeśli jest za wąsko */
+            justify-content: space-between;
         }
 
         .substitute-item {
@@ -187,48 +212,51 @@
             transform: translateX(3px);
         }
 
-        .substitute-item .item-primary {
+        /* Nowe style dla zastępstw w jednym wierszu */
+        .substitute-item-content {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 5px;
+            flex-grow: 1;
+            font-size: 16px; /* Ogólny rozmiar tekstu w wierszu */
+            color: #202124;
+            gap: 10px; /* Odstępy między segmentami */
+            flex-wrap: wrap; /* Pozwala na zawijanie, jeśli wiersz jest bardzo długi */
         }
 
-        .substitute-item .lesson-info {
-            font-size: 18px; /* Mniejszy rozmiar */
+        .substitute-item-content .lesson-info {
+            font-size: 15px; /* Mniejszy rozmiar dla lekcji */
             font-weight: 700;
             color: #c5221f; /* Ciemny czerwony */
             background-color: #ffe0b2; /* Jasnopomarańczowy */
-            padding: 4px 8px; /* Mniejszy padding */
-            border-radius: 4px;
-            margin-right: 10px;
+            padding: 3px 6px; /* Kompaktowy padding */
+            border-radius: 3px;
+            white-space: nowrap; /* Zapobiega łamaniu wiersza */
+            flex-shrink: 0; /* Nie zmniejszaj */
         }
 
-        .substitute-item .teachers-info {
-            font-size: 16px; /* Mniejszy rozmiar */
+        .substitute-item-content .teachers-info {
             font-weight: 500;
-            color: #202124;
-            flex-grow: 1;
+            white-space: nowrap; /* Zapobiega łamaniu wiersza */
+            flex-grow: 1; /* Pozwala na rozszerzanie */
         }
 
-        .substitute-item .class-info {
-            font-size: 14px; /* Mniejszy rozmiar */
+        .substitute-item-content .class-info {
             font-weight: 500;
             color: #5f6368;
-            margin-top: 5px;
-            display: block;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
-        .substitute-item .notes-info {
-            font-size: 14px; /* Mniejszy rozmiar */
-            color: #5f6368;
-            line-height: 1.4;
-            margin-top: 8px;
+        .substitute-item-content .notes-info {
             font-style: italic;
+            color: #5f6368;
+            flex-basis: 100%; /* Zajmij cały wiersz poniżej, jeśli jest */
+            font-size: 13px; /* Mniejszy rozmiar dla notatek */
+            margin-top: 2px; /* Mały odstęp od góry */
+            white-space: normal; /* Pozwól na zawijanie */
         }
 
-
+        /* Ogłoszenia */
         .announcement-item {
             border-left-color: #34a853; /* Google zielony */
         }
@@ -243,7 +271,7 @@
             font-size: 18px; /* Zmniejszony rozmiar */
             font-weight: 600;
             color: #202124;
-            margin-bottom: 8px;
+            margin-bottom: 8px; /* Zachowany, ale dla zastępstw będzie nadpisany */
         }
 
         .item-secondary {
@@ -529,7 +557,8 @@
             color: #5f6368;
         }
 
-        .substitute-entry .entry-row input[type="text"] {
+        .substitute-entry .entry-row input[type="text"],
+        .substitute-entry .entry-row input[type="date"] { /* Dodano input type="date" */
             flex-grow: 1;
             margin-bottom: 0;
         }
@@ -591,13 +620,13 @@
             <div class="card">
                 <div class="card-header substitutes-header">
                     <span class="card-icon">🔄</span>
-                    <h2 class="card-title">Zastępstwa na dziś</h2>
+                    <h2 class="card-title">Zastępstwa</h2>
                 </div>
                 <div class="card-body">
                     <ul class="item-list" id="substituteList">
                         <li class="empty-state">
                             <div class="empty-state-icon">📝</div>
-                            <div class="empty-state-text">Brak zastępstw</div>
+                            <div class="empty-state-text">Brak zastępstw na najbliższe dni</div>
                         </li>
                     </ul>
                 </div>
@@ -673,6 +702,30 @@
         // URL Twojej aplikacji Google Apps Script
         let GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxfjyGp7LkXsBXM53InKCeGEveCLz2K6J85Q6IGVL3y__eXXwV_4gG_TGv5EWCcIHF8/exec'; 
 
+        // Funkcja pomocnicza do formatowania daty na potrzeby wyświetlania
+        function formatDateToDisplay(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString + 'T00:00:00'); // Dodaj T00:00:00, aby uniknąć problemów ze strefą czasową
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+            const dayAfterTomorrow = new Date(today);
+            dayAfterTomorrow.setDate(today.getDate() + 2);
+
+            date.setHours(0,0,0,0); // Ustaw na początek dnia dla porównania
+
+            if (date.getTime() === today.getTime()) {
+                return 'Dziś';
+            } else if (date.getTime() === tomorrow.getTime()) {
+                return 'Jutro';
+            } else if (date.getTime() === dayAfterTomorrow.getTime()) {
+                return 'Pojutrze';
+            } else {
+                return date.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' });
+            }
+        }
+
         // Aktualizacja czasu
         function updateDateTime() {
             const now = new Date();
@@ -736,9 +789,13 @@
 
             entryDiv.innerHTML = `
                 <div class="entry-row">
+                    <label>Data:</label>
+                    <input type="date" class="config-input-small" value="${substitute.date || ''}">
+                    <button class="btn btn-remove" onclick="removeSubstitutionEntry(this)">Usuń</button>
+                </div>
+                <div class="entry-row">
                     <label>Godz. lekcyjna:</label>
                     <input type="text" class="config-input-small" value="${substitute.lessonHour || ''}" placeholder="Np. 1-2">
-                    <button class="btn btn-remove" onclick="removeSubstitutionEntry(this)">Usuń</button>
                 </div>
                 <div class="entry-row">
                     <label>Za kogo:</label>
@@ -801,19 +858,20 @@
             const substituteEntries = document.querySelectorAll('#editSubstitutesSection .substitute-entry');
             const substitutesData = [];
             substituteEntries.forEach(entry => {
-                const inputs = entry.querySelectorAll('input[type="text"]');
+                const inputs = entry.querySelectorAll('input[type="date"], input[type="text"]'); // Zmieniono selektor
                 substitutesData.push({
-                    lessonHour: inputs[0].value.trim(),
-                    replacedTeacher: inputs[1].value.trim(),
-                    substitutingTeacher: inputs[2].value.trim(),
-                    class: inputs[3].value.trim(),
-                    notes: inputs[4].value.trim()
+                    date: inputs[0].value.trim(), // Pole daty
+                    lessonHour: inputs[1].value.trim(),
+                    replacedTeacher: inputs[2].value.trim(),
+                    substitutingTeacher: inputs[3].value.trim(),
+                    class: inputs[4].value.trim(),
+                    notes: inputs[5].value.trim()
                 });
             });
 
-            // Usuń puste wiersze
+            // Usuń puste wiersze (teraz sprawdzamy wszystkie pola)
             const filteredSubstitutesData = substitutesData.filter(sub => 
-                sub.lessonHour || sub.replacedTeacher || sub.substitutingTeacher || sub.class || sub.notes
+                sub.date || sub.lessonHour || sub.replacedTeacher || sub.substitutingTeacher || sub.class || sub.notes
             );
 
             const dataToSend = {
@@ -856,7 +914,7 @@
             }
         }
 
-        // Pobieranie treści z Google Apps Script (teraz z mode: 'cors')
+        // Pobieranie treści z Google Apps Script (z mode: 'cors')
         async function fetchDataFromAppsScript() {
             if (!GOOGLE_APP_SCRIPT_URL || GOOGLE_APP_SCRIPT_URL === 'TWOJ_URL_APPS_SCRIPT_TUTAJ') {
                 console.warn("URL Google Apps Script nie został skonfigurowany. Dane będą ładowane z localStorage.");
@@ -922,37 +980,54 @@
                 substitutes = JSON.parse(substitutesRaw);
                 // Filtrowanie pustych wpisów
                 substitutes = substitutes.filter(sub => 
-                    sub.lessonHour || sub.replacedTeacher || sub.substitutingTeacher || sub.class || sub.notes
+                    sub.date || sub.lessonHour || sub.replacedTeacher || sub.substitutingTeacher || sub.class || sub.notes
                 );
             } catch (e) {
                 console.error("Błąd parsowania zastępstw z localStorage (wyświetlanie):", e);
             }
 
             if (substitutes.length > 0) {
-                // Wyświetl tylko do 5 zastępstw
-                substitutes.slice(0, 5).forEach(sub => {
-                    const li = document.createElement('li');
-                    li.className = 'item substitute-item';
-                    li.innerHTML = `
-                        <div class="item-primary">
-                            ${sub.lessonHour ? `<span class="lesson-info">Lekcja ${sub.lessonHour}</span>` : ''}
-                            <span class="teachers-info">
-                                ${sub.replacedTeacher ? `Za: ${sub.replacedTeacher}` : ''}
-                                ${sub.substitutingTeacher ? `&nbsp;&nbsp;➡️&nbsp;&nbsp; ${sub.substitutingTeacher}` : ''}
-                            </span>
-                        </div>
-                        <div class="item-secondary">
-                            ${sub.class ? `<span class="class-info">Klasa: ${sub.class}</span>` : ''}
-                            ${sub.notes ? `<span class="notes-info">Uwagi: ${sub.notes}</span>` : ''}
-                        </div>
-                    `;
-                    substituteList.appendChild(li);
-                });
+                // Grupuj zastępstwa według daty
+                const groupedSubstitutes = substitutes.reduce((acc, sub) => {
+                    const dateKey = sub.date; // Użyj daty jako klucza
+                    if (!acc[dateKey]) {
+                        acc[dateKey] = [];
+                    }
+                    acc[dateKey].push(sub);
+                    return acc;
+                }, {});
+
+                // Wyświetl grupy zastępstw
+                for (const dateKey in groupedSubstitutes) {
+                    const dateTitle = formatDateToDisplay(dateKey);
+                    
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'substitute-date-group';
+                    groupDiv.innerHTML = `<h3 class="substitute-date-title">${dateTitle}</h3>`;
+                    
+                    groupedSubstitutes[dateKey].forEach(sub => {
+                        const li = document.createElement('li');
+                        li.className = 'item substitute-item';
+                        li.innerHTML = `
+                            <div class="substitute-item-content">
+                                ${sub.lessonHour ? `<span class="lesson-info">Lekcja ${sub.lessonHour}</span>` : ''}
+                                <span class="teachers-info">
+                                    ${sub.replacedTeacher ? `Za: ${sub.replacedTeacher}` : ''}
+                                    ${sub.substitutingTeacher ? `&nbsp;&nbsp;➡️&nbsp;&nbsp; ${sub.substitutingTeacher}` : ''}
+                                    ${sub.class ? `&nbsp;&nbsp;(${sub.class})` : ''}
+                                </span>
+                                ${sub.notes ? `<span class="notes-info">${sub.notes}</span>` : ''}
+                            </div>
+                        `;
+                        groupDiv.appendChild(li);
+                    });
+                    substituteList.appendChild(groupDiv);
+                }
             } else {
                 substituteList.innerHTML = `
                     <li class="empty-state">
                         <div class="empty-state-icon">📝</div>
-                        <div class="empty-state-text">Brak zastępstw</div>
+                        <div class="empty-state-text">Brak zastępstw na najbliższe dni</div>
                     </li>
                 `;
             }
