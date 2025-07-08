@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tablica Informacyjna - Szkoła</title>
     <style>
+        /* Import Google Fonts for a Google-like feel */
+        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -12,11 +15,15 @@
         }
 
         body {
-            font-family: 'Google Sans', 'Roboto', Arial, sans-serif; /* Bardziej Google-like font-family */
-            background: #f8f9fa; /* Jasne tło */
-            color: #333; /* Ciemny tekst na jasnym tle */
+            font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+            background: #f8f9fa; /* Bardzo jasne tło, prawie białe */
+            color: #3c4043; /* Ciemniejszy szary dla głównego tekstu */
             overflow: hidden;
             height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Główny kontener */
@@ -26,6 +33,7 @@
             display: flex;
             flex-direction: column;
             background: #f8f9fa; /* Jasne tło */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* Lekki cień, aby wyglądało jak "strona" */
         }
 
         /* Nagłówek */
@@ -37,14 +45,15 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: none; /* Usunięcie dolnej linii */
+            z-index: 10; /* Aby cień był widoczny */
         }
 
         .school-name {
             font-size: 42px;
-            font-weight: 300;
-            letter-spacing: -1px;
+            font-weight: 400; /* Google Sans default weight */
+            letter-spacing: -0.5px;
             color: #1a73e8; /* Google blue */
-            text-shadow: none; /* Usunięcie cienia */
+            text-shadow: none;
         }
 
         .date-time {
@@ -68,6 +77,7 @@
             overflow: hidden;
             position: relative;
             box-shadow: 0 1px 6px rgba(0,0,0,0.1); /* Delikatny cień */
+            margin-top: -1px; /* Aby cień nagłówka ładnie się łączył */
         }
 
         .ticker-content {
@@ -82,7 +92,7 @@
             font-size: 24px;
             font-weight: 500; /* Lżejsza czcionka */
             color: #1a73e8; /* Google blue */
-            text-shadow: none; /* Usunięcie cienia */
+            text-shadow: none;
         }
 
         @keyframes scroll {
@@ -128,16 +138,8 @@
             border-bottom: 1px solid #f0f0f0; /* Delikatna linia pod nagłówkiem */
         }
 
-        /* Usunięto .duties-header */
-
-        .substitutes-header {
-            /* Nowe kolory dla nagłówka zastępstw, nawiązujące do Google */
-            background: #ffffff;
-            color: #202124;
-        }
-
-        .announcements-header {
-            /* Nowe kolory dla nagłówka ogłoszeń, nawiązujące do Google */
+        .substitutes-header, .announcements-header {
+            /* Nowe kolory dla nagłówka zastępstw i ogłoszeń, nawiązujące do Google */
             background: #ffffff;
             color: #202124;
         }
@@ -158,7 +160,7 @@
             padding: 20px 25px;
             flex: 1;
             overflow-y: auto;
-            color: #333;
+            color: #3c4043; /* Ciemniejszy szary */
         }
 
         /* Lista elementów */
@@ -176,8 +178,6 @@
             transition: all 0.2s ease-in-out; /* Szybsza animacja */
             animation: none; /* Usunięcie animacji slideIn */
         }
-
-        /* Usunięto .duty-item */
 
         .substitute-item {
             border-left-color: #fbbc05; /* Google żółty/pomarańczowy */
@@ -269,7 +269,7 @@
             padding: 25px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.15); /* Większy cień */
             max-width: 450px;
-            color: #333;
+            color: #3c4043; /* Ciemniejszy szary */
             transform: translateY(200%);
             transition: transform 0.3s ease-out; /* Płynniejsza animacja */
             max-height: 90vh;
@@ -670,6 +670,8 @@
 
     <script>
         const EDIT_CODE = 'admin123';
+        // URL Twojej aplikacji Google Apps Script (zastąpisz to po publikacji)
+        let GOOGLE_APP_SCRIPT_URL = 'TWOJ_URL_APPS_SCRIPT_TUTAJ'; 
 
         // Aktualizacja czasu
         function updateDateTime() {
@@ -786,8 +788,11 @@
         }
 
 
-        // Zapisywanie treści do localStorage
-        function saveContent() {
+        // Zapisywanie treści do Google Apps Script
+        async function saveContent() {
+            const loader = document.getElementById('loader');
+            loader.classList.add('show');
+
             const schoolName = document.getElementById('editSchoolName').value;
             const ticker = document.getElementById('editTicker').value;
             const announcements = document.getElementById('editAnnouncements').value;
@@ -806,21 +811,81 @@
                 });
             });
 
-            localStorage.setItem('schoolName', schoolName);
-            localStorage.setItem('tickerContent', ticker);
-            localStorage.setItem('announcementsContent', announcements);
-            localStorage.setItem('substitutesContent', JSON.stringify(substitutesData)); // Zapisz jako JSON
-            
-            displayContent(); // Odśwież widok tablicy
-            toggleConfig(); // Schowaj panel po zapisie
-            alert('✅ Zmiany zostały zapisane!');
+            // Usuń puste wiersze
+            const filteredSubstitutesData = substitutesData.filter(sub => 
+                sub.lessonHour || sub.replacedTeacher || sub.substitutingTeacher || sub.class || sub.notes
+            );
+
+            const dataToSend = {
+                schoolName: schoolName,
+                tickerContent: ticker,
+                announcementsContent: announcements,
+                substitutesContent: filteredSubstitutesData
+            };
+
+            try {
+                const response = await fetch(GOOGLE_APP_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Wymagane dla Apps Script, jeśli nie ustawiasz CORS
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dataToSend)
+                });
+
+                // Apps Script z no-cors zawsze zwróci ok: true, więc musimy polegać na logice Apps Script.
+                // Na potrzeby demo, zakładamy sukces jeśli request przeszedł bez błędu sieci.
+                
+                alert('✅ Zmiany zostały wysłane do zapisania!');
+                // Odśwież dane z serwera po zapisie
+                await fetchDataFromAppsScript(); 
+
+            } catch (error) {
+                console.error('Błąd podczas wysyłania danych:', error);
+                alert('❌ Wystąpił błąd podczas zapisywania zmian. Sprawdź konsolę.');
+            } finally {
+                loader.classList.remove('show');
+                toggleConfig(); // Schowaj panel po zapisie
+            }
         }
 
-        // Wyświetlanie treści z localStorage lub domyślnych wartości
-        function displayContent() {
+        // Pobieranie treści z Google Apps Script
+        async function fetchDataFromAppsScript() {
+            if (!GOOGLE_APP_SCRIPT_URL || GOOGLE_APP_SCRIPT_URL === 'TWOJ_URL_APPS_SCRIPT_TUTAJ') {
+                console.warn("URL Google Apps Script nie został skonfigurowany. Dane będą ładowane z localStorage.");
+                displayContentFromLocalStorage();
+                return;
+            }
+
+            const loader = document.getElementById('loader');
+            loader.classList.add('show');
+
+            try {
+                const response = await fetch(GOOGLE_APP_SCRIPT_URL + '?action=getData'); // Dodaj parametr, aby Apps Script wiedział, że ma pobrać dane
+                const data = await response.json(); // Apps Script powinien zwrócić JSON
+
+                // Zapisz pobrane dane do localStorage na wypadek, gdyby Apps Script był niedostępny offline
+                localStorage.setItem('schoolName', data.schoolName || '');
+                localStorage.setItem('tickerContent', data.tickerContent || '');
+                localStorage.setItem('announcementsContent', data.announcementsContent || '');
+                localStorage.setItem('substitutesContent', JSON.stringify(data.substitutesContent || []));
+
+                displayContentFromLocalStorage(); // Wyświetl dane z localStorage (teraz zsynchronizowanego)
+
+            } catch (error) {
+                console.error('Błąd podczas pobierania danych z Apps Script:', error);
+                alert('❌ Wystąpił błąd podczas pobierania danych. Spróbuj ponownie lub sprawdź konsolę. Ładowanie danych z pamięci lokalnej.');
+                displayContentFromLocalStorage(); // Spróbuj załadować z localStorage, jeśli API zawiodło
+            } finally {
+                loader.classList.remove('show');
+            }
+        }
+
+        // Wyświetlanie treści z localStorage (używane zarówno po lokalnym zapisie, jak i po pobraniu z Apps Script)
+        function displayContentFromLocalStorage() {
             const schoolName = localStorage.getItem('schoolName') || 'Tablica Informacyjna';
             const ticker = localStorage.getItem('tickerContent') || 'Wpisz tekst paska informacyjnego w panelu konfiguracji, aby wyświetlić bieżące wiadomości.';
-            const substitutesRaw = localStorage.getItem('substitutesContent') || '[]'; // Domyślnie pusta tablica JSON
+            const substitutesRaw = localStorage.getItem('substitutesContent') || '[]';
             const announcementsRaw = localStorage.getItem('announcementsContent') || '';
 
             document.getElementById('schoolName').textContent = schoolName;
@@ -906,8 +971,10 @@
             updateDateTime();
             setInterval(updateDateTime, 1000);
 
-            // Załaduj i wyświetl dane z localStorage
-            displayContent();
+            // Po załadowaniu strony, spróbuj pobrać dane z Apps Script
+            fetchDataFromAppsScript();
+            // Ustaw automatyczne odświeżanie co 30 sekund
+            setInterval(fetchDataFromAppsScript, 30000); 
             
             // Pełny ekran po kliknięciu F11
             document.addEventListener('keydown', (e) => {
