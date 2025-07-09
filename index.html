@@ -73,6 +73,7 @@
             padding: 18px 0; 
             overflow: hidden; 
             white-space: nowrap; 
+            position: relative;
         }
         
         .ticker-text { 
@@ -309,6 +310,38 @@
             margin-bottom: 0;
         }
         
+        /* === Loading state === */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--font-color-secondary);
+        }
+        
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+        
+        .error {
+            color: var(--danger-color);
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--font-color-secondary);
+            font-style: italic;
+        }
+        
         /* === Responsywność === */
         @media (max-width: 1024px) {
             .content-grid {
@@ -348,8 +381,8 @@
 
     <!-- Ticker z ogłoszeniami -->
     <div class="ticker-wrapper">
-        <div class="ticker-text">
-            📢 Witamy w nowym roku szkolnym! • 📚 Przypominamy o obowiązku noszenia identyfikatorów • 🎯 Dzisiaj odbędą się konsultacje z matematyki w sali 205 • 🏫 Sekretariat czynny w godzinach 7:30-15:30
+        <div class="ticker-text" id="ticker-text">
+            Ładowanie komunikatów...
         </div>
     </div>
 
@@ -364,45 +397,8 @@
                 <h2>Zastępstwa na dziś</h2>
             </div>
             <div class="card-body">
-                <div class="substitutes-content">
-                    <div class="substitute-table">
-                        <div class="substitute-header">
-                            <span class="col-lesson">Lekcja</span>
-                            <span class="col-class">Klasa</span>
-                            <span>Nauczyciel</span>
-                            <span>Zastępuje</span>
-                        </div>
-                        <div class="substitute-row">
-                            <span class="col-lesson">1</span>
-                            <span class="col-class">3A</span>
-                            <span>A. Kowalski (matematyka)</span>
-                            <span class="substituting-teacher">M. Nowak</span>
-                        </div>
-                        <div class="substitute-row">
-                            <span class="col-lesson">2</span>
-                            <span class="col-class">2B</span>
-                            <span>J. Wiśniewska (j. polski)</span>
-                            <span class="substituting-teacher">K. Dąbrowski</span>
-                        </div>
-                        <div class="substitute-row">
-                            <span class="col-lesson">3</span>
-                            <span class="col-class">1C</span>
-                            <span>P. Lewandowski (historia)</span>
-                            <span class="substituting-teacher">A. Wójcik</span>
-                        </div>
-                        <div class="substitute-row">
-                            <span class="col-lesson">4</span>
-                            <span class="col-class">3D</span>
-                            <span>M. Kamińska (biologia)</span>
-                            <span class="substituting-teacher">R. Zieliński</span>
-                        </div>
-                        <div class="substitute-row">
-                            <span class="col-lesson">5</span>
-                            <span class="col-class">2A</span>
-                            <span>T. Szymański (fizyka)</span>
-                            <span class="substituting-teacher">E. Kozłowska</span>
-                        </div>
-                    </div>
+                <div class="substitutes-content" id="substitutes-content">
+                    <div class="loading">Ładowanie zastępstw</div>
                 </div>
             </div>
         </div>
@@ -416,31 +412,8 @@
                 <h2>Ogłoszenia</h2>
             </div>
             <div class="card-body">
-                <div class="announcements-content">
-                    <div class="announcement-item">
-                        <div class="announcement-title">Konkurs matematyczny</div>
-                        <div class="announcement-content">
-                            Zapraszamy uczniów klas 2-3 do udziału w szkolnym konkursie matematycznym. Zgłoszenia przyjmuje p. Kowalski do 15 marca.
-                        </div>
-                    </div>
-                    <div class="announcement-item">
-                        <div class="announcement-title">Wycieczka do muzeum</div>
-                        <div class="announcement-content">
-                            Klasy pierwsze jadą na wycieczkę do Muzeum Narodowego w piątek 20 marca. Zbiórka o godz. 8:00 przed szkołą.
-                        </div>
-                    </div>
-                    <div class="announcement-item">
-                        <div class="announcement-title">Zebranie z rodzicami</div>
-                        <div class="announcement-content">
-                            Przypominamy o zebraniu z rodzicami klas drugich, które odbędzie się we wtorek 17 marca o godz. 17:00.
-                        </div>
-                    </div>
-                    <div class="announcement-item">
-                        <div class="announcement-title">Dni otwarte uczelni</div>
-                        <div class="announcement-content">
-                            Uczniowie klas maturalnych mogą skorzystać ze zwolnienia na dni otwarte uczelni wyższych. Wymagane zaświadczenie z uczelni.
-                        </div>
-                    </div>
+                <div class="announcements-content" id="announcements-content">
+                    <div class="loading">Ładowanie ogłoszeń</div>
                 </div>
             </div>
         </div>
@@ -454,83 +427,40 @@
                 <h2>Dyżury nauczycieli</h2>
             </div>
             <div class="card-body">
-                <div class="duties-body">
-                    <div class="duties-day-info">
-                        <h3>Środa</h3>
-                        <p>10 marca 2024</p>
-                    </div>
-                    
-                    <div class="duties-break-group">
-                        <div class="duties-break-title">Przerwa 1 (8:45 - 8:55)</div>
-                        <div class="duties-location-card">
-                            <div class="duties-location-header">
-                                <h4>Parter</h4>
-                            </div>
-                            <div class="duties-teachers">
-                                <div class="duties-teacher">A. Nowak</div>
-                                <div class="duties-teacher">B. Kowalczyk</div>
-                            </div>
-                        </div>
-                        <div class="duties-location-card">
-                            <div class="duties-location-header">
-                                <h4>I piętro</h4>
-                            </div>
-                            <div class="duties-teachers">
-                                <div class="duties-teacher">C. Wiśniewski</div>
-                                <div class="duties-teacher">D. Mazur</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="duties-break-group">
-                        <div class="duties-break-title">Przerwa 2 (9:40 - 9:50)</div>
-                        <div class="duties-location-card">
-                            <div class="duties-location-header">
-                                <h4>Parter</h4>
-                            </div>
-                            <div class="duties-teachers">
-                                <div class="duties-teacher">E. Jankowski</div>
-                                <div class="duties-teacher">F. Wojciechowski</div>
-                            </div>
-                        </div>
-                        <div class="duties-location-card">
-                            <div class="duties-location-header">
-                                <h4>I piętro</h4>
-                            </div>
-                            <div class="duties-teachers">
-                                <div class="duties-teacher">G. Kowalski</div>
-                                <div class="duties-teacher">H. Lewandowska</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="duties-break-group">
-                        <div class="duties-break-title">Przerwa obiadowa (11:25 - 11:40)</div>
-                        <div class="duties-location-card">
-                            <div class="duties-location-header">
-                                <h4>Stołówka</h4>
-                            </div>
-                            <div class="duties-teachers">
-                                <div class="duties-teacher">I. Dąbrowska</div>
-                                <div class="duties-teacher">J. Zieliński</div>
-                            </div>
-                        </div>
-                        <div class="duties-location-card">
-                            <div class="duties-location-header">
-                                <h4>Korytarze</h4>
-                            </div>
-                            <div class="duties-teachers">
-                                <div class="duties-teacher">K. Szymańska</div>
-                                <div class="duties-teacher">L. Woźniak</div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="duties-body" id="duties-content">
+                    <div class="loading">Ładowanie dyżurów</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // ========================================
+        // KONFIGURACJA
+        // ========================================
+        
+        // URL do Google Apps Script
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxfjyGp7LkXsBXM53InKCeGEveCLz2K6J85Q6IGVL3y__eXXwV_4gG_TGv5EWCcIHF8/exec';
+        
+        // ========================================
+        // KOD APLIKACJI
+        // ========================================
+        
+        // Funkcja do pobierania danych z Google Apps Script
+        async function fetchSheetData(action) {
+            try {
+                const response = await fetch(`${APPS_SCRIPT_URL}?action=${action}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                return data.data || [];
+            } catch (error) {
+                console.error(`Błąd podczas pobierania danych dla akcji ${action}:`, error);
+                return [];
+            }
+        }
+        
         // Aktualizacja daty i czasu
         function updateDateTime() {
             const now = new Date();
@@ -545,19 +475,222 @@
             const dateTimeString = now.toLocaleDateString('pl-PL', options);
             document.getElementById('datetime').textContent = dateTimeString;
         }
-
-        // Aktualizuj czas co sekundę
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-
-        // Symulacja dynamicznego ładowania danych
-        function loadDynamicContent() {
-            // Tu można dodać kod do pobierania danych z API
-            console.log('Ładowanie dynamicznej zawartości...');
+        
+        // Załaduj zastępstwa
+        async function loadSubstitutes() {
+            const container = document.getElementById('substitutes-content');
+            
+            try {
+                // Pobierz dane z Apps Script
+                const response = await fetchSheetData('getSubstitutes');
+                const data = response.data || response;
+                
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="empty-state">Brak zastępstw na dziś</div>';
+                    return;
+                }
+                
+                // Zbuduj tabelę
+                let html = `
+                    <div class="substitute-table">
+                        <div class="substitute-header">
+                            <span class="col-lesson">Lekcja</span>
+                            <span class="col-class">Klasa</span>
+                            <span>Nauczyciel</span>
+                            <span>Zastępuje</span>
+                        </div>
+                `;
+                
+                data.forEach(row => {
+                    if (row.lesson && row.class && row.teacher && row.substitute) {
+                        html += `
+                            <div class="substitute-row">
+                                <span class="col-lesson">${row.lesson}</span>
+                                <span class="col-class">${row.class}</span>
+                                <span>${row.teacher}</span>
+                                <span class="substituting-teacher">${row.substitute}</span>
+                            </div>
+                        `;
+                    }
+                });
+                
+                html += '</div>';
+                container.innerHTML = html;
+                
+            } catch (error) {
+                container.innerHTML = '<div class="error">Błąd ładowania zastępstw</div>';
+                console.error('Błąd:', error);
+            }
         }
-
-        // Załaduj dane przy starcie
-        window.addEventListener('load', loadDynamicContent);
+        
+        // Załaduj ogłoszenia
+        async function loadAnnouncements() {
+            const container = document.getElementById('announcements-content');
+            
+            try {
+                // Pobierz dane z Apps Script
+                const response = await fetchSheetData('getAnnouncements');
+                const data = response.data || response;
+                
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="empty-state">Brak ogłoszeń</div>';
+                    return;
+                }
+                
+                let html = '';
+                data.forEach(announcement => {
+                    if (announcement.title && announcement.content) {
+                        html += `
+                            <div class="announcement-item">
+                                <div class="announcement-title">${announcement.title}</div>
+                                <div class="announcement-content">${announcement.content}</div>
+                            </div>
+                        `;
+                    }
+                });
+                
+                container.innerHTML = html;
+                
+            } catch (error) {
+                container.innerHTML = '<div class="error">Błąd ładowania ogłoszeń</div>';
+                console.error('Błąd:', error);
+            }
+        }
+        
+        // Załaduj dyżury
+        async function loadDuties() {
+            const container = document.getElementById('duties-content');
+            
+            try {
+                // Pobierz dane z Apps Script
+                const response = await fetchSheetData('getDuties');
+                const data = response.data || response;
+                
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="empty-state">Brak dyżurów na dziś</div>';
+                    return;
+                }
+                
+                // Pobierz dzień tygodnia
+                const days = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+                const today = new Date();
+                const dayName = days[today.getDay()];
+                
+                let html = `
+                    <div class="duties-day-info">
+                        <h3>${dayName}</h3>
+                        <p>${today.toLocaleDateString('pl-PL')}</p>
+                    </div>
+                `;
+                
+                // Grupuj dyżury według przerw
+                const dutiesByBreak = {};
+                data.forEach(duty => {
+                    if (duty.break && duty.location && duty.teacher) {
+                        if (!dutiesByBreak[duty.break]) {
+                            dutiesByBreak[duty.break] = [];
+                        }
+                        dutiesByBreak[duty.break].push({
+                            time: duty.time || '',
+                            location: duty.location,
+                            teacher: duty.teacher
+                        });
+                    }
+                });
+                
+                // Wyświetl dyżury pogrupowane
+                for (const [breakName, duties] of Object.entries(dutiesByBreak)) {
+                    html += `<div class="duties-break-group">`;
+                    html += `<div class="duties-break-title">${breakName}</div>`;
+                    
+                    // Grupuj według lokalizacji
+                    const dutiesByLocation = {};
+                    duties.forEach(duty => {
+                        if (!dutiesByLocation[duty.location]) {
+                            dutiesByLocation[duty.location] = [];
+                        }
+                        dutiesByLocation[duty.location].push(duty.teacher);
+                    });
+                    
+                    // Wyświetl według lokalizacji
+                    for (const [location, teachers] of Object.entries(dutiesByLocation)) {
+                        html += `
+                            <div class="duties-location-card">
+                                <div class="duties-location-header">
+                                    <h4>${location}</h4>
+                                </div>
+                                <div class="duties-teachers">
+                        `;
+                        
+                        teachers.forEach(teacher => {
+                            html += `<div class="duties-teacher">${teacher}</div>`;
+                        });
+                        
+                        html += `
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    html += `</div>`;
+                }
+                
+                container.innerHTML = html;
+                
+            } catch (error) {
+                container.innerHTML = '<div class="error">Błąd ładowania dyżurów</div>';
+                console.error('Błąd:', error);
+            }
+        }
+        
+        // Załaduj komunikaty do tickera
+        async function loadTicker() {
+            const tickerElement = document.getElementById('ticker-text');
+            
+            try {
+                const response = await fetchSheetData('getTicker');
+                const data = response.data || response;
+                
+                if (!data || data.length === 0) {
+                    tickerElement.textContent = '📢 Brak komunikatów na dziś';
+                    return;
+                }
+                
+                // Połącz wszystkie komunikaty
+                const messages = data
+                    .filter(item => item.message || item.text || item)
+                    .map(item => item.message || item.text || item)
+                    .join(' • ');
+                
+                tickerElement.textContent = messages || '📢 Brak komunikatów na dziś';
+                
+            } catch (error) {
+                tickerElement.textContent = '📢 Błąd ładowania komunikatów';
+                console.error('Błąd:', error);
+            }
+        }
+        
+        // Funkcja do odświeżania wszystkich danych
+        async function refreshAllData() {
+            await Promise.all([
+                loadSubstitutes(),
+                loadAnnouncements(),
+                loadDuties(),
+                loadTicker()
+            ]);
+        }
+        
+        // Inicjalizacja
+        document.addEventListener('DOMContentLoaded', async () => {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // Załaduj dane
+            await refreshAllData();
+            
+            // Odświeżaj dane co 5 minut
+            setInterval(refreshAllData, 300000);
+        });
     </script>
 </body>
 </html>
