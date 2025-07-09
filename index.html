@@ -2,69 +2,187 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Test Połączenia z Google Apps Script</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablica Informacyjna</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; padding: 2em; line-height: 1.6; background-color: #f4f4f9; color: #333; }
-        h1 { color: #1a73e8; }
-        #result { padding: 1.5em; margin-top: 1em; border-radius: 8px; border: 1px solid #ccc; background-color: #f0f0f0; white-space: pre-wrap; font-family: monospace; }
-        .success { border-color: #2e7d32; background-color: #e8f5e9; color: #1b5e20; }
-        .error { border-color: #d32f2f; background-color: #ffebee; color: #c62828; }
-        button {
-            background-color: #1a73e8;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        :root {
+            --primary-color: #1a73e8;
+            --primary-light-color: #e8f0fe;
+            --primary-dark-color: #174ea6;
+            --danger-color: #d93025;
+            --font-color-primary: #202124;
+            --font-color-secondary: #5f6368;
+            --bg-color-main: #f8f9fa;
+            --bg-color-card: #ffffff;
+            --border-color-light: #e8eaed;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            --border-radius-md: 8px;
+            --font-family-sans: 'Google Sans', 'Roboto', Arial, sans-serif;
         }
-        button:hover {
-            background-color: #174ea6;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Roboto', Arial, sans-serif; background-color: var(--bg-color-main); color: var(--font-color-primary); line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
+        .header { background: var(--bg-color-card); padding: 16px 24px; box-shadow: var(--shadow-sm); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .header h1 { font-family: var(--font-family-sans); font-size: 24px; font-weight: 500; color: var(--primary-color); }
+        .header .datetime { font-size: 16px; color: var(--font-color-secondary); }
+        .ticker-wrapper { background: var(--primary-light-color); border-bottom: 1px solid var(--border-color-light); padding: 18px 0; overflow: hidden; white-space: nowrap; }
+        .ticker-text { display: inline-block; padding-left: 100%; animation: scroll 40s linear infinite; font-family: var(--font-family-sans); font-size: 18px; font-weight: 500; color: var(--primary-dark-color); }
+        @keyframes scroll { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+        .content-grid { display: grid; grid-template-columns: 1fr 1fr 320px; gap: 20px; padding: 20px; flex: 1; }
+        .card { background: var(--bg-color-card); border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); overflow: hidden; display: flex; flex-direction: column; max-height: calc(100vh - 180px); }
+        .card-header { padding: 16px 20px; border-bottom: 1px solid var(--border-color-light); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+        .card-header h2 { font-family: var(--font-family-sans); font-size: 18px; font-weight: 500; }
+        .card-header .icon { width: 24px; height: 24px; fill: var(--font-color-secondary); }
+        .card-body { flex: 1; overflow-y: auto; }
+        .substitutes-content, .announcements-content, .duties-body { padding: 0; }
+        .substitute-table { width: 100%; border-collapse: collapse; }
+        .substitute-table th, .substitute-table td { padding: 12px 8px; text-align: left; border-bottom: 1px solid var(--border-color-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; }
+        .substitute-table th { font-size: 12px; font-weight: 700; color: var(--font-color-secondary); text-transform: uppercase; background: var(--bg-color-main); position: sticky; top: 0; }
+        .substitute-table tr:hover { background-color: var(--primary-light-color); }
+        .substituting-teacher { font-weight: 700; }
+        .announcements-content { padding: 8px 16px; }
+        .announcement-item { padding: 16px; margin-bottom: 12px; background: var(--bg-color-main); border-radius: var(--border-radius-md); border: 1px solid var(--border-color-light); }
+        .announcement-title { font-weight: 500; margin-bottom: 8px; font-size: 16px; }
+        .announcement-content { color: var(--font-color-secondary); font-size: 14px; }
+        .duties-column { grid-column: 3 / 4; }
+        .duties-body { padding: 12px; }
+        .duties-day-info { background: var(--primary-light-color); padding: 12px; border-radius: var(--border-radius-md); margin-bottom: 16px; text-align: center; }
+        .duties-day-info h3 { font-family: var(--font-family-sans); font-size: 16px; color: var(--primary-color); }
+        .duties-break-group { margin-bottom: 16px; }
+        .duties-break-title { font-family: var(--font-family-sans); font-size: 13px; font-weight: 500; margin-bottom: 8px; padding: 6px 10px; background: var(--bg-color-main); border-radius: 4px; text-align: center; }
+        .duties-location-card { border: 1px solid var(--border-color-light); border-radius: var(--border-radius-md); margin-bottom: 8px; }
+        .duties-location-header { padding: 8px 12px; }
+        .duties-location-header h4 { font-size: 13px; font-weight: 500; }
+        .duties-teachers { padding: 0 12px 8px; font-size: 12px; color: var(--font-color-secondary); }
+        .loading, .error, .empty-state { text-align: center; padding: 40px; color: var(--font-color-secondary); font-style: italic; }
+        .error { color: var(--danger-color); font-weight: 500; }
+        @media (max-width: 1024px) { .content-grid { grid-template-columns: 1fr 1fr; } .duties-column { grid-column: 1 / -1; order: 3; } }
+        @media (max-width: 768px) { .content-grid { grid-template-columns: 1fr; } .header { flex-direction: column; align-items: flex-start; } }
     </style>
 </head>
 <body>
-    <h1>Test Połączenia z Google Apps Script</h1>
-    <p>Kliknij przycisk, aby spróbować połączyć się ze skryptem i wywołać funkcję `testConnection`.</p>
-    <button onclick="runTest()">Uruchom Test</button>
-    <hr style="margin: 2em 0;">
-    <h2>Wynik:</h2>
-    <div id="result">Oczekiwanie na uruchomienie testu...</div>
-
+    <header class="header">
+        <h1 id="school-name">Tablica Informacyjna</h1>
+        <div class="datetime" id="datetime"></div>
+    </header>
+    <div class="ticker-wrapper">
+        <div class="ticker-text" id="ticker-text">Ładowanie...</div>
+    </div>
+    <div class="content-grid">
+        <div class="card">
+            <div class="card-header"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg><h2>Zastępstwa na dziś</h2></div>
+            <div class="card-body"><div class="substitutes-content" id="substitutes-content"><div class="loading">Ładowanie...</div></div></div>
+        </div>
+        <div class="card">
+            <div class="card-header"><svg class="icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg><h2>Ogłoszenia</h2></div>
+            <div class="card-body"><div class="announcements-content" id="announcements-content"><div class="loading">Ładowanie...</div></div></div>
+        </div>
+        <div class="card duties-column">
+            <div class="card-header"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/></svg><h2>Dyżury nauczycieli</h2></div>
+            <div class="card-body"><div class="duties-body" id="duties-content"><div class="loading">Ładowanie...</div></div></div>
+        </div>
+    </div>
     <script>
-        // URL Twojej nowej aplikacji webowej
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw4LhgUpTExDpjp_u6UR7r7b968A5mHqJoYBKYh6Hribp3djRR9rbe2D-w_8qxLRu00/exec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3n4BruFXhGo2ZUE8Nf8bKT3d19Q1yB-RWFi89Ts3ddsfCdO1aQsr85iwjOmLg3khA/exec';
+        const REFRESH_INTERVAL = 300000;
 
-        async function runTest() {
-            const resultDiv = document.getElementById('result');
-            resultDiv.textContent = 'Łączenie...';
-            resultDiv.className = '';
-
-            // Dodajemy parametr cache-busting, aby uniknąć problemów z pamięcią podręczną
-            const url = `${APPS_SCRIPT_URL}?action=testConnection&cachebust=${new Date().getTime()}`;
-
+        async function fetchSheetData(action) {
+            const url = `${APPS_SCRIPT_URL}?action=${action}&cachebust=${new Date().getTime()}`;
             try {
                 const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`Błąd sieci: ${response.status} - ${response.statusText}`);
-                }
-                const data = await response.json();
-                
-                // Wyświetl wynik w ładnym formacie JSON
-                resultDiv.textContent = JSON.stringify(data, null, 2);
-
-                if (data.status === 'OK') {
-                    resultDiv.classList.add('success');
-                } else {
-                    resultDiv.classList.add('error');
-                }
-
+                if (!response.ok) throw new Error(`Błąd sieci: ${response.status}`);
+                const jsonResponse = await response.json();
+                if (jsonResponse.error) throw new Error(`Błąd serwera: ${jsonResponse.error}`);
+                return jsonResponse.data || [];
             } catch (error) {
-                resultDiv.textContent = `Wystąpił krytyczny błąd:\n${error.message}`;
-                resultDiv.classList.add('error');
+                console.error(`Błąd dla akcji '${action}':`, error);
+                return [];
             }
         }
+
+        function updateDateTime() {
+            document.getElementById('datetime').textContent = new Date().toLocaleDateString('pl-PL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        async function loadConfiguration() {
+            const data = await fetchSheetData('getConfiguration');
+            const config = data.reduce((acc, item) => ({ ...acc, [item.Klucz]: item.Wartość }), {});
+            document.getElementById('school-name').textContent = config['Nazwa Szkoły'] || 'Tablica Informacyjna';
+            document.getElementById('ticker-text').textContent = config['Pasek Informacyjny'] || 'Brak komunikatów';
+        }
+
+        async function loadSubstitutes() {
+            const container = document.getElementById('substitutes-content');
+            const data = await fetchSheetData('getSubstitutes');
+            if (data.length === 0) {
+                container.innerHTML = '<div class="empty-state">Brak zastępstw</div>';
+                return;
+            }
+            const headers = ['Godzina lekcyjna', 'Za kogo', 'Kto zastępuje', 'Klasa', 'Uwagi'];
+            let html = '<table class="substitute-table"><thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
+            data.forEach(row => {
+                if (row['Za kogo'] && row['Kto zastępuje']) {
+                    html += `<tr>` + headers.map(h => `<td class="${h === 'Kto zastępuje' ? 'substituting-teacher' : ''}">${row[h] || '-'}</td>`).join('') + `</tr>`;
+                }
+            });
+            container.innerHTML = html + '</tbody></table>';
+        }
+
+        async function loadAnnouncements() {
+            const container = document.getElementById('announcements-content');
+            const data = await fetchSheetData('getAnnouncements');
+            if (data.length === 0) {
+                container.innerHTML = '<div class="empty-state">Brak ogłoszeń</div>';
+                return;
+            }
+            container.innerHTML = data.map(ann => ann['Tytuł'] && ann['Treść'] ? `<div class="announcement-item"><div class="announcement-title">${ann['Tytuł']}</div><div class="announcement-content">${ann['Treść']}</div></div>` : '').join('');
+        }
+
+        async function loadDuties() {
+            const container = document.getElementById('duties-content');
+            const data = await fetchSheetData('getDuties');
+            const today = new Date();
+            const currentDayName = today.toLocaleDateString('pl-PL', { weekday: 'long' }).toLowerCase();
+            const todayDuties = data.filter(d => d['Dzień tygodnia']?.toLowerCase() === currentDayName);
+
+            if (todayDuties.length === 0) {
+                container.innerHTML = `<div class="empty-state">Brak dyżurów na dziś</div>`;
+                return;
+            }
+
+            const dutiesByBreak = todayDuties.reduce((acc, duty) => {
+                const breakNum = duty['Przerwa'];
+                if (!acc[breakNum]) acc[breakNum] = [];
+                acc[breakNum].push(duty);
+                return acc;
+            }, {});
+
+            let html = `<div class="duties-day-info"><h3>${currentDayName.charAt(0).toUpperCase() + currentDayName.slice(1)}</h3><p>${today.toLocaleDateString('pl-PL')}</p></div>`;
+            for (const breakNum in dutiesByBreak) {
+                html += `<div class="duties-break-group"><div class="duties-break-title">Przerwa ${breakNum}</div>`;
+                dutiesByBreak[breakNum].forEach(duty => {
+                    Object.keys(duty).filter(key => key.toLowerCase().includes('sektor') && duty[key]).forEach(key => {
+                        const color = key.includes('pomarańczowy') ? '#fff3cd' : key.includes('zielony') ? '#d4edda' : key.includes('czerwony') ? '#f8d7da' : '#f0f0f0';
+                        html += `<div class="duties-location-card"><div class="duties-location-header" style="background-color:${color};"><h4 class="duties-location-title">${key}</h4></div><div class="duties-teachers">${duty[key]}</div></div>`;
+                    });
+                });
+                html += `</div>`;
+            }
+            container.innerHTML = html;
+        }
+        
+        async function refreshAllData() {
+            await Promise.all([loadConfiguration(), loadSubstitutes(), loadAnnouncements(), loadDuties()]);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDateTime();
+            setInterval(updateDateTime, 60000);
+            refreshAllData();
+            setInterval(refreshAllData, REFRESH_INTERVAL);
+        });
     </script>
 </body>
 </html>
