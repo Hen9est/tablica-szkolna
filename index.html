@@ -6,9 +6,8 @@
     <title>Tablica Informacyjna</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* === ZMIENNE CSS === */
         :root {
             --primary-color: #1a73e8;
             --primary-light-color: #e8f0fe;
@@ -17,397 +16,548 @@
             --danger-color: #d93025;
             --success-color: #34a853;
             --purple-color: #9c27b0;
-
             --font-color-primary: #202124;
             --font-color-secondary: #5f6368;
             --font-color-light: #ffffff;
-            --font-color-emphasis: #000000;
-
+            --font-color-header: #80868b;
             --bg-color-main: #f8f9fa;
             --bg-color-card: #ffffff;
             --border-color-light: #e8eaed;
             --border-color-medium: #dadce0;
-
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
             --border-radius-md: 8px;
-            --border-radius-sm: 6px;
-
-            --font-family-sans: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            --font-family-roboto: 'Roboto', sans-serif;
-        }
-
-        /* === RESET I USTAWIENIA GŁÓWNE === */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-family-roboto);
-            background-color: var(--bg-color-main);
-            color: var(--font-color-primary);
-            line-height: 1.5;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* === NAGŁÓWEK === */
-        .header {
-            background: var(--bg-color-card);
-            padding: 16px 24px;
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header h1 {
-            font-family: var(--font-family-sans);
-            font-size: 24px;
-            font-weight: 500;
-            color: var(--primary-color);
-        }
-
-        .header .datetime {
-            font-size: 16px;
-            color: var(--font-color-secondary);
-            font-weight: 400;
-        }
-
-        /* === PASEK INFORMACYJNY (TICKER) === */
-        .ticker-wrapper {
-            background: var(--primary-light-color);
-            border-bottom: 1px solid var(--border-color-medium);
-            padding: 18px 0;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .ticker-text {
-            display: inline-block;
-            padding-left: 100%;
-            animation: scroll 30s linear infinite;
-            font-family: var(--font-family-sans);
-            font-size: 18px;
-            font-weight: 500;
-            color: var(--primary-dark-color);
-            letter-spacing: 0.5px;
-        }
-
-        @keyframes scroll {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
-        }
-
-        /* === GŁÓWNY KONTENER (GRID) === */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 320px;
-            gap: 20px;
-            padding: 20px;
-            flex: 1;
-        }
-
-        /* === KARTY === */
-        .card {
-            background: var(--bg-color-card);
-            border-radius: var(--border-radius-md);
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            max-height: calc(100vh - 140px);
-        }
-
-        .card-header {
-            background: var(--bg-color-card);
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border-color-light);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        .card-header h2 {
-            font-family: var(--font-family-sans);
-            font-size: 18px;
-            font-weight: 500;
-        }
-
-        .card-header .icon {
-            width: 24px;
-            height: 24px;
-            fill: var(--font-color-secondary);
-        }
-
-        .card-body {
-            flex: 1;
-            overflow-y: auto;
+            --font-family-sans: 'Google Sans', 'Roboto', Arial, sans-serif;
+            --font-family-roboto: 'Roboto', Arial, sans-serif;
         }
         
-        .substitutes-content {
-             padding: 8px 0 8px 8px;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: var(--font-family-roboto); 
+            background-color: var(--bg-color-main); 
+            color: var(--font-color-primary); 
+            line-height: 1.5; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
         }
         
-        .announcements-content {
-            padding: 16px 20px;
+        .header { 
+            background: var(--bg-color-card); 
+            padding: 16px 24px; 
+            box-shadow: var(--shadow-sm); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
         }
-
-        /* === Pasek Przewijania === */
-        .card-body::-webkit-scrollbar,
-        .duties-body::-webkit-scrollbar { width: 6px; }
-        .card-body::-webkit-scrollbar-track,
-        .duties-body::-webkit-scrollbar-track { background: #f1f1f1; }
-        .card-body::-webkit-scrollbar-thumb,
-        .duties-body::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 3px; }
-        .card-body::-webkit-scrollbar-thumb:hover,
-        .duties-body::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
         
-        /* === ZASTĘPSTWA (STYL ARKUSZA) === */
-        .substitute-item {
-            display: grid;
-            grid-template-columns: 50px 1fr 70px 1fr;
-            align-items: center;
-            padding: 12px;
-            gap: 12px;
-            border-bottom: 1px solid var(--border-color-light);
+        .header h1 { 
+            font-family: var(--font-family-sans); 
+            font-size: 24px; 
+            font-weight: 500; 
+            color: var(--primary-color); 
         }
-        .substitute-item:last-child { border-bottom: none; }
-        .substitute-item span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; }
-        .lesson-hour { font-weight: 500; color: var(--primary-dark-color); }
-        .teachers-info { color: var(--font-color-secondary); }
-        .teachers-info .substituting-teacher { font-weight: 700; color: var(--font-color-emphasis); }
-        .class-info { font-weight: 500; color: var(--danger-color); text-align: center; }
-        .notes-info { color: var(--font-color-secondary); font-size: 13px; }
+        
+        .header .datetime { 
+            font-size: 16px; 
+            color: var(--font-color-secondary); 
+            font-weight: 400; 
+        }
+        
+        .ticker-wrapper { 
+            background: var(--primary-light-color); 
+            border-bottom: 1px solid var(--border-color-medium); 
+            padding: 18px 0; 
+            overflow: hidden; 
+            white-space: nowrap; 
+        }
+        
+        .ticker-text { 
+            display: inline-block; 
+            padding-left: 100%; 
+            animation: scroll 40s linear infinite; 
+            font-family: var(--font-family-sans); 
+            font-size: 18px; 
+            font-weight: 500; 
+            color: var(--primary-dark-color); 
+            letter-spacing: 0.5px; 
+        }
+        
+        @keyframes scroll { 
+            0% { transform: translate3d(0, 0, 0); } 
+            100% { transform: translate3d(-100%, 0, 0); } 
+        }
+        
+        .content-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr 320px; 
+            gap: 20px; 
+            padding: 20px; 
+            flex: 1; 
+        }
+        
+        .card { 
+            background: var(--bg-color-card); 
+            border-radius: var(--border-radius-md); 
+            box-shadow: var(--shadow-sm); 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            max-height: calc(100vh - 180px); 
+        }
+        
+        .card-header { 
+            padding: 16px 20px; 
+            border-bottom: 1px solid var(--border-color-light); 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            flex-shrink: 0; 
+        }
+        
+        .card-header h2 { 
+            font-family: var(--font-family-sans); 
+            font-size: 18px; 
+            font-weight: 500; 
+        }
+        
+        .card-header .icon { 
+            width: 24px; 
+            height: 24px; 
+            fill: var(--font-color-secondary); 
+        }
+        
+        .card-body { 
+            flex: 1; 
+            overflow-y: auto; 
+        }
+        
+        .card-body::-webkit-scrollbar { width: 6px; }
+        .card-body::-webkit-scrollbar-track { background: #f1f1f1; }
+        .card-body::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 3px; }
+        .card-body::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+        
+        .substitutes-content, .announcements-content, .duties-body { 
+            padding: 8px 16px; 
+        }
 
-        /* === OGŁOSZENIA === */
-        .announcement-item {
-            padding: 12px 16px;
-            margin-bottom: 12px;
+        /* === Zastępstwa - Tabela === */
+        .substitute-table { 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        .substitute-row, .substitute-header { 
+            display: grid; 
+            grid-template-columns: 60px 80px 1fr 1fr;
+            align-items: center; 
+            padding: 12px 8px; 
+            gap: 12px; 
+            border-bottom: 1px solid var(--border-color-light); 
+        }
+        
+        .substitute-header { 
+            font-size: 12px; 
+            font-weight: 700; 
+            color: var(--font-color-header); 
+            text-transform: uppercase; 
             background: var(--bg-color-main);
-            border-radius: var(--border-radius-sm);
-            border-left: 3px solid var(--secondary-color);
         }
-        .announcement-item:last-child { margin-bottom: 0; }
-        .announcement-title { font-weight: 500; margin-bottom: 4px; }
-        .announcement-content { color: var(--font-color-secondary); font-size: 14px; }
         
-        /* === DYŻURY === */
-        .duties-column { grid-column: 3 / 4; }
-        .duties-header { padding: 12px 16px; }
-        .duties-header h2 { font-size: 16px; }
-        .duties-header .icon { width: 20px; height: 20px; }
-        .duties-body { padding: 12px; font-size: 13px; }
-        .duties-day-info { background: var(--primary-light-color); padding: 8px 12px; border-radius: var(--border-radius-sm); margin-bottom: 12px; text-align: center; }
-        .duties-day-info h3 { font-family: var(--font-family-sans); font-size: 14px; color: var(--primary-color); }
-        .duties-day-info p { color: var(--font-color-secondary); font-size: 11px; }
-        .duties-break-group { margin-bottom: 16px; }
-        .duties-break-group:last-child { margin-bottom: 0; }
-        .duties-break-title { font-family: var(--font-family-sans); font-size: 13px; font-weight: 500; margin-bottom: 8px; padding: 6px 10px; background: var(--bg-color-main); border-radius: 4px; border-left: 3px solid var(--primary-color); text-align: center; }
-        .duties-location-card { background: var(--bg-color-card); border: 1px solid var(--border-color-light); border-radius: var(--border-radius-sm); margin-bottom: 8px; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .duties-location-card:hover { transform: translateY(-1px); box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-        .duties-location-card:last-child { margin-bottom: 0; }
-        .duties-location-header { padding: 8px 12px; display: flex; align-items: center; gap: 8px; }
-        .duties-location-header h4 { font-family: var(--font-family-sans); font-size: 12px; font-weight: 500; color: var(--font-color-light); flex: 1; }
-        .duties-location-icon { width: 14px; height: 14px; fill: var(--font-color-light); }
-        .duties-korytarz-pomaranczowy { --duty-color: #ff8a00; }
-        .duties-korytarz-zielony { --duty-color: var(--success-color); }
-        .duties-korytarz-niebieski { --duty-color: var(--primary-color); }
-        .duties-hol-glowny { --duty-color: var(--purple-color); }
-        .duties-korytarz-czerwony { --duty-color: #ea4335; }
-        .duties-korytarz-zolty { --duty-color: var(--secondary-color); }
-        [class^="duties-"] .duties-location-header { background: var(--duty-color); }
-        [class^="duties-"] .duties-person { border-left-color: var(--duty-color); }
-        .duties-location-body { padding: 8px 12px; }
-        .duties-person { display: flex; align-items: center; gap: 8px; padding: 4px 6px; background: var(--bg-color-main); border-radius: 4px; border-left: 2px solid; }
-        .duties-person-avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--primary-light-color); display: flex; align-items: center; justify-content: center; font-weight: 500; color: var(--primary-color); font-size: 10px; flex-shrink: 0; }
-        .duties-person-info { flex: 1; min-width: 0; }
-        .duties-person-name { font-weight: 500; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        /* === Stany Puste, Błędy, Ładowanie === */
-        .empty-state, .loader, .error-message { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 40px 20px; color: var(--font-color-secondary); height: 100%; }
-        .empty-state .icon { width: 48px; height: 48px; fill: var(--border-color-medium); margin-bottom: 16px; }
-        .empty-state h3 { font-family: var(--font-family-sans); font-size: 18px; font-weight: 400; margin-bottom: 8px; }
-        .empty-state p { font-size: 14px; }
-        .error-message { background: #fce8e6; color: var(--danger-color); padding: 16px; border-radius: var(--border-radius-md); border-left: 4px solid var(--danger-color); text-align: left; align-items: flex-start; }
-        .loader-spinner { width: 28px; height: 28px; border: 3px solid var(--border-color-light); border-top: 3px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* === MEDIA QUERIES === */
-        @media (max-width: 1200px) { .content-grid { grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; } .duties-column { display: none; } }
-        @media (max-width: 768px) { .content-grid { grid-template-columns: 1fr; } .header { padding: 12px 16px; flex-direction: column; gap: 8px; } .header h1 { font-size: 20px; } .header .datetime { font-size: 14px; } .substitute-item { grid-template-columns: 45px 1fr; gap: 8px; } .class-info, .notes-info { grid-column: 1 / -1; text-align: left; } .class-info { margin-top: 4px; } }
+        .substitute-row { 
+            font-size: 14px; 
+            color: var(--font-color-primary); 
+        }
+        
+        .substitute-row:hover {
+            background: var(--bg-color-main);
+        }
+        
+        .substitute-row .substituting-teacher { 
+            font-weight: 700; 
+        }
+        
+        .substitute-row > span { 
+            min-width: 0; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+        }
+        
+        .col-lesson { 
+            text-align: center; 
+            font-weight: 500; 
+        }
+        
+        .col-class { 
+            text-align: center; 
+            font-weight: 500; 
+        }
+        
+        /* === Ogłoszenia === */
+        .announcement-item { 
+            padding: 16px; 
+            margin-bottom: 12px; 
+            background: var(--bg-color-main); 
+            border-radius: var(--border-radius-md); 
+            border: 1px solid var(--border-color-light);
+        }
+        
+        .announcement-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .announcement-title { 
+            font-weight: 500; 
+            margin-bottom: 8px; 
+            color: var(--font-color-primary);
+            font-size: 16px;
+        }
+        
+        .announcement-content { 
+            color: var(--font-color-secondary); 
+            font-size: 14px; 
+            line-height: 1.6;
+        }
+        
+        /* === Dyżury === */
+        .duties-column { 
+            grid-column: 3 / 4; 
+        }
+        
+        .duties-body { 
+            padding: 12px; 
+            font-size: 13px; 
+        }
+        
+        .duties-day-info { 
+            background: var(--primary-light-color); 
+            padding: 12px; 
+            border-radius: var(--border-radius-md); 
+            margin-bottom: 16px; 
+            text-align: center; 
+        }
+        
+        .duties-day-info h3 { 
+            font-family: var(--font-family-sans); 
+            font-size: 16px; 
+            color: var(--primary-color); 
+            margin-bottom: 4px;
+        }
+        
+        .duties-day-info p { 
+            color: var(--font-color-secondary); 
+            font-size: 12px; 
+        }
+        
+        .duties-break-group { 
+            margin-bottom: 16px; 
+        }
+        
+        .duties-break-group:last-child { 
+            margin-bottom: 0; 
+        }
+        
+        .duties-break-title { 
+            font-family: var(--font-family-sans); 
+            font-size: 13px; 
+            font-weight: 500; 
+            margin-bottom: 8px; 
+            padding: 6px 10px; 
+            background: var(--bg-color-main); 
+            border-radius: 4px; 
+            text-align: center; 
+        }
+        
+        .duties-location-card { 
+            background: var(--bg-color-card); 
+            border: 1px solid var(--border-color-light); 
+            border-radius: var(--border-radius-md); 
+            margin-bottom: 8px; 
+            overflow: hidden; 
+        }
+        
+        .duties-location-header { 
+            padding: 8px 12px; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            background-color: var(--bg-color-main); 
+        }
+        
+        .duties-location-header h4 { 
+            font-family: var(--font-family-sans); 
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--font-color-primary);
+        }
+        
+        .duties-teachers {
+            padding: 8px 12px;
+            font-size: 12px;
+            color: var(--font-color-secondary);
+        }
+        
+        .duties-teacher {
+            margin-bottom: 4px;
+        }
+        
+        .duties-teacher:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* === Responsywność === */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .duties-column {
+                grid-column: 1 / -1;
+                order: 3;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 16px;
+            }
+            .header {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+            .ticker-text {
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Nagłówek -->
     <header class="header">
-        <h1 id="school-name">Tablica Informacyjna</h1>
+        <h1>Tablica Informacyjna</h1>
         <div class="datetime" id="datetime"></div>
     </header>
 
+    <!-- Ticker z ogłoszeniami -->
     <div class="ticker-wrapper">
-        <div class="ticker-text" id="ticker-text">Witamy w szkolnej tablicy informacyjnej!</div>
+        <div class="ticker-text">
+            📢 Witamy w nowym roku szkolnym! • 📚 Przypominamy o obowiązku noszenia identyfikatorów • 🎯 Dzisiaj odbędą się konsultacje z matematyki w sali 205 • 🏫 Sekretariat czynny w godzinach 7:30-15:30
+        </div>
     </div>
 
-    <main class="content-grid">
+    <!-- Główna zawartość -->
+    <div class="content-grid">
+        <!-- Zastępstwa -->
         <div class="card">
             <div class="card-header">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
-                <h2>Zastępstwa</h2>
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <h2>Zastępstwa na dziś</h2>
             </div>
-            <div class="card-body substitutes-content" id="substitutes-content"></div>
+            <div class="card-body">
+                <div class="substitutes-content">
+                    <div class="substitute-table">
+                        <div class="substitute-header">
+                            <span class="col-lesson">Lekcja</span>
+                            <span class="col-class">Klasa</span>
+                            <span>Nauczyciel</span>
+                            <span>Zastępuje</span>
+                        </div>
+                        <div class="substitute-row">
+                            <span class="col-lesson">1</span>
+                            <span class="col-class">3A</span>
+                            <span>A. Kowalski (matematyka)</span>
+                            <span class="substituting-teacher">M. Nowak</span>
+                        </div>
+                        <div class="substitute-row">
+                            <span class="col-lesson">2</span>
+                            <span class="col-class">2B</span>
+                            <span>J. Wiśniewska (j. polski)</span>
+                            <span class="substituting-teacher">K. Dąbrowski</span>
+                        </div>
+                        <div class="substitute-row">
+                            <span class="col-lesson">3</span>
+                            <span class="col-class">1C</span>
+                            <span>P. Lewandowski (historia)</span>
+                            <span class="substituting-teacher">A. Wójcik</span>
+                        </div>
+                        <div class="substitute-row">
+                            <span class="col-lesson">4</span>
+                            <span class="col-class">3D</span>
+                            <span>M. Kamińska (biologia)</span>
+                            <span class="substituting-teacher">R. Zieliński</span>
+                        </div>
+                        <div class="substitute-row">
+                            <span class="col-lesson">5</span>
+                            <span class="col-class">2A</span>
+                            <span>T. Szymański (fizyka)</span>
+                            <span class="substituting-teacher">E. Kozłowska</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <!-- Ogłoszenia -->
         <div class="card">
             <div class="card-header">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/>
+                </svg>
                 <h2>Ogłoszenia</h2>
             </div>
-            <div class="card-body announcements-content" id="announcements-content"></div>
+            <div class="card-body">
+                <div class="announcements-content">
+                    <div class="announcement-item">
+                        <div class="announcement-title">Konkurs matematyczny</div>
+                        <div class="announcement-content">
+                            Zapraszamy uczniów klas 2-3 do udziału w szkolnym konkursie matematycznym. Zgłoszenia przyjmuje p. Kowalski do 15 marca.
+                        </div>
+                    </div>
+                    <div class="announcement-item">
+                        <div class="announcement-title">Wycieczka do muzeum</div>
+                        <div class="announcement-content">
+                            Klasy pierwsze jadą na wycieczkę do Muzeum Narodowego w piątek 20 marca. Zbiórka o godz. 8:00 przed szkołą.
+                        </div>
+                    </div>
+                    <div class="announcement-item">
+                        <div class="announcement-title">Zebranie z rodzicami</div>
+                        <div class="announcement-content">
+                            Przypominamy o zebraniu z rodzicami klas drugich, które odbędzie się we wtorek 17 marca o godz. 17:00.
+                        </div>
+                    </div>
+                    <div class="announcement-item">
+                        <div class="announcement-title">Dni otwarte uczelni</div>
+                        <div class="announcement-content">
+                            Uczniowie klas maturalnych mogą skorzystać ze zwolnienia na dni otwarte uczelni wyższych. Wymagane zaświadczenie z uczelni.
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <!-- Dyżury -->
         <div class="card duties-column">
-            <div class="card-header duties-header">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                <h2>Dyżury</h2>
+            <div class="card-header">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/>
+                </svg>
+                <h2>Dyżury nauczycieli</h2>
             </div>
-            <div class="duties-body" id="duties-content"></div>
+            <div class="card-body">
+                <div class="duties-body">
+                    <div class="duties-day-info">
+                        <h3>Środa</h3>
+                        <p>10 marca 2024</p>
+                    </div>
+                    
+                    <div class="duties-break-group">
+                        <div class="duties-break-title">Przerwa 1 (8:45 - 8:55)</div>
+                        <div class="duties-location-card">
+                            <div class="duties-location-header">
+                                <h4>Parter</h4>
+                            </div>
+                            <div class="duties-teachers">
+                                <div class="duties-teacher">A. Nowak</div>
+                                <div class="duties-teacher">B. Kowalczyk</div>
+                            </div>
+                        </div>
+                        <div class="duties-location-card">
+                            <div class="duties-location-header">
+                                <h4>I piętro</h4>
+                            </div>
+                            <div class="duties-teachers">
+                                <div class="duties-teacher">C. Wiśniewski</div>
+                                <div class="duties-teacher">D. Mazur</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="duties-break-group">
+                        <div class="duties-break-title">Przerwa 2 (9:40 - 9:50)</div>
+                        <div class="duties-location-card">
+                            <div class="duties-location-header">
+                                <h4>Parter</h4>
+                            </div>
+                            <div class="duties-teachers">
+                                <div class="duties-teacher">E. Jankowski</div>
+                                <div class="duties-teacher">F. Wojciechowski</div>
+                            </div>
+                        </div>
+                        <div class="duties-location-card">
+                            <div class="duties-location-header">
+                                <h4>I piętro</h4>
+                            </div>
+                            <div class="duties-teachers">
+                                <div class="duties-teacher">G. Kowalski</div>
+                                <div class="duties-teacher">H. Lewandowska</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="duties-break-group">
+                        <div class="duties-break-title">Przerwa obiadowa (11:25 - 11:40)</div>
+                        <div class="duties-location-card">
+                            <div class="duties-location-header">
+                                <h4>Stołówka</h4>
+                            </div>
+                            <div class="duties-teachers">
+                                <div class="duties-teacher">I. Dąbrowska</div>
+                                <div class="duties-teacher">J. Zieliński</div>
+                            </div>
+                        </div>
+                        <div class="duties-location-card">
+                            <div class="duties-location-header">
+                                <h4>Korytarze</h4>
+                            </div>
+                            <div class="duties-teachers">
+                                <div class="duties-teacher">K. Szymańska</div>
+                                <div class="duties-teacher">L. Woźniak</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </main>
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // === KONFIGURACJA ===
-            const APPS_SCRIPT_URL = 'https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLgYmuN8gBSqhiMkNhna7F9mSK2ExPnkrYXpKfwutHHdLP3ADYeoMZechduG9qhodznDhkMuUBIhbKEDsOzYAJ8dlYex_WXMCtDbts2AicWPY83LzDPY1Upq1LMiIcq3arQxtC4d0zxp5OstE3suSrE_WaN519-h8crGvRqGPnuis4W0QyFzbut8dQAaBbeThG0yYMuh7ZK7D4z_CjcdB0CFDi1E_mE7gWTbZZK8AgcDJ6z_schTFezYIgSZqNDhLfG2IbACa2zuKSg84UG7U7ObNEyszQ&lib=Mzvp2gWvC--ERlvIUeLpEcoVNnmqaIwCp';
-            const REFRESH_INTERVAL = 60000;
-
-            const DAYS_PL = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
-            
-            const elements = {
-                schoolName: document.getElementById('school-name'),
-                dateTime: document.getElementById('datetime'),
-                tickerText: document.getElementById('ticker-text'),
-                substitutesContent: document.getElementById('substitutes-content'),
-                announcementsContent: document.getElementById('announcements-content'),
-                dutiesContent: document.getElementById('duties-content')
+        // Aktualizacja daty i czasu
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
             };
+            const dateTimeString = now.toLocaleDateString('pl-PL', options);
+            document.getElementById('datetime').textContent = dateTimeString;
+        }
 
-            const renderLoader = (container) => container.innerHTML = '<div class="loader"><div class="loader-spinner"></div></div>';
-            const renderError = (container, message = "Wystąpił błąd ładowania danych.") => container.innerHTML = `<div class="error-message"><strong>Błąd:</strong> ${message}</div>`;
-            const renderEmpty = (container, { icon, title, message }) => container.innerHTML = `<div class="empty-state"><svg class="icon" viewBox="0 0 24 24">${icon}</svg><h3>${title}</h3><p>${message}</p></div>`;
+        // Aktualizuj czas co sekundę
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
 
-            const updateDateTime = () => {
-                const now = new Date();
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-                elements.dateTime.textContent = now.toLocaleDateString('pl-PL', options);
-            };
+        // Symulacja dynamicznego ładowania danych
+        function loadDynamicContent() {
+            // Tu można dodać kod do pobierania danych z API
+            console.log('Ładowanie dynamicznej zawartości...');
+        }
 
-            /** Wyświetla dane o zastępstwach - UPROSZCZONA, BARDZIEJ NIEZAWODNA WERSJA */
-            const updateSubstitutes = (substitutes) => {
-                // Sprawdzamy, czy otrzymane dane to tablica i czy nie jest pusta
-                if (!Array.isArray(substitutes) || substitutes.length === 0) {
-                    renderEmpty(elements.substitutesContent, {
-                        icon: '<path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>',
-                        title: 'Brak zastępstw',
-                        message: 'Obecnie nie ma żadnych informacji o zastępstwach.'
-                    });
-                    return;
-                }
-
-                // Generujemy HTML dla każdego elementu w tablicy
-                const html = substitutes.map(item => `
-                    <div class="substitute-item">
-                        <span class="lesson-hour" title="Godzina lekcyjna">${item.lessonHour || '-'}</span>
-                        <span class="teachers-info" title="Zastępca za nauczyciela">
-                            ${item.replacedTeacher || ''} → <strong class="substituting-teacher">${item.substitutingTeacher || 'Brak'}</strong>
-                        </span>
-                        <span class="class-info" title="Klasa">${item.class || '-'}</span>
-                        <span class="notes-info" title="Uwagi">${item.notes || ''}</span>
-                    </div>
-                `).join('');
-                
-                elements.substitutesContent.innerHTML = html;
-            };
-
-            const updateAnnouncements = (announcements) => {
-                if (!Array.isArray(announcements) || announcements.length === 0) {
-                    renderEmpty(elements.announcementsContent, {
-                        icon: '<path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/>',
-                        title: 'Brak ogłoszeń',
-                        message: 'Aktualnie nie ma nic do ogłoszenia.'
-                    });
-                    return;
-                }
-                elements.announcementsContent.innerHTML = announcements.map(item => `
-                    <div class="announcement-item">
-                        <div class="announcement-title">${item.title}</div>
-                        <div class="announcement-content">${item.content}</div>
-                    </div>
-                `).join('');
-            };
-
-            const updateDuties = (duties) => {
-                const todayName = DAYS_PL[new Date().getDay()];
-                const dutiesToday = duties ? duties[todayName] : null;
-
-                if (!dutiesToday || Object.keys(dutiesToday).length === 0) {
-                    renderEmpty(elements.dutiesContent, {
-                        icon: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
-                        title: 'Brak dyżurów',
-                        message: `Dzisiaj (${todayName.toLowerCase()}) nie ma zaplanowanych dyżurów.`
-                    });
-                    return;
-                }
-                const getInitials = (name) => !name ? '?' : (name.trim().split(' ').length > 1 ? name.trim().split(' ')[0][0] + name.trim().split(' ')[1][0] : name.trim().substring(0, 2)).toUpperCase();
-                const slugify = (text) => text.toLowerCase().replace(/\s+/g, '-');
-                let html = `<div class="duties-day-info"><h3>${todayName}</h3><p>Grafik dyżurów na dziś</p></div>`;
-                for (const [breakTime, locations] of Object.entries(dutiesToday)) {
-                    html += `<div class="duties-break-group"><div class="duties-break-title">${breakTime}</div>`;
-                    html += Object.entries(locations).map(([location, person]) => `<div class="duties-location-card duties-${slugify(location)}"><div class="duties-location-header"><svg class="duties-location-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><h4>${location}</h4></div><div class="duties-location-body"><div class="duties-person"><div class="duties-person-avatar">${getInitials(person)}</div><div class="duties-person-info"><div class="duties-person-name" title="${person}">${person}</div></div></div></div></div>`).join('');
-                    html += `</div>`;
-                }
-                elements.dutiesContent.innerHTML = html;
-            };
-
-            const fetchData = async () => {
-                try {
-                    const response = await fetch(APPS_SCRIPT_URL);
-                    if (!response.ok) throw new Error(`Błąd serwera: ${response.status}`);
-                    const data = await response.json();
-                    if (data.error) throw new Error(data.error);
-
-                    if (data.schoolName) elements.schoolName.textContent = data.schoolName;
-                    if (data.tickerContent) elements.tickerText.textContent = data.tickerContent;
-                    
-                    updateSubstitutes(data.substitutesContent);
-                    updateAnnouncements(data.announcementsContent);
-                    updateDuties(data.dutiesContent);
-
-                } catch (error) {
-                    console.error('Błąd podczas ładowania danych:', error);
-                    renderError(elements.substitutesContent, error.message);
-                    renderError(elements.announcementsContent, error.message);
-                    renderError(elements.dutiesContent, error.message);
-                }
-            };
-            
-            const init = () => {
-                updateDateTime();
-                setInterval(updateDateTime, 1000);
-                renderLoader(elements.substitutesContent);
-                renderLoader(elements.announcementsContent);
-                renderLoader(elements.dutiesContent);
-                fetchData();
-                setInterval(fetchData, REFRESH_INTERVAL);
-            };
-
-            init();
-        });
+        // Załaduj dane przy starcie
+        window.addEventListener('load', loadDynamicContent);
     </script>
 </body>
 </html>
