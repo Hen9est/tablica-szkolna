@@ -338,7 +338,7 @@
 
     <script>
         // Konfiguracja
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxfjyGp7LkXsBXM53InKCeGEveCLz2K6J85Q6IGVL3y__eXXwV_4gG_TGv5EWCcIHF8/exec';
+        const APPS_SCRIPT_URL = 'https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLgYmuN8gBSqhiMkNhna7F9mSK2ExPnkrYXpKfwutHHdLP3ADYeoMZechduG9qhodznDhkMuUBIhbKEDsOzYAJ8dlYex_WXMCtDbts2AicWPY83LzDPY1Upq1LMiIcq3arQxtC4d0zxp5OstE3suSrE_WaN519-h8crGvRqGPnuis4W0QyFzbut8dQAaBbeThG0yYMuh7ZK7D4z_CjcdB0CFDi1E_mE7gWTbZZK8AgcDJ6z_schTFezYIgSZqNDhLfG2IbACa2zuKSg84UG7U7ObNEyszQ&lib=Mzvp2gWvC--ERlvIUeLpEcoVNnmqaIwCp';
         const REFRESH_INTERVAL = 30000; // 30 sekund
         
         // Globalne zmienne
@@ -402,25 +402,30 @@
         }
 
         function updateContent(data) {
+            console.log('Received data:', data); // Debug
+            
             // Aktualizacja nazwy szkoły
-            if (data.config && data.config.schoolName) {
-                document.getElementById('school-name').textContent = data.config.schoolName;
+            if (data.schoolName) {
+                document.getElementById('school-name').textContent = data.schoolName;
             }
             
             // Aktualizacja paska informacyjnego
-            if (data.config && data.config.tickerText) {
-                document.getElementById('ticker-text').textContent = data.config.tickerText;
+            if (data.tickerContent) {
+                document.getElementById('ticker-text').textContent = data.tickerContent;
             }
             
             // Aktualizacja zastępstw
-            updateSubstitutes(data.substitutes || []);
+            updateSubstitutes(data.substitutesContent || []);
             
-            // Aktualizacja ogłoszeń
-            updateAnnouncements(data.announcements || []);
+            // Aktualizacja ogłoszeń - konwertuj string na tablicę
+            const announcements = data.announcementsContent ? 
+                [{ title: 'Ogłoszenie', content: data.announcementsContent }] : [];
+            updateAnnouncements(announcements);
         }
 
         function updateSubstitutes(substitutes) {
             const container = document.getElementById('substitutes-content');
+            console.log('Processing substitutes:', substitutes); // Debug
             
             if (!substitutes || substitutes.length === 0) {
                 container.innerHTML = `
@@ -435,8 +440,26 @@
                 return;
             }
             
+            // Konwertuj format danych do oczekiwanego
+            const convertedSubstitutes = substitutes.map(item => {
+                // Parsuj datę z lessonHour
+                let date = new Date();
+                if (item.lessonHour) {
+                    date = new Date(item.lessonHour);
+                }
+                
+                return {
+                    date: date.toISOString().split('T')[0],
+                    lesson: '', // Brak w danych
+                    originalTeacher: item.replacedTeacher || '',
+                    substituteTeacher: item.substitutingTeacher || '',
+                    class: item.class || '',
+                    notes: item.notes || ''
+                };
+            });
+            
             // Grupowanie zastępstw według dat
-            const groupedSubstitutes = groupSubstitutesByDate(substitutes);
+            const groupedSubstitutes = groupSubstitutesByDate(convertedSubstitutes);
             
             let html = '';
             for (const [dateKey, items] of Object.entries(groupedSubstitutes)) {
