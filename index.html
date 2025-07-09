@@ -414,7 +414,10 @@
          * @returns {Promise<Array>} - Obietnica, która zwraca tablicę z danymi.
          */
         async function fetchSheetData(action) {
-            const url = `${APPS_SCRIPT_URL}?action=${action}`;
+            // KLUCZOWA ZMIANA: Dodajemy unikalny parametr 'cachebust', aby zapobiec buforowaniu (cachingowi) odpowiedzi przez Google.
+            const cacheBust = `&cachebust=${new Date().getTime()}`;
+            const url = `${APPS_SCRIPT_URL}?action=${action}${cacheBust}`;
+            
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
@@ -427,7 +430,6 @@
                 return jsonResponse.data || [];
             } catch (error) {
                 console.error(`Błąd podczas pobierania danych dla akcji '${action}':`, error);
-                // Zwraca pustą tablicę, aby uniknąć dalszych błędów
                 return []; 
             }
         }
@@ -448,7 +450,6 @@
             const data = await fetchSheetData('getConfiguration');
             if (data.length > 0) {
                 const config = {};
-                // Przekształca tablicę klucz-wartość w obiekt dla łatwiejszego dostępu
                 data.forEach(item => {
                     config[item.Klucz] = item.Wartość;
                 });
@@ -472,7 +473,6 @@
                 return;
             }
 
-            // Nagłówki tabeli - klucze muszą odpowiadać nazwom kolumn w arkuszu
             const headers = {
                 'Godzina lekcyjna': 'Lekcja',
                 'Za kogo': 'Nauczyciel',
@@ -487,7 +487,6 @@
             html += '</tr></thead><tbody>';
 
             data.forEach(row => {
-                 // Sprawdzamy czy kluczowe dane istnieją
                 if (row['Za kogo'] && row['Kto zastępuje']) {
                     html += `<tr title="Uwagi: ${row['Uwagi'] || ''}">`;
                     for (const key in headers) {
@@ -516,7 +515,6 @@
 
             let html = '';
             data.forEach(announcement => {
-                // Klucze 'Tytuł' i 'Treść' muszą odpowiadać nazwom kolumn w arkuszu
                 if (announcement['Tytuł'] && announcement['Treść']) {
                     html += `
                         <div class="announcement-item">
@@ -540,7 +538,6 @@
             const today = new Date();
             const currentDayName = days[today.getDay()];
 
-            // Filtruj dyżury tylko dla bieżącego dnia tygodnia
             const todayDuties = data.filter(duty => 
                 duty['Dzień tygodnia'] && duty['Dzień tygodnia'].toLowerCase() === currentDayName
             );
@@ -550,7 +547,6 @@
                 return;
             }
             
-            // Grupuj dyżury po numerze przerwy
             const dutiesByBreak = todayDuties.reduce((acc, duty) => {
                 const breakNum = duty['Przerwa'];
                 if (!acc[breakNum]) {
@@ -566,13 +562,11 @@
                     <p>${today.toLocaleDateString('pl-PL')}</p>
                 </div>`;
 
-            // Generuj HTML dla każdej przerwy
             for (const breakNum in dutiesByBreak) {
                 html += `<div class="duties-break-group">
                            <div class="duties-break-title">Przerwa ${breakNum}</div>`;
 
                 dutiesByBreak[breakNum].forEach(duty => {
-                    // Iteruj po wszystkich kolumnach z sektorami
                     for(const key in duty) {
                         if (key.toLowerCase().includes('sektor') && duty[key]) {
                              const color = key.toLowerCase().includes('pomarańczowy') ? '#fff3cd' : 
@@ -601,7 +595,6 @@
          */
         async function refreshAllData() {
             console.log("Rozpoczynam odświeżanie danych...");
-            // Używamy Promise.all, aby wszystkie dane ładowały się równocześnie
             await Promise.all([
                 loadConfiguration(),
                 loadSubstitutes(),
@@ -616,10 +609,10 @@
          */
         document.addEventListener('DOMContentLoaded', () => {
             updateDateTime();
-            setInterval(updateDateTime, 1000 * 60); // Aktualizuj czas co minutę
+            setInterval(updateDateTime, 1000 * 60);
 
-            refreshAllData(); // Pierwsze ładowanie danych
-            setInterval(refreshAllData, REFRESH_INTERVAL); // Ustaw cykliczne odświeżanie
+            refreshAllData();
+            setInterval(refreshAllData, REFRESH_INTERVAL);
         });
     </script>
 </body>
