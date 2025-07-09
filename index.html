@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tablica Informacyjna - Szkoła</title>
+    <title>Tablica Informacyjna</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        /* Import Google Fonts for a Google-like feel */
-        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap');
-
-        /* Resetowanie podstawowych stylów */
         * {
             margin: 0;
             padding: 0;
@@ -16,274 +13,248 @@
         }
 
         body {
-            font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
-            background: #f8f9fa; /* Bardzo jasne tło, prawie białe */
-            color: #3c4043; /* Ciemniejszy szary dla głównego tekstu */
-            overflow: hidden;
-            height: 100vh;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f8f9fa;
+            color: #202124;
+            line-height: 1.5;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
 
-        /* Główny kontener strony */
-        .dashboard {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: #f8f9fa;
-        }
-
-        /* Sekcja nagłówka */
+        /* Nagłówek */
         .header {
             background: #ffffff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            padding: 20px 40px;
+            padding: 16px 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 10;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .school-name {
-            font-size: 42px;
-            font-weight: 400;
-            letter-spacing: -0.5px;
-            color: #1a73e8;
-        }
-
-        .date-time {
-            font-size: 28px;
-            font-weight: 300;
-            color: #5f6368;
-            text-align: right;
-            opacity: 0.9;
-        }
-
-        .time {
-            font-size: 36px;
-            font-weight: 400;
-            color: #202124;
-        }
-
-        /* Sekcja paska informacyjnego */
-        .ticker-wrapper {
-            background: #e8f0fe;
-            padding: 15px 0;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.1);
-            margin-top: -1px;
-        }
-
-        .ticker-content {
-            display: flex;
-            animation: scroll 30s linear infinite; /* Animacja przewijania */
-            padding-left: 100%; /* Zaczyna się poza ekranem */
-        }
-
-        .ticker-item {
-            white-space: nowrap; /* Zapobiega zawijaniu tekstu */
-            padding: 0 100px; /* Duży odstęp między powtórzeniami */
+        .header h1 {
+            font-family: 'Google Sans', sans-serif;
             font-size: 24px;
             font-weight: 500;
             color: #1a73e8;
         }
 
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        .header .datetime {
+            font-size: 16px;
+            color: #5f6368;
+            font-weight: 400;
         }
 
-        /* Główna siatka treści (2 kolumny) */
+        /* Pasek informacyjny */
+        .ticker-wrapper {
+            background: #e8f0fe;
+            border-bottom: 1px solid #dadce0;
+            padding: 12px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .ticker-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scroll 30s linear infinite;
+            font-size: 14px;
+            color: #1a73e8;
+            font-weight: 500;
+        }
+
+        @keyframes scroll {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        /* Główna siatka treści */
         .content-grid {
-            flex: 1;
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Zmieniono na 2 kolumny */
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
             padding: 20px;
-            overflow-y: auto;
-            background: transparent;
+            flex: 1;
         }
 
-        /* Ogólne style kart */
+        /* Karty */
         .card {
             background: #ffffff;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            transform: translateY(0);
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
         }
 
         .card-header {
             background: #ffffff;
-            color: #202124;
-            padding: 18px 25px;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e8eaed;
             display: flex;
             align-items: center;
-            gap: 15px;
-            border-bottom: 1px solid #f0f0f0;
+            gap: 8px;
         }
 
-        .card-icon {
-            font-size: 36px;
-            color: #1a73e8;
-        }
-
-        .card-title {
-            font-size: 22px;
+        .card-header h2 {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 18px;
             font-weight: 500;
+            color: #202124;
+        }
+
+        .card-header .icon {
+            width: 20px;
+            height: 20px;
+            fill: #5f6368;
         }
 
         .card-body {
-            padding: 20px 25px;
             flex: 1;
+            padding: 16px 20px;
             overflow-y: auto;
-            color: #3c4043;
         }
 
-        /* Lista elementów w kartach */
-        .item-list {
-            list-style: none;
+        /* Zastępstwa */
+        .substitute-group {
+            margin-bottom: 24px;
         }
 
-        /* Ogólny styl dla pojedynczego elementu listy (zastępstwa, ogłoszenia) */
-        .item {
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            background: #ffffff;
-            border-radius: 6px;
-            border: 1px solid #e0e0e0;
-            border-left: 5px solid; /* Kolorowy pasek po lewej */
-            transition: all 0.2s ease-in-out;
-            display: flex;
-            align-items: center;
-            flex-wrap: nowrap; /* WAŻNE: Zapobiega zawijaniu */
-            justify-content: space-between;
-            min-height: 48px;
+        .substitute-group:last-child {
+            margin-bottom: 0;
         }
 
-        /* Styl dla elementów zastępstw */
-        .substitute-item {
-            border-left-color: #fbbc05; /* Google żółty/pomarańczowy */
-        }
-        .substitute-item:hover {
-            background: #fffde7;
-            transform: translateX(3px);
-        }
-
-        /* Kontener dla treści zastępstwa (w jednym wierszu) */
-        .substitute-item-content {
-            display: flex;
-            align-items: center;
-            flex-grow: 1;
+        .substitute-date {
+            font-family: 'Google Sans', sans-serif;
             font-size: 16px;
-            color: #202124;
-            gap: 8px; /* Małe odstępy między segmentami */
-            min-width: 0; /* Pozwala elementom na zmniejszanie */
-        }
-
-        .substitute-item-content > span {
-            white-space: nowrap; /* Upewnij się, że tekst w spanach się nie zawija */
-            overflow: hidden; /* Ukryj nadmiar tekstu */
-            text-overflow: ellipsis; /* Dodaj trzy kropki */
-            flex-shrink: 1; /* Pozwól im się zmniejszać */
-        }
-
-        .substitute-item-content .lesson-info {
-            font-size: 15px;
-            font-weight: 700;
-            color: #c5221f;
-            background-color: #ffe0b2;
-            padding: 3px 6px;
-            border-radius: 3px;
-            flex-shrink: 0; /* Ten element nie powinien się zmniejszać, jeśli to możliwe */
-            min-width: 40px; /* Minimalna szerokość dla "Lekcja X" */
-            text-align: center;
-        }
-
-        .substitute-item-content .teachers-info {
             font-weight: 500;
-            flex-grow: 2; /* Daj więcej miejsca nauczycielom */
-            min-width: 150px; /* Minimalna szerokość, żeby nie był za mały */
+            color: #1a73e8;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #e8f0fe;
         }
 
-        .substitute-item-content .class-info {
-            font-weight: 500;
-            color: #5f6368;
+        .substitute-item {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #34a853;
+            gap: 8px;
+        }
+
+        .substitute-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .substitute-item span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-shrink: 1;
+        }
+
+        .lesson-info {
+            min-width: 60px;
             flex-grow: 0;
             flex-shrink: 0;
-            min-width: 50px;
-        }
-
-        .substitute-item-content .notes-info {
-            font-style: italic;
-            color: #5f6368;
-            flex-grow: 1; /* Pozwól notatkom zająć pozostałe miejsce */
-            min-width: 50px;
-        }
-
-        /* Grupowanie zastępstw po dacie */
-        .substitute-date-group {
-            margin-bottom: 20px;
-            border-bottom: 1px dashed #e0e0e0;
-            padding-bottom: 10px;
-        }
-
-        .substitute-date-group:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .substitute-date-title {
-            font-size: 20px;
-            font-weight: 600;
+            font-weight: 500;
             color: #1a73e8;
-            margin-bottom: 10px;
-            text-align: center;
         }
 
+        .teachers-info {
+            min-width: 100px;
+            flex-grow: 1;
+            flex-shrink: 1;
+            color: #202124;
+        }
 
-        /* Styl dla elementów ogłoszeń */
+        .class-info {
+            min-width: 60px;
+            flex-grow: 0;
+            flex-shrink: 0;
+            font-weight: 500;
+            color: #ea4335;
+        }
+
+        .notes-info {
+            min-width: 80px;
+            flex-grow: 1;
+            flex-shrink: 1;
+            color: #5f6368;
+            font-size: 13px;
+        }
+
+        /* Ogłoszenia */
         .announcement-item {
-            border-left-color: #34a853; /* Google zielony */
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #fbbc05;
         }
 
-        .announcement-item:hover {
-            background: #e6f4ea;
-            transform: translateX(3px);
+        .announcement-item:last-child {
+            margin-bottom: 0;
         }
-        
-        /* Loader (pozostaje do wizualizacji ładowania danych) */
+
+        .announcement-title {
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 4px;
+        }
+
+        .announcement-content {
+            color: #5f6368;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* Stany puste */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #5f6368;
+        }
+
+        .empty-state .icon {
+            width: 48px;
+            height: 48px;
+            fill: #dadce0;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* Loader */
         .loader {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-            z-index: 1001;
-        }
-
-        .loader.show {
-            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
         }
 
         .loader-spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(0, 0, 0, 0.1);
-            border-top: 5px solid #1a73e8;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #e8eaed;
+            border-top: 2px solid #1a73e8;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -293,310 +264,308 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Komunikaty o braku danych */
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #9aa0a6;
+        /* Komunikaty o błędach */
+        .error-message {
+            background: #fce8e6;
+            color: #d93025;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+            border-left: 3px solid #ea4335;
         }
 
-        .empty-state-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-            opacity: 0.6;
-            color: #dadce0;
+        /* Responsywność */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 16px;
+            }
+            
+            .header {
+                padding: 12px 16px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .header .datetime {
+                font-size: 14px;
+            }
         }
-
-        .empty-state-text {
-            font-size: 18px;
-        }
-
-        /* Responsywność dla dużych ekranów */
-        @media (min-width: 1920px) {
-            .school-name { font-size: 48px; }
-            .date-time { font-size: 32px; }
-            .time { font-size: 42px; }
-            .ticker-item { font-size: 28px; }
-            .card-title { font-size: 26px; }
-            .substitute-item-content .lesson-info { font-size: 16px; }
-            .substitute-item-content .teachers-info { font-size: 17px; }
-            .substitute-item-content .class-info { font-size: 15px; }
-            .substitute-item-content .notes-info { font-size: 14px; }
-        }
-
     </style>
 </head>
 <body>
-    <div class="dashboard">
-        <header class="header">
-            <h1 class="school-name" id="schoolName">Tablica Informacyjna</h1>
-            <div class="date-time">
-                <div id="dateText"></div>
-                <div class="time" id="timeText"></div>
-            </div>
-        </header>
+    <header class="header">
+        <h1 id="school-name">Tablica Informacyjna</h1>
+        <div class="datetime" id="datetime"></div>
+    </header>
 
-        <div class="ticker-wrapper">
-            <div class="ticker-content" id="tickerContent">
-                <span class="ticker-item">Ładowanie danych...</span>
-                <span class="ticker-item">Ładowanie danych...</span>
+    <div class="ticker-wrapper">
+        <div class="ticker-text" id="ticker-text">Witamy w tablicy informacyjnej szkoły</div>
+    </div>
+
+    <main class="content-grid">
+        <div class="card">
+            <div class="card-header">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                </svg>
+                <h2>Zastępstwa</h2>
+            </div>
+            <div class="card-body" id="substitutes-content">
+                <div class="loader">
+                    <div class="loader-spinner"></div>
+                </div>
             </div>
         </div>
 
-        <div class="content-grid">
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-icon">🔄</span>
-                    <h2 class="card-title">Zastępstwa</h2>
-                </div>
-                <div class="card-body">
-                    <ul class="item-list" id="substituteList">
-                        <li class="empty-state">
-                            <div class="empty-state-icon">📝</div>
-                            <div class="empty-state-text">Ładowanie zastępstw...</div>
-                        </li>
-                    </ul>
-                </div>
+        <div class="card">
+            <div class="card-header">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/>
+                </svg>
+                <h2>Ogłoszenia</h2>
             </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-icon">📢</span>
-                    <h2 class="card-title">Ogłoszenia</h2>
-                </div>
-                <div class="card-body">
-                    <ul class="item-list" id="announcementList">
-                        <li class="empty-state">
-                            <div class="empty-state-icon">📣</div>
-                            <div class="empty-state-text">Ładowanie ogłoszeń...</div>
-                        </li>
-                    </ul>
+            <div class="card-body" id="announcements-content">
+                <div class="loader">
+                    <div class="loader-spinner"></div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="loader" id="loader">
-        <div class="loader-spinner"></div>
-    </div>
+    </main>
 
     <script>
-        // URL Twojej aplikacji Google Apps Script
-        const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxfjyGp7LkXsBXM53InKCeGEveCLz2K6J85Q6IGVL3y__eXXwV_4gG_TGv5EWCcIHF8/exec'; 
+        // Konfiguracja
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxfjyGp7LkXsBXM53InKCeGEveCLz2K6J85Q6IGVL3y__eXXwV_4gG_TGv5EWCcIHF8/exec';
+        const REFRESH_INTERVAL = 30000; // 30 sekund
+        
+        // Globalne zmienne
+        let refreshInterval;
+        let lastUpdateTime = 0;
 
-        // Funkcja pomocnicza do formatowania daty na potrzeby wyświetlania
-        function formatDateToDisplay(dateString) {
-            if (!dateString) return '';
-            const date = new Date(dateString + 'T00:00:00'); // Dodaj T00:00:00, aby uniknąć problemów ze strefą czasową
-            const today = new Date();
-            today.setHours(0,0,0,0);
-            const tomorrow = new Date(today);
-            tomorrow.setDate(today.getDate() + 1);
-            const dayAfterTomorrow = new Date(today);
-            dayAfterTomorrow.setDate(today.getDate() + 2);
+        // Inicjalizacja
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePage();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // Obsługa klawisza F11
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F11') {
+                    e.preventDefault();
+                    toggleFullscreen();
+                }
+            });
+        });
 
-            date.setHours(0,0,0,0); // Ustaw na początek dnia dla porównania
-
-            if (date.getTime() === today.getTime()) {
-                return 'Dziś';
-            } else if (date.getTime() === tomorrow.getTime()) {
-                return 'Jutro';
-            } else if (date.getTime() === dayAfterTomorrow.getTime()) {
-                return 'Pojutrze';
-            } else {
-                return date.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' });
-            }
+        function initializePage() {
+            loadData();
+            refreshInterval = setInterval(loadData, REFRESH_INTERVAL);
         }
 
-        // Aktualizacja czasu
         function updateDateTime() {
             const now = new Date();
-            const days = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
-            const months = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 
-                           'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
-            
-            const dayName = days[now.getDay()];
-            const day = now.getDate();
-            const month = months[now.getMonth()];
-            const year = now.getFullYear();
-            
-            document.getElementById('dateText').textContent = `${dayName}, ${day} ${month} ${year}`;
-            document.getElementById('timeText').textContent = now.toLocaleTimeString('pl-PL', 
-                { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('datetime').textContent = now.toLocaleDateString('pl-PL', options);
         }
 
-        // Pobieranie treści z Google Apps Script
-        async function fetchDataFromAppsScript() {
-            const loader = document.getElementById('loader');
-            loader.classList.add('show');
-
+        async function loadData() {
             try {
-                const response = await fetch(GOOGLE_APP_SCRIPT_URL + '?action=getData', {
-                    method: 'GET',
-                    mode: 'cors'
-                });
-
+                const response = await fetch(APPS_SCRIPT_URL);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
-                const data = await response.json(); 
-
-                // Sprawdź, czy Apps Script zwrócił błąd
+                
+                const data = await response.json();
+                
                 if (data.error) {
-                    console.error('Błąd z Apps Script:', data.error, data.stack);
-                    alert('❌ Błąd z Apps Script: ' + data.message + ' Sprawdź dzienniki Apps Script.');
-                    displayDefaultErrorContent(data.message);
-                    return;
+                    throw new Error(data.error);
                 }
-
-                // Wyświetl dane
-                displayContent(data);
-
+                
+                updateContent(data);
+                lastUpdateTime = Date.now();
+                
             } catch (error) {
-                console.error('Błąd podczas pobierania danych z Apps Script:', error);
-                alert('❌ Wystąpił błąd podczas pobierania danych. Spróbuj ponownie lub sprawdź konsolę.');
+                console.error('Error loading data:', error);
                 displayDefaultErrorContent();
-            } finally {
-                loader.classList.remove('show');
             }
         }
 
-        // Wyświetlanie domyślnych komunikatów o błędzie
-        function displayDefaultErrorContent(errorMessage = "Błąd ładowania danych") {
-            document.getElementById('schoolName').textContent = "BŁĄD ŁADOWANIA";
-            document.getElementById('tickerContent').innerHTML = `
-                <span class="ticker-item">${errorMessage}. Odśwież stronę lub skontaktuj się z administratorem.</span>
-                <span class="ticker-item">${errorMessage}. Odśwież stronę lub skontaktuj się z administratorem.</span>
-            `;
-            document.getElementById('substituteList').innerHTML = `
-                <li class="empty-state">
-                    <div class="empty-state-icon">❌</div>
-                    <div class="empty-state-text">${errorMessage}</div>
-                </li>
-            `;
-            document.getElementById('announcementList').innerHTML = `
-                <li class="empty-state">
-                    <div class="empty-state-icon">❌</div>
-                    <div class="empty-state-text">${errorMessage}</div>
-                </li>
-            `;
+        function updateContent(data) {
+            // Aktualizacja nazwy szkoły
+            if (data.config && data.config.schoolName) {
+                document.getElementById('school-name').textContent = data.config.schoolName;
+            }
+            
+            // Aktualizacja paska informacyjnego
+            if (data.config && data.config.tickerText) {
+                document.getElementById('ticker-text').textContent = data.config.tickerText;
+            }
+            
+            // Aktualizacja zastępstw
+            updateSubstitutes(data.substitutes || []);
+            
+            // Aktualizacja ogłoszeń
+            updateAnnouncements(data.announcements || []);
         }
 
-        // Wyświetlanie treści
-        function displayContent(data) {
-            const schoolName = data.schoolName || 'Tablica Informacyjna';
-            const ticker = data.tickerContent || 'Brak danych na pasku informacyjnym.';
-            const substitutes = data.substitutesContent || [];
-            const announcementsRaw = data.announcementsContent || '';
-            const announcements = announcementsRaw.split('\n').filter(line => line.trim() !== '');
-
-            document.getElementById('schoolName').textContent = schoolName;
-
-            const tickerContentElement = document.getElementById('tickerContent');
-            tickerContentElement.innerHTML = `
-                <span class="ticker-item">${ticker}</span>
-                <span class="ticker-item">${ticker}</span>
-            `;
-
-            // Zastępstwa
-            const substituteList = document.getElementById('substituteList');
-            substituteList.innerHTML = '';
+        function updateSubstitutes(substitutes) {
+            const container = document.getElementById('substitutes-content');
             
-            if (substitutes.length > 0) {
-                // Grupuj zastępstwa według daty
-                const groupedSubstitutes = substitutes.reduce((acc, sub) => {
-                    const dateKey = sub.date;
-                    if (!acc[dateKey]) {
-                        acc[dateKey] = [];
-                    }
-                    acc[dateKey].push(sub);
-                    return acc;
-                }, {});
-
-                // Wyświetl grupy zastępstw
-                for (const dateKey in groupedSubstitutes) {
-                    const dateTitle = formatDateToDisplay(dateKey);
-                    
-                    const groupDiv = document.createElement('div');
-                    groupDiv.className = 'substitute-date-group';
-                    groupDiv.innerHTML = `<h3 class="substitute-date-title">${dateTitle}</h3><ul class="item-list"></ul>`;
-                    
-                    groupedSubstitutes[dateKey].forEach(sub => {
-                        const li = document.createElement('li');
-                        li.className = 'item substitute-item';
-                        // Sprawdzamy, czy sub.lessonHour to faktycznie godzina, a nie data
-                        const isLessonHourValid = sub.lessonHour && !isNaN(parseInt(sub.lessonHour.split('-')[0]));
-
-                        li.innerHTML = `
-                            <div class="substitute-item-content">
-                                ${isLessonHourValid ? `<span class="lesson-info">Lekcja ${sub.lessonHour}</span>` : ''}
-                                <span class="teachers-info">
-                                    ${sub.replacedTeacher ? `Za: ${sub.replacedTeacher}` : ''}
-                                    ${sub.substitutingTeacher ? `&nbsp;&nbsp;➡️&nbsp;&nbsp; ${sub.substitutingTeacher}` : ''}
-                                    ${sub.class ? `&nbsp;&nbsp;(${sub.class})` : ''}
-                                </span>
-                                ${sub.notes ? `<span class="notes-info">${sub.notes}</span>` : ''}
+            if (!substitutes || substitutes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
+                        </svg>
+                        <h3>Brak zastępstw</h3>
+                        <p>Aktualnie nie ma żadnych zastępstw do wyświetlenia.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Grupowanie zastępstw według dat
+            const groupedSubstitutes = groupSubstitutesByDate(substitutes);
+            
+            let html = '';
+            for (const [dateKey, items] of Object.entries(groupedSubstitutes)) {
+                html += `
+                    <div class="substitute-group">
+                        <div class="substitute-date">${dateKey}</div>
+                        ${items.map(item => `
+                            <div class="substitute-item">
+                                <span class="lesson-info">${item.lesson || ''}</span>
+                                <span class="teachers-info">${formatTeachers(item.originalTeacher, item.substituteTeacher)}</span>
+                                <span class="class-info">${item.class || ''}</span>
+                                <span class="notes-info">${item.notes || ''}</span>
                             </div>
-                        `;
-                        groupDiv.querySelector('.item-list').appendChild(li);
-                    });
-                    substituteList.appendChild(groupDiv);
-                }
-            } else {
-                substituteList.innerHTML = `
-                    <li class="empty-state">
-                        <div class="empty-state-icon">📝</div>
-                        <div class="empty-state-text">Brak zastępstw na najbliższe dni</div>
-                    </li>
+                        `).join('')}
+                    </div>
                 `;
             }
-
-            // Ogłoszenia
-            const announcementList = document.getElementById('announcementList');
-            announcementList.innerHTML = '';
             
-            if (announcements.length > 0) {
-                announcements.forEach(announcement => {
-                    const li = document.createElement('li');
-                    li.className = 'item announcement-item';
-                    li.innerHTML = `<div class="item-primary">${announcement}</div>`;
-                    announcementList.appendChild(li);
+            container.innerHTML = html;
+        }
+
+        function groupSubstitutesByDate(substitutes) {
+            const groups = {};
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const dayAfterTomorrow = new Date(today);
+            dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
+            
+            substitutes.forEach(substitute => {
+                const date = new Date(substitute.date);
+                let dateKey;
+                
+                if (isSameDay(date, today)) {
+                    dateKey = 'Dziś';
+                } else if (isSameDay(date, tomorrow)) {
+                    dateKey = 'Jutro';
+                } else if (isSameDay(date, dayAfterTomorrow)) {
+                    dateKey = 'Pojutrze';
+                } else {
+                    dateKey = date.toLocaleDateString('pl-PL', {
+                        weekday: 'long',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                }
+                
+                if (!groups[dateKey]) {
+                    groups[dateKey] = [];
+                }
+                groups[dateKey].push(substitute);
+            });
+            
+            return groups;
+        }
+
+        function formatTeachers(originalTeacher, substituteTeacher) {
+            if (!originalTeacher && !substituteTeacher) return '';
+            if (!originalTeacher) return substituteTeacher;
+            if (!substituteTeacher) return originalTeacher;
+            return `${originalTeacher} → ${substituteTeacher}`;
+        }
+
+        function updateAnnouncements(announcements) {
+            const container = document.getElementById('announcements-content');
+            
+            if (!announcements || announcements.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/>
+                        </svg>
+                        <h3>Brak ogłoszeń</h3>
+                        <p>Aktualnie nie ma żadnych ogłoszeń do wyświetlenia.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const html = announcements.map(announcement => `
+                <div class="announcement-item">
+                    <div class="announcement-title">${announcement.title || 'Ogłoszenie'}</div>
+                    <div class="announcement-content">${announcement.content || ''}</div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = html;
+        }
+
+        function displayDefaultErrorContent() {
+            const substitutesContainer = document.getElementById('substitutes-content');
+            const announcementsContainer = document.getElementById('announcements-content');
+            
+            const errorMessage = `
+                <div class="error-message">
+                    <strong>Błąd ładowania danych</strong><br>
+                    Nie udało się pobrać danych z serwera. Sprawdź połączenie internetowe lub skontaktuj się z administratorem.
+                </div>
+            `;
+            
+            substitutesContainer.innerHTML = errorMessage;
+            announcementsContainer.innerHTML = errorMessage;
+        }
+
+        function isSameDay(date1, date2) {
+            return date1.getDate() === date2.getDate() &&
+                   date1.getMonth() === date2.getMonth() &&
+                   date1.getFullYear() === date2.getFullYear();
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
                 });
             } else {
-                announcementList.innerHTML = `
-                    <li class="empty-state">
-                        <div class="empty-state-icon">📣</div>
-                        <div class="empty-state-text">Brak ogłoszeń</div>
-                    </li>
-                `;
+                document.exitFullscreen();
             }
         }
 
+        // Obsługa błędów JavaScript
+        window.addEventListener('error', function(e) {
+            console.error('JavaScript error:', e.error);
+        });
 
-        // Inicjalizacja
-        window.onload = function() {
-            // Aktualizuj czas
-            updateDateTime();
-            setInterval(updateDateTime, 1000);
-
-            // Po załadowaniu strony, spróbuj pobrać dane z Apps Script
-            fetchDataFromAppsScript();
-            // Ustaw automatyczne odświeżanie co 30 sekund
-            setInterval(fetchDataFromAppsScript, 30000); 
-            
-            // Pełny ekran po kliknięciu F11
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'F11') {
-                    e.preventDefault();
-                    if (!document.fullscreenElement) {
-                        document.documentElement.requestFullscreen();
-                    } else {
-                        document.exitFullscreen();
-                    }
-                }
-            });
-        }
+        // Obsługa nieobsłużonych Promise
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('Unhandled promise rejection:', e.reason);
+        });
     </script>
 </body>
 </html>
