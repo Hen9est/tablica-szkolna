@@ -3,98 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tablica Informacyjna</title>
+    <title>Tablica Informacyjna 2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #1a73e8;
-            --primary-light-color: #e8f0fe;
-            --primary-dark-color: #174ea6;
-            --danger-color: #d93025;
-            --font-color-primary: #202124;
-            --font-color-secondary: #5f6368;
-            --bg-color-main: #f8f9fa;
-            --bg-color-card: #ffffff;
-            --border-color-light: #e8eaed;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-            --border-radius-md: 8px;
-            --font-family-sans: 'Google Sans', 'Roboto', Arial, sans-serif;
+        body { font-family: 'Inter', sans-serif; }
+        .ticker-text {
+            /* Animacja przesuwania tekstu */
+            animation: scroll 40s linear infinite;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Roboto', Arial, sans-serif; background-color: var(--bg-color-main); color: var(--font-color-primary); line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
-        .header { background: var(--bg-color-card); padding: 16px 24px; box-shadow: var(--shadow-sm); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .header h1 { font-family: var(--font-family-sans); font-size: 24px; font-weight: 500; color: var(--primary-color); }
-        .header .datetime { font-size: 16px; color: var(--font-color-secondary); }
-        .ticker-wrapper { background: var(--primary-light-color); border-bottom: 1px solid var(--border-color-light); padding: 18px 0; overflow: hidden; white-space: nowrap; }
-        .ticker-text { display: inline-block; padding-left: 100%; animation: scroll 40s linear infinite; font-family: var(--font-family-sans); font-size: 18px; font-weight: 500; color: var(--primary-dark-color); }
-        @keyframes scroll { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-        .content-grid { display: grid; grid-template-columns: 1fr 1fr 320px; gap: 20px; padding: 20px; flex: 1; }
-        .card { background: var(--bg-color-card); border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); overflow: hidden; display: flex; flex-direction: column; max-height: calc(100vh - 180px); }
-        .card-header { padding: 16px 20px; border-bottom: 1px solid var(--border-color-light); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-        .card-header h2 { font-family: var(--font-family-sans); font-size: 18px; font-weight: 500; }
-        .card-header .icon { width: 24px; height: 24px; fill: var(--font-color-secondary); }
-        .card-body { flex: 1; overflow-y: auto; }
-        .substitutes-content, .announcements-content, .duties-body { padding: 0; }
-        .substitute-table { width: 100%; border-collapse: collapse; }
-        .substitute-table th, .substitute-table td { padding: 12px 8px; text-align: left; border-bottom: 1px solid var(--border-color-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; }
-        .substitute-table th { font-size: 12px; font-weight: 700; color: var(--font-color-secondary); text-transform: uppercase; background: var(--bg-color-main); position: sticky; top: 0; }
-        .substitute-table tr:hover { background-color: var(--primary-light-color); }
-        .substituting-teacher { font-weight: 700; }
-        .announcements-content { padding: 8px 16px; }
-        .announcement-item { padding: 16px; margin-bottom: 12px; background: var(--bg-color-main); border-radius: var(--border-radius-md); border: 1px solid var(--border-color-light); }
-        .announcement-title { font-weight: 500; margin-bottom: 8px; font-size: 16px; }
-        .announcement-content { color: var(--font-color-secondary); font-size: 14px; }
-        .duties-column { grid-column: 3 / 4; }
-        .duties-body { padding: 12px; }
-        .duties-day-info { background: var(--primary-light-color); padding: 12px; border-radius: var(--border-radius-md); margin-bottom: 16px; text-align: center; }
-        .duties-day-info h3 { font-family: var(--font-family-sans); font-size: 16px; color: var(--primary-color); }
-        .duties-break-group { margin-bottom: 16px; }
-        .duties-break-title { font-family: var(--font-family-sans); font-size: 13px; font-weight: 500; margin-bottom: 8px; padding: 6px 10px; background: var(--bg-color-main); border-radius: 4px; text-align: center; }
-        .duties-location-card { border: 1px solid var(--border-color-light); border-radius: var(--border-radius-md); margin-bottom: 8px; }
-        .duties-location-header { padding: 8px 12px; }
-        .duties-location-header h4 { font-size: 13px; font-weight: 500; }
-        .duties-teachers { padding: 0 12px 8px; font-size: 12px; color: var(--font-color-secondary); }
-        .loading, .error, .empty-state { text-align: center; padding: 40px; color: var(--font-color-secondary); font-style: italic; }
-        .error { color: var(--danger-color); font-weight: 500; }
-        @media (max-width: 1024px) { .content-grid { grid-template-columns: 1fr 1fr; } .duties-column { grid-column: 1 / -1; order: 3; } }
-        @media (max-width: 768px) { .content-grid { grid-template-columns: 1fr; } .header { flex-direction: column; align-items: flex-start; } }
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
     </style>
 </head>
-<body>
-    <header class="header">
-        <h1 id="school-name">Tablica Informacyjna</h1>
-        <div class="datetime" id="datetime"></div>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Nagłówek -->
+    <header class="bg-white shadow-md sticky top-0 z-20">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 id="school-name" class="text-2xl font-bold text-blue-600">Ładowanie...</h1>
+            <div id="datetime" class="text-sm text-gray-600 text-right"></div>
+        </div>
     </header>
-    <div class="ticker-wrapper">
-        <div class="ticker-text" id="ticker-text">Ładowanie...</div>
+
+    <!-- Pasek informacyjny -->
+    <div class="bg-blue-100 border-b border-blue-200 py-3 overflow-hidden whitespace-nowrap">
+        <div id="ticker-text" class="inline-block text-blue-800 font-semibold">Ładowanie...</div>
     </div>
-    <div class="content-grid">
-        <div class="card">
-            <div class="card-header"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg><h2>Zastępstwa na dziś</h2></div>
-            <div class="card-body"><div class="substitutes-content" id="substitutes-content"><div class="loading">Ładowanie...</div></div></div>
+
+    <!-- Główna treść -->
+    <main class="container mx-auto p-4 flex-grow">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Zastępstwa -->
+            <div class="bg-white rounded-lg shadow-md flex flex-col lg:col-span-2 max-h-[calc(100vh-200px)]">
+                <div class="p-4 border-b">
+                    <h2 class="text-xl font-bold">Zastępstwa na dziś</h2>
+                </div>
+                <div id="substitutes-content" class="p-4 overflow-y-auto">
+                    <div class="text-center text-gray-500 italic py-8">Ładowanie...</div>
+                </div>
+            </div>
+
+            <!-- Dyżury -->
+            <div class="bg-white rounded-lg shadow-md flex flex-col max-h-[calc(100vh-200px)]">
+                <div class="p-4 border-b">
+                    <h2 class="text-xl font-bold">Dyżury na dziś</h2>
+                </div>
+                <div id="duties-content" class="p-4 overflow-y-auto">
+                    <div class="text-center text-gray-500 italic py-8">Ładowanie...</div>
+                </div>
+            </div>
+
+            <!-- Ogłoszenia -->
+            <div class="bg-white rounded-lg shadow-md flex flex-col lg:col-span-3 max-h-[calc(100vh-200px)]">
+                <div class="p-4 border-b">
+                    <h2 class="text-xl font-bold">Ogłoszenia</h2>
+                </div>
+                <div id="announcements-content" class="p-4 overflow-y-auto">
+                     <div class="text-center text-gray-500 italic py-8">Ładowanie...</div>
+                </div>
+            </div>
+
         </div>
-        <div class="card">
-            <div class="card-header"><svg class="icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg><h2>Ogłoszenia</h2></div>
-            <div class="card-body"><div class="announcements-content" id="announcements-content"><div class="loading">Ładowanie...</div></div></div>
-        </div>
-        <div class="card duties-column">
-            <div class="card-header"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/></svg><h2>Dyżury nauczycieli</h2></div>
-            <div class="card-body"><div class="duties-body" id="duties-content"><div class="loading">Ładowanie...</div></div></div>
-        </div>
-    </div>
+    </main>
+
     <script>
-        // WAŻNE: Wklej tutaj swój NOWY adres URL, który otrzymasz po ponownym wdrożeniu skryptu!
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGt7-9z5BlJoKj7G4C3TV4gu2-_Svrj5fnnamcWlhztFShZUSpvv_5UwTqY_Vd59Ru/exec';
+        // Adres URL Twojej wdrożonej aplikacji Google Apps Script
+        let APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx-txRiGyfhltUxSXldlbBTojVTjMMvo04T3Mo_M4FDcjmhfqXhhL5Icw2ybuEryqfv/exec';
         const REFRESH_INTERVAL = 300000; // 5 minut
 
         /**
-         * Pobiera dane z Google Apps Script używając techniki JSONP, aby uniknąć błędów CORS.
-         * @param {string} action - Nazwa akcji do wykonania po stronie serwera.
+         * Pobiera dane z Google Apps Script używając techniki JSONP.
+         * @param {string} action - Nazwa akcji do wykonania.
          * @returns {Promise<Array>} - Obietnica, która zwraca tablicę z danymi.
          */
         function fetchSheetData(action) {
+            if (!APPS_SCRIPT_URL) {
+                console.error("Błąd krytyczny: Brak adresu URL skryptu (APPS_SCRIPT_URL). Wdróż skrypt i wklej URL.");
+                return Promise.resolve([]); 
+            }
             return new Promise((resolve) => {
                 const callbackName = 'jsonp_callback_' + Math.floor(Date.now() * Math.random());
                 const script = document.createElement('script');
@@ -114,7 +106,7 @@
                 script.onerror = () => {
                     document.body.removeChild(script);
                     delete window[callbackName];
-                    console.error(`Błąd ładowania skryptu dla akcji '${action}'. Sprawdź URL, połączenie sieciowe i czy skrypt został poprawnie wdrożony.`);
+                    console.error(`Błąd ładowania skryptu dla akcji '${action}'.`);
                     resolve([]); 
                 };
                 
@@ -122,87 +114,131 @@
             });
         }
 
-
+        /** Aktualizuje datę i czas */
         function updateDateTime() {
-            document.getElementById('datetime').textContent = new Date().toLocaleDateString('pl-PL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('datetime').textContent = now.toLocaleDateString('pl-PL', options);
         }
 
+        /** Ładuje konfigurację ogólną */
         async function loadConfiguration() {
             const data = await fetchSheetData('getConfiguration');
             const config = data.reduce((acc, item) => ({ ...acc, [item.Klucz]: item.Wartość }), {});
-            document.getElementById('school-name').textContent = config['Nazwa Szkoły'] || 'Tablica Informacyjna';
-            document.getElementById('ticker-text').textContent = config['Pasek Informacyjny'] || 'Brak komunikatów';
+            document.getElementById('school-name').textContent = config['NazwaSzkoly'] || 'Tablica Informacyjna';
+            document.getElementById('ticker-text').textContent = config['PasekInfo'] || 'Brak komunikatów';
         }
 
+        /** Ładuje i wyświetla zastępstwa na dziś */
         async function loadSubstitutes() {
             const container = document.getElementById('substitutes-content');
             const data = await fetchSheetData('getSubstitutes');
-            if (data.length === 0) {
-                container.innerHTML = '<div class="empty-state">Brak zastępstw</div>';
+            const currentDayName = new Date().toLocaleDateString('pl-PL', { weekday: 'long' }).toLowerCase();
+
+            const todaySubstitutes = data.filter(sub => sub.DzienTygodnia && sub.DzienTygodnia.toLowerCase() === currentDayName);
+
+            if (todaySubstitutes.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-500 italic py-8">Brak zastępstw na dziś</div>';
                 return;
             }
-            const headers = ['Godzina lekcyjna', 'Za kogo', 'Kto zastępuje', 'Klasa', 'Uwagi'];
-            let html = '<table class="substitute-table"><thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
-            data.forEach(row => {
-                if (row['Za kogo'] && row['Kto zastępuje']) {
-                    html += `<tr>` + headers.map(h => `<td class="${h === 'Kto zastępuje' ? 'substituting-teacher' : ''}">${row[h] || '-'}</td>`).join('') + `</tr>`;
-                }
+            
+            let html = '<table class="w-full text-sm text-left text-gray-600"><tbody>';
+            todaySubstitutes.forEach(row => {
+                html += `<tr class="bg-white border-b hover:bg-gray-50">
+                    <td class="px-4 py-3 font-bold text-blue-600 w-24">${row.Godzina || '-'}</td>
+                    <td class="px-4 py-3">${row.ZaKogo || '-'}</td>
+                    <td class="px-4 py-3 font-semibold text-gray-800">${row.KtoZastepuje || '-'}</td>
+                    <td class="px-4 py-3">${row.Klasa || '-'}</td>
+                    <td class="px-4 py-3 text-gray-500">${row.Uwagi || ''}</td>
+                </tr>`;
             });
             container.innerHTML = html + '</tbody></table>';
         }
 
+        /** Ładuje i wyświetla ogłoszenia */
         async function loadAnnouncements() {
             const container = document.getElementById('announcements-content');
             const data = await fetchSheetData('getAnnouncements');
+            
             if (data.length === 0) {
-                container.innerHTML = '<div class="empty-state">Brak ogłoszeń</div>';
+                container.innerHTML = '<div class="text-center text-gray-500 italic py-8">Brak ogłoszeń</div>';
                 return;
             }
-            container.innerHTML = data.map(ann => ann['Tytuł'] && ann['Treść'] ? `<div class="announcement-item"><div class="announcement-title">${ann['Tytuł']}</div><div class="announcement-content">${ann['Treść']}</div></div>` : '').join('');
+
+            container.innerHTML = data.map(ann => `
+                <div class="p-4 mb-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <h3 class="font-bold text-lg text-blue-800 mb-1">${ann.Tytul}</h3>
+                    <p class="text-gray-700">${ann.Tresc}</p>
+                </div>
+            `).join('');
         }
 
+        /** Ładuje i wyświetla dyżury na dziś */
         async function loadDuties() {
             const container = document.getElementById('duties-content');
             const data = await fetchSheetData('getDuties');
-            const today = new Date();
-            const currentDayName = today.toLocaleDateString('pl-PL', { weekday: 'long' }).toLowerCase();
-            const todayDuties = data.filter(d => d['Dzień tygodnia']?.toLowerCase() === currentDayName);
+            const currentDayName = new Date().toLocaleDateString('pl-PL', { weekday: 'long' }).toLowerCase();
+
+            const todayDuties = data.filter(duty => duty.DzienTygodnia && duty.DzienTygodnia.toLowerCase() === currentDayName);
 
             if (todayDuties.length === 0) {
-                container.innerHTML = `<div class="empty-state">Brak dyżurów na dziś</div>`;
+                container.innerHTML = '<div class="text-center text-gray-500 italic py-8">Brak dyżurów na dziś</div>';
                 return;
             }
-
+            
+            // Grupuj dyżury po przerwie
             const dutiesByBreak = todayDuties.reduce((acc, duty) => {
-                const breakNum = duty['Przerwa'];
-                if (!acc[breakNum]) acc[breakNum] = [];
-                acc[breakNum].push(duty);
+                const breakTime = duty.Przerwa || 'Inne';
+                if (!acc[breakTime]) {
+                    acc[breakTime] = [];
+                }
+                acc[breakTime].push(duty);
                 return acc;
             }, {});
 
-            let html = `<div class="duties-day-info"><h3>${currentDayName.charAt(0).toUpperCase() + currentDayName.slice(1)}</h3><p>${today.toLocaleDateString('pl-PL')}</p></div>`;
-            for (const breakNum in dutiesByBreak) {
-                html += `<div class="duties-break-group"><div class="duties-break-title">Przerwa ${breakNum}</div>`;
-                dutiesByBreak[breakNum].forEach(duty => {
-                    Object.keys(duty).filter(key => key.toLowerCase().includes('sektor') && duty[key]).forEach(key => {
-                        const color = key.toLowerCase().includes('pomarańczowy') ? '#fff3cd' : key.toLowerCase().includes('zielony') ? '#d4edda' : key.toLowerCase().includes('czerwony') ? '#f8d7da' : '#f0f0f0';
-                        html += `<div class="duties-location-card"><div class="duties-location-header" style="background-color:${color};"><h4>${key}</h4></div><div class="duties-teachers">${duty[key]}</div></div>`;
-                    });
+            let html = '';
+            for (const breakTime in dutiesByBreak) {
+                html += `<div class="mb-4">
+                    <h4 class="font-semibold text-gray-700 bg-gray-200 px-3 py-1 rounded-md mb-2">${breakTime}</h4>
+                    <ul class="space-y-1">`;
+                
+                dutiesByBreak[breakTime].forEach(duty => {
+                    html += `<li class="text-sm text-gray-600 flex justify-between">
+                        <span>${duty.Sektor || '-'}</span>
+                        <span class="font-medium text-gray-800">${duty.Nauczyciel || '-'}</span>
+                    </li>`;
                 });
-                html += `</div>`;
+
+                html += `</ul></div>`;
             }
             container.innerHTML = html;
         }
         
+        /** Główna funkcja odświeżająca wszystkie dane */
         async function refreshAllData() {
-            console.log("Rozpoczynam odświeżanie danych...");
-            await Promise.all([loadConfiguration(), loadSubstitutes(), loadAnnouncements(), loadDuties()]);
-            console.log("Wszystkie dane zostały załadowane.");
+            console.log("Odświeżam dane...");
+            if (!APPS_SCRIPT_URL) {
+                document.getElementById('school-name').textContent = 'BŁĄD KONFIGURACJI';
+                document.getElementById('ticker-text').textContent = 'Wklej adres URL skryptu w pliku index.html';
+                ['substitutes-content', 'duties-content', 'announcements-content'].forEach(id => {
+                    document.getElementById(id).innerHTML = `<div class="text-center text-red-500 font-bold p-8">Błąd: Brak adresu URL skryptu. Wdróż skrypt i wklej URL w pliku index.html w zmiennej APPS_SCRIPT_URL.</div>`;
+                });
+                return;
+            }
+            await Promise.all([
+                loadConfiguration(), 
+                loadSubstitutes(), 
+                loadAnnouncements(), 
+                loadDuties()
+            ]);
+            console.log("Dane załadowane.");
         }
 
+        /** Inicjalizacja po załadowaniu strony */
         document.addEventListener('DOMContentLoaded', () => {
             updateDateTime();
             setInterval(updateDateTime, 60000);
+            
             refreshAllData();
             setInterval(refreshAllData, REFRESH_INTERVAL);
         });
