@@ -153,7 +153,7 @@
         
         .substitute-row, .substitute-header { 
             display: grid; 
-            grid-template-columns: 60px 80px 1fr 1fr;
+            grid-template-columns: 80px 60px 1fr 1fr 80px;
             align-items: center; 
             padding: 12px 8px; 
             gap: 12px; 
@@ -375,7 +375,7 @@
 <body>
     <!-- Nagłówek -->
     <header class="header">
-        <h1>Tablica Informacyjna</h1>
+        <h1 id="school-name">Tablica Informacyjna</h1>
         <div class="datetime" id="datetime"></div>
     </header>
 
@@ -476,6 +476,28 @@
             document.getElementById('datetime').textContent = dateTimeString;
         }
         
+        // Załaduj konfigurację (nazwa szkoły i pasek informacyjny)
+        async function loadConfiguration() {
+            try {
+                const response = await fetchSheetData('getConfiguration');
+                const data = response.data || response;
+                
+                if (data && data.length > 0) {
+                    // Znajdź nazwę szkoły i pasek informacyjny
+                    data.forEach(item => {
+                        if (item.key === 'Nazwa Szkoły' || item.klucz === 'Nazwa Szkoły') {
+                            document.getElementById('school-name').textContent = item.value || item.wartość || 'Tablica Informacyjna';
+                        }
+                        if (item.key === 'Pasek Informacyjny' || item.klucz === 'Pasek Informacyjny') {
+                            document.getElementById('ticker-text').textContent = item.value || item.wartość || '📢 Brak komunikatów';
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Błąd ładowania konfiguracji:', error);
+            }
+        }
+        
         // Załaduj zastępstwa
         async function loadSubstitutes() {
             const container = document.getElementById('substitutes-content');
@@ -490,25 +512,35 @@
                     return;
                 }
                 
-                // Zbuduj tabelę
+                // Zbuduj tabelę z nową strukturą
                 let html = `
                     <div class="substitute-table">
-                        <div class="substitute-header">
+                        <div class="substitute-header" style="grid-template-columns: 80px 60px 1fr 1fr 80px;">
+                            <span>Data</span>
                             <span class="col-lesson">Lekcja</span>
+                            <span>Za kogo</span>
+                            <span>Kto zastępuje</span>
                             <span class="col-class">Klasa</span>
-                            <span>Nauczyciel</span>
-                            <span>Zastępuje</span>
                         </div>
                 `;
                 
                 data.forEach(row => {
-                    if (row.lesson && row.class && row.teacher && row.substitute) {
+                    // Obsługa różnych możliwych nazw pól
+                    const date = row.data || row.Data || row[0] || '';
+                    const lesson = row.godzina || row['Godzina lekcyjna'] || row.lesson || row[1] || '';
+                    const originalTeacher = row.zaKogo || row['Za kogo'] || row.teacher || row[2] || '';
+                    const substitute = row.ktoZastepuje || row['Kto zastępuje'] || row.substitute || row[3] || '';
+                    const className = row.klasa || row.Klasa || row.class || row[4] || '';
+                    const notes = row.uwagi || row.Uwagi || row.notes || row[5] || '';
+                    
+                    if (lesson && originalTeacher && substitute) {
                         html += `
-                            <div class="substitute-row">
-                                <span class="col-lesson">${row.lesson}</span>
-                                <span class="col-class">${row.class}</span>
-                                <span>${row.teacher}</span>
-                                <span class="substituting-teacher">${row.substitute}</span>
+                            <div class="substitute-row" style="grid-template-columns: 80px 60px 1fr 1fr 80px;" title="${notes}">
+                                <span>${date}</span>
+                                <span class="col-lesson">${lesson}</span>
+                                <span>${originalTeacher}</span>
+                                <span class="substituting-teacher">${substitute}</span>
+                                <span class="col-class">${className}</span>
                             </div>
                         `;
                     }
@@ -539,11 +571,15 @@
                 
                 let html = '';
                 data.forEach(announcement => {
-                    if (announcement.title && announcement.content) {
+                    // Obsługa różnych możliwych nazw pól (uwaga na literówkę "Terść")
+                    const title = announcement.tytul || announcement.Tytuł || announcement.title || announcement[0] || '';
+                    const content = announcement.tresc || announcement.Treść || announcement.Terść || announcement.content || announcement[1] || '';
+                    
+                    if (title && content) {
                         html += `
                             <div class="announcement-item">
-                                <div class="announcement-title">${announcement.title}</div>
-                                <div class="announcement-content">${announcement.content}</div>
+                                <div class="announcement-title">${title}</div>
+                                <div class="announcement-content">${content}</div>
                             </div>
                         `;
                     }
@@ -572,51 +608,80 @@
                 }
                 
                 // Pobierz dzień tygodnia
-                const days = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+                const days = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota'];
                 const today = new Date();
-                const dayName = days[today.getDay()];
+                const currentDay = days[today.getDay()];
                 
                 let html = `
                     <div class="duties-day-info">
-                        <h3>${dayName}</h3>
+                        <h3>${currentDay.charAt(0).toUpperCase() + currentDay.slice(1)}</h3>
                         <p>${today.toLocaleDateString('pl-PL')}</p>
                     </div>
                 `;
                 
-                // Grupuj dyżury według przerw
+                // Filtruj tylko dzisiejsze dyżury
+                const todayDuties = data.filter(duty => {
+                    const dayField = duty.dzienTygodnia || duty['Dzień tygodnia'] || duty.day || duty[0] || '';
+                    return dayField.toLowerCase() === currentDay;
+                });
+                
+                if (todayDuties.length === 0) {
+                    html += '<div class="empty-state">Brak dyżurów na dziś</div>';
+                    container.innerHTML = html;
+                    return;
+                }
+                
+                // Grupuj według przerw
                 const dutiesByBreak = {};
-                data.forEach(duty => {
-                    if (duty.break && duty.location && duty.teacher) {
-                        if (!dutiesByBreak[duty.break]) {
-                            dutiesByBreak[duty.break] = [];
+                todayDuties.forEach(duty => {
+                    const breakNum = duty.przerwa || duty.Przerwa || duty.break || duty[1] || '';
+                    const orange = duty.pomaranczowy || duty.Pomarańczowy || duty.orange || duty[2] || '';
+                    const green = duty.zielony || duty.Zielony || duty.green || duty[3] || '';
+                    const red = duty.czerwony || duty.Czerwony || duty.Czwrwony || duty.red || duty[4] || ''; // uwaga na literówkę "Czwrwony"
+                    
+                    if (breakNum) {
+                        const breakName = `Przerwa ${breakNum}`;
+                        if (!dutiesByBreak[breakName]) {
+                            dutiesByBreak[breakName] = {};
                         }
-                        dutiesByBreak[duty.break].push({
-                            time: duty.time || '',
-                            location: duty.location,
-                            teacher: duty.teacher
-                        });
+                        
+                        // Dodaj nauczycieli do odpowiednich lokalizacji
+                        if (orange) {
+                            if (!dutiesByBreak[breakName]['Sektor pomarańczowy']) {
+                                dutiesByBreak[breakName]['Sektor pomarańczowy'] = [];
+                            }
+                            dutiesByBreak[breakName]['Sektor pomarańczowy'].push(orange);
+                        }
+                        if (green) {
+                            if (!dutiesByBreak[breakName]['Sektor zielony']) {
+                                dutiesByBreak[breakName]['Sektor zielony'] = [];
+                            }
+                            dutiesByBreak[breakName]['Sektor zielony'].push(green);
+                        }
+                        if (red) {
+                            if (!dutiesByBreak[breakName]['Sektor czerwony']) {
+                                dutiesByBreak[breakName]['Sektor czerwony'] = [];
+                            }
+                            dutiesByBreak[breakName]['Sektor czerwony'].push(red);
+                        }
                     }
                 });
                 
-                // Wyświetl dyżury pogrupowane
-                for (const [breakName, duties] of Object.entries(dutiesByBreak)) {
+                // Wyświetl dyżury
+                for (const [breakName, locations] of Object.entries(dutiesByBreak)) {
                     html += `<div class="duties-break-group">`;
                     html += `<div class="duties-break-title">${breakName}</div>`;
                     
-                    // Grupuj według lokalizacji
-                    const dutiesByLocation = {};
-                    duties.forEach(duty => {
-                        if (!dutiesByLocation[duty.location]) {
-                            dutiesByLocation[duty.location] = [];
-                        }
-                        dutiesByLocation[duty.location].push(duty.teacher);
-                    });
-                    
-                    // Wyświetl według lokalizacji
-                    for (const [location, teachers] of Object.entries(dutiesByLocation)) {
+                    // Wyświetl każdą lokalizację
+                    for (const [location, teachers] of Object.entries(locations)) {
                         html += `
                             <div class="duties-location-card">
-                                <div class="duties-location-header">
+                                <div class="duties-location-header" style="background-color: ${
+                                    location.includes('pomarańczowy') ? '#fff3cd' : 
+                                    location.includes('zielony') ? '#d4edda' : 
+                                    location.includes('czerwony') ? '#f8d7da' : 
+                                    'var(--bg-color-main)'
+                                };">
                                     <h4>${location}</h4>
                                 </div>
                                 <div class="duties-teachers">
@@ -645,39 +710,13 @@
         
         // Załaduj komunikaty do tickera
         async function loadTicker() {
-            const tickerElement = document.getElementById('ticker-text');
-            
-            try {
-                const response = await fetchSheetData('getTicker');
-                const data = response.data || response;
-                
-                if (!data || data.length === 0) {
-                    tickerElement.textContent = '📢 Brak komunikatów na dziś';
-                    return;
-                }
-                
-                // Połącz wszystkie komunikaty
-                const messages = data
-                    .filter(item => item.message || item.text || item)
-                    .map(item => item.message || item.text || item)
-                    .join(' • ');
-                
-                tickerElement.textContent = messages || '📢 Brak komunikatów na dziś';
-                
-            } catch (error) {
-                tickerElement.textContent = '📢 Błąd ładowania komunikatów';
-                console.error('Błąd:', error);
-            }
+            // Ticker jest ładowany z konfiguracji jako "Pasek Informacyjny"
+            // Ta funkcja może zostać pusta lub usunięta
         }
         
         // Funkcja do odświeżania wszystkich danych
         async function refreshAllData() {
-            await Promise.all([
-                loadSubstitutes(),
-                loadAnnouncements(),
-                loadDuties(),
-                loadTicker()
-            ]);
+            await loadAllData();
         }
         
         // Inicjalizacja
