@@ -85,18 +85,27 @@
         </div>
     </div>
     <script>
-        // WAŻNE: Wklej tutaj swój NOWY adres URL, który otrzymałeś po ponownym wdrożeniu skryptu!
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8duLSxi2hKUnWsfyfNbiVA0Yr-ZQW8VbFc0eaeD3tJyKr6dLKUlx148uKYgbncF4u/exec';
+        // WAŻNE: Wklej tutaj swój NOWY adres URL, który otrzymasz po ponownym wdrożeniu skryptu!
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzWu-F9iM0gpd75IesljwmRy9PjAMtXT9JNOwNkaUO33SWl_me6b9K6E8b5kV0qRDk6/exec';
         const REFRESH_INTERVAL = 300000; // 5 minut
 
+        /**
+         * Pobiera dane z Google Apps Script używając standardowej metody fetch.
+         * @param {string} action - Nazwa akcji do wykonania po stronie serwera.
+         * @returns {Promise<Array>} - Obietnica, która zwraca tablicę z danymi.
+         */
         async function fetchSheetData(action) {
             // Dodajemy unikalny parametr, aby uniknąć problemów z pamięcią podręczną
             const url = `${APPS_SCRIPT_URL}?action=${action}&cachebust=${new Date().getTime()}`;
             try {
                 const response = await fetch(url);
-                if (!response.ok) throw new Error(`Błąd sieci: ${response.status}`);
+                if (!response.ok) {
+                    throw new Error(`Błąd sieci: ${response.status} - ${response.statusText}`);
+                }
                 const jsonResponse = await response.json();
-                if (jsonResponse.error) throw new Error(`Błąd serwera: ${jsonResponse.error}`);
+                if (jsonResponse.error) {
+                    throw new Error(`Błąd serwera: ${jsonResponse.error}`);
+                }
                 return jsonResponse.data || [];
             } catch (error) {
                 console.error(`Błąd podczas pobierania danych dla akcji '${action}':`, error);
