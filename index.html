@@ -85,10 +85,12 @@
         </div>
     </div>
     <script>
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3n4BruFXhGo2ZUE8Nf8bKT3d19Q1yB-RWFi89Ts3ddsfCdO1aQsr85iwjOmLg3khA/exec';
-        const REFRESH_INTERVAL = 300000;
+        // WAŻNE: Wklej tutaj swój NOWY adres URL, który otrzymałeś po ponownym wdrożeniu skryptu!
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8duLSxi2hKUnWsfyfNbiVA0Yr-ZQW8VbFc0eaeD3tJyKr6dLKUlx148uKYgbncF4u/exec';
+        const REFRESH_INTERVAL = 300000; // 5 minut
 
         async function fetchSheetData(action) {
+            // Dodajemy unikalny parametr, aby uniknąć problemów z pamięcią podręczną
             const url = `${APPS_SCRIPT_URL}?action=${action}&cachebust=${new Date().getTime()}`;
             try {
                 const response = await fetch(url);
@@ -97,8 +99,8 @@
                 if (jsonResponse.error) throw new Error(`Błąd serwera: ${jsonResponse.error}`);
                 return jsonResponse.data || [];
             } catch (error) {
-                console.error(`Błąd dla akcji '${action}':`, error);
-                return [];
+                console.error(`Błąd podczas pobierania danych dla akcji '${action}':`, error);
+                return []; // Zwróć pustą tablicę, aby uniknąć dalszych błędów
             }
         }
 
@@ -108,6 +110,7 @@
 
         async function loadConfiguration() {
             const data = await fetchSheetData('getConfiguration');
+            // Przekształca tablicę klucz-wartość w obiekt dla łatwiejszego dostępu
             const config = data.reduce((acc, item) => ({ ...acc, [item.Klucz]: item.Wartość }), {});
             document.getElementById('school-name').textContent = config['Nazwa Szkoły'] || 'Tablica Informacyjna';
             document.getElementById('ticker-text').textContent = config['Pasek Informacyjny'] || 'Brak komunikatów';
@@ -120,6 +123,7 @@
                 container.innerHTML = '<div class="empty-state">Brak zastępstw</div>';
                 return;
             }
+            // Upewnij się, że te nagłówki odpowiadają nazwom kolumn w Twoim Arkuszu
             const headers = ['Godzina lekcyjna', 'Za kogo', 'Kto zastępuje', 'Klasa', 'Uwagi'];
             let html = '<table class="substitute-table"><thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
             data.forEach(row => {
@@ -164,8 +168,8 @@
                 html += `<div class="duties-break-group"><div class="duties-break-title">Przerwa ${breakNum}</div>`;
                 dutiesByBreak[breakNum].forEach(duty => {
                     Object.keys(duty).filter(key => key.toLowerCase().includes('sektor') && duty[key]).forEach(key => {
-                        const color = key.includes('pomarańczowy') ? '#fff3cd' : key.includes('zielony') ? '#d4edda' : key.includes('czerwony') ? '#f8d7da' : '#f0f0f0';
-                        html += `<div class="duties-location-card"><div class="duties-location-header" style="background-color:${color};"><h4 class="duties-location-title">${key}</h4></div><div class="duties-teachers">${duty[key]}</div></div>`;
+                        const color = key.toLowerCase().includes('pomarańczowy') ? '#fff3cd' : key.toLowerCase().includes('zielony') ? '#d4edda' : key.toLowerCase().includes('czerwony') ? '#f8d7da' : '#f0f0f0';
+                        html += `<div class="duties-location-card"><div class="duties-location-header" style="background-color:${color};"><h4>${key}</h4></div><div class="duties-teachers">${duty[key]}</div></div>`;
                     });
                 });
                 html += `</div>`;
@@ -174,12 +178,14 @@
         }
         
         async function refreshAllData() {
+            console.log("Rozpoczynam odświeżanie danych...");
             await Promise.all([loadConfiguration(), loadSubstitutes(), loadAnnouncements(), loadDuties()]);
+            console.log("Wszystkie dane zostały załadowane.");
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             updateDateTime();
-            setInterval(updateDateTime, 60000);
+            setInterval(updateDateTime, 60000); // Aktualizuj czas co minutę
             refreshAllData();
             setInterval(refreshAllData, REFRESH_INTERVAL);
         });
