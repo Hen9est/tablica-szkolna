@@ -3,70 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zegar 320x180px</title>
-    <!-- Link do czcionki Google Fonts - Roboto -->
-    <link href="http://googleusercontent.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Zegar 180x230px</title>
+    <!-- Link do czcionki Google Fonts - Roboto i Oswald -->
+    <link href="http://googleusercontent.com/css2?family=Oswald:wght@400&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
             /* Ustawienie stałych wymiarów strony */
-            width: 320px;
-            height: 180px;
+            width: 180px; /* Zmieniona szerokość */
+            height: 230px; /* Zmieniona wysokość */
             margin: 0;
             overflow: hidden; /* Ukrywa zawartość wychodzącą poza ustalone wymiary */
             background-color: #f0f0f0; /* Jasne tło strony */
             display: flex; /* Użycie flexbox do centrowania kontenera zegara */
             justify-content: center;
-            align-items: center;
-            font-family: 'Roboto', sans-serif;
+            align-items: center; /* Wyśrodkowanie całej zawartości w pionie */
+            font-family: 'Roboto', sans-serif; /* Domyślna czcionka dla reszty */
             color: #333;
         }
         #clock-container {
-            text-align: center;
-            /* Usunięto tło, padding, border-radius i box-shadow, aby zajmował więcej miejsca */
-            /* Zapewnia, że zawartość zegara jest wyśrodkowana w ciele strony */
+            display: flex; /* Użycie Flexbox */
+            flex-direction: column; /* Ułożenie elementów w kolumnie */
+            justify-content: center; /* Wyśrodkowanie elementów w pionie */
+            align-items: center; /* Wyśrodkowanie elementów w poziomie */
+            width: 100%; /* Kontener zegara wypełnia dostępną szerokość body */
+            height: 100%; /* Kontener zegara wypełnia dostępną wysokość body */
+            padding: 10px; /* Wewnętrzny odstęp dla całego widgetu */
+            box-sizing: border-box; /* Padding wliczony w szerokość/wysokość */
+            text-align: center; /* Wyrównanie tekstu do środka */
         }
-        #current-time { /* Nowy element dla samej godziny */
-            font-size: 3.5em; /* Dostosowany rozmiar czcionki dla godziny */
-            font-weight: 300; /* Cienka waga czcionki */
-            color: #212121; /* Bardzo ciemny szary (prawie czarny) dla kontrastu */
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.08); /* Delikatny cień tekstu */
+
+        #dayofweek { /* Dzień tygodnia (najwyżej) */
+            font-family: 'Roboto', sans-serif; /* Zmieniona czcionka na Roboto */
+            font-size: 0.9em; /* Mały rozmiar czcionki */
+            font-weight: 400;
+            color: #616161;
+            letter-spacing: 0.05em; /* Lekkie rozciągnięcie liter */
+            text-transform: uppercase; /* Wszystkie litery wielkie, jak w niektórych widżetach */
             line-height: 1.2;
-            white-space: nowrap; /* Zapobiega łamaniu linii */
-            display: block; /* Upewnia się, że jest w osobnej linii */
-            margin-bottom: 5px; /* Odstęp od daty */
+            margin-bottom: 2px; /* Mały odstęp od daty */
         }
-        #current-date { /* Zmieniony element dla samej daty */
-            font-size: 1.5em; /* Dostosowany rozmiar czcionki dla daty */
-            font-weight: 400; /* Normalna waga czcionki */
-            color: #424242; /* Ciemniejszy szary dla daty */
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Delikatny cień tekstu */
+        #current-date { /* Data (środkowa pozycja) */
+            font-size: 1.1em; /* Mały rozmiar czcionki */
+            font-weight: 400;
+            color: #424242;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
             line-height: 1.2;
             white-space: nowrap;
-            display: block; /* Upewnia się, że jest w osobnej linii */
-            margin-bottom: 5px; /* Odstęp od dnia tygodnia */
+            margin-bottom: 5px; /* Odstęp od godziny */
         }
-        #dayofweek {
-            font-size: 1.2em; /* Dostosowany rozmiar dla dnia tygodnia */
-            font-weight: 400; /* Normalna waga czcionki */
-            color: #616161; /* Ciemniejszy szary dla dnia tygodnia */
-            display: block; /* W nowej linii */
-            margin-top: 5px; /* Odstęp od daty */
-            letter-spacing: 0.05em; /* Lekkie rozciągnięcie liter */
-            text-transform: capitalize; /* Pierwsza litera wielka */
+        #current-time { /* Godzina (najniżej i największa) */
+            font-size: 2.8em; /* Zmniejszony rozmiar czcionki dla godziny, aby zmieściła się i była wyśrodkowana */
+            font-weight: 300;
+            color: #212121;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.08);
+            line-height: 1.2;
+            white-space: nowrap;
         }
-        /* Usunięto media queries, ponieważ rozmiar jest stały */
     </style>
 </head>
 <body>
 
     <!-- Główny kontener zegara -->
     <div id="clock-container">
-        <!-- Godzina -->
-        <div id="current-time"></div>
-        <!-- Data -->
-        <div id="current-date"></div>
-        <!-- Dzień tygodnia -->
+        <!-- Dzień tygodnia (najwyżej) -->
         <div id="dayofweek"></div>
+        <!-- Data (środkowa pozycja) -->
+        <div id="current-date"></div>
+        <!-- Godzina (najniżej i największa) -->
+        <div id="current-time"></div>
     </div>
 
     <script>
