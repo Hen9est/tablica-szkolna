@@ -3,31 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zegar 180x230px</title>
+    <title>Zegar 640px</title>
     <!-- Link do czcionki Google Fonts - Roboto i Oswald -->
     <link href="http://googleusercontent.com/css2?family=Oswald:wght@400&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
             /* Ustawienie stałych wymiarów strony */
-            width: 180px; /* Zmieniona szerokość */
-            height: 230px; /* Zmieniona wysokość */
+            width: 640px; /* Zmieniona szerokość na 640px */
+            height: 100vh; /* Pełna wysokość viewport */
             margin: 0;
             overflow: hidden; /* Ukrywa zawartość wychodzącą poza ustalone wymiary */
             background-color: #f0f0f0; /* Jasne tło strony */
             display: flex; /* Użycie flexbox do centrowania kontenera zegara */
             justify-content: center;
-            align-items: center; /* Wyśrodkowanie całej zawartości w pionie */
+            /* Usunięto align-items: center aby nie centrować w pionie */
             font-family: 'Roboto', sans-serif; /* Domyślna czcionka dla reszty */
             color: #333;
         }
         #clock-container {
             display: flex; /* Użycie Flexbox */
             flex-direction: column; /* Ułożenie elementów w kolumnie */
-            justify-content: center; /* Wyśrodkowanie elementów w pionie */
+            justify-content: flex-start; /* Wyrównanie do góry zamiast center */
             align-items: center; /* Wyśrodkowanie elementów w poziomie */
             width: 100%; /* Kontener zegara wypełnia dostępną szerokość body */
             height: 100%; /* Kontener zegara wypełnia dostępną wysokość body */
-            padding: 10px; /* Wewnętrzny odstęp dla całego widgetu */
+            padding: 5px 10px 10px 10px; /* Górny padding 5px, pozostałe 10px */
             box-sizing: border-box; /* Padding wliczony w szerokość/wysokość */
             text-align: center; /* Wyrównanie tekstu do środka */
         }
@@ -52,7 +52,7 @@
             margin-bottom: 5px; /* Odstęp od godziny */
         }
         #current-time { /* Godzina (najniżej i największa) */
-            font-size: 2.8em; /* Zmniejszony rozmiar czcionki dla godziny, aby zmieściła się i była wyśrodkowana */
+            font-size: 2.5em; /* Zmniejszony rozmiar czcionki dla godziny, aby zmieściła się i była wyśrodkowana */
             font-weight: 300;
             color: #212121;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.08);
