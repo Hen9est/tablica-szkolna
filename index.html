@@ -37,6 +37,8 @@
             flex-direction: row; /* Panele ułożone w rzędzie (obok siebie) */
             box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Lekki cień, aby wizualnie oddzielić stronę */
             background-color: #fff; /* Białe tło dla wrapper'a */
+            border-radius: 15px; /* Zaokrąglone rogi dla głównego wrappera */
+            overflow: hidden; /* Ukrywa zawartość wychodzącą poza zaokrąglone rogi */
         }
 
         .panel {
@@ -109,11 +111,11 @@
         /* Style dla Szczęśliwego Numeru */
         #lucky-number-container {
             width: 90%; /* Dostosowanie szerokości do panelu */
-            height: auto; /* Pozwala na dopasowanie wysokości do zawartości */
+            height: 100%; /* Ważne: wypełnia dostępną wysokość panelu */
             position: relative;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            flex-direction: column; /* Ułożenie elementów w kolumnie: tytuł, potem zawartość */
+            justify-content: flex-start; /* Wyrównanie zawartości do góry */
             align-items: center;
             border: 8px solid var(--theme-border-color); /* Użycie zmiennej CSS */
             box-shadow: 0 0 30px rgba(0,0,0,0.5);
@@ -123,14 +125,15 @@
             background: linear-gradient(135deg, var(--theme-bg-gradient-start) 0%, var(--theme-bg-gradient-end) 100%); /* Użycie zmiennych CSS */
             color: var(--theme-number-color); /* Domyślny kolor tekstu */
             flex-grow: 1; /* Pozwala kontenerowi zająć dostępną przestrzeń powyżej spacera */
-            max-height: calc(100% - 25px - 50px - 20px); /* Maksymalna wysokość = wysokość panelu - padding-top - spacer - padding wewnętrzny */
+            max-height: none; /* Usunięto ograniczenie wysokości, aby lepiej się dopasowywał */
+            border-radius: 15px; /* Zaokrąglone rogi dla kontenera szczęśliwego numeru */
         }
 
         #lucky-number-container .title {
             font-family: 'Bangers', cursive; /* Specyficzna czcionka */
-            font-size: 1.8em; /* Zmniejszony rozmiar czcionki */
+            font-size: 1.5em; /* ZMNIEJSZONY ROZMIAR CZCIONKI */
             line-height: 1.1;
-            margin: 0 0 2px 0; /* Mniejszy margines */
+            margin: 0 0 10px 0; /* Mniejszy margines */
             -webkit-text-stroke: 1.5px black; /* Zmniejszona grubość obrysu */
             text-stroke: 1.5px black;
             z-index: 10;
@@ -138,31 +141,91 @@
             color: var(--theme-title-color); /* Użycie zmiennej CSS */
         }
 
-        #lucky-number-container .lucky-number-display {
-            font-family: 'Bangers', cursive; /* Specyficzna czcionka */
-            font-size: 5em; /* Zmniejszony rozmiar czcionki */
-            line-height: 1;
-            margin: 0;
-            padding: 0;
-            -webkit-text-stroke: 3px black; /* Zmniejszona grubość obrysu */
-            text-stroke: 3px black;
-            text-shadow: 5px 5px 0px rgba(0,0,0,0.25); /* Zmniejszony cień */
-            z-index: 10;
-            animation: pulse 2s infinite ease-in-out;
-            text-align: center;
-            color: var(--theme-number-color); /* Użycie zmiennej CSS */
-            transition: all 0.3s ease-out; /* Płynne przejście dla transformacji */
+        /* Nowy kontener dla kostek i numeru, ułożone obok siebie */
+        #lucky-content-wrapper {
+            display: flex;
+            flex-direction: row; /* Kostki po lewej, numer po prawej */
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            flex-grow: 1; /* Wypełnij dostępną przestrzeń */
         }
 
-        /* Styl dla cyfry 7 */
-        #lucky-number-container .lucky-number-display.is-seven {
-            transform: scale(1.05) rotate(1deg); /* Lekko większa i obrócona */
-            text-shadow: 6px 6px 0px rgba(0, 255, 255, 0.3), 10px 10px 0px rgba(0,0,0,0.25); /* Dodatkowy cień w kolorze cyjanu */
+        /* Kontener na kostki (kolumna) */
+        #lucky-dice-column {
+            display: flex;
+            flex-direction: column; /* Domyślny układ pionowy */
+            justify-content: center;
+            align-items: center;
+            gap: 8px; /* Odstęp między kostkami */
+            padding: 5px;
+            box-sizing: border-box;
+            flex-grow: 1; /* Pozwól kolumnie kostek rosnąć */
+            flex-basis: 50%; /* Daj 50% szerokości */
+            animation: pulse 2s infinite ease-in-out; /* Animacja pulsująca na kolumnie kostek */
+            transition: all 0.3s ease-out;
+        }
+
+        /* Styl dla cyfry 7 (jeśli nadal chcesz wyróżniać numer 7, nawet z kostkami) */
+        #lucky-dice-column.is-seven {
+            transform: scale(1.05); /* Lekko większa */
+        }
+
+        /* NOWY STYL: Układ dla trzech kostek */
+        #lucky-dice-column.three-dice-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Dwie kolumny: jedna dla dwóch kostek, druga dla trzeciej */
+            grid-template-rows: 1fr 1fr;   /* Dwa wiersze */
+            gap: 5px; /* Mniejszy odstęp dla elementów w siatce */
+            align-items: center; /* Wyśrodkowanie pionowe w komórkach siatki */
+            justify-items: center; /* Wyśrodkowanie poziome w komórkach siatki */
+            width: auto; /* Pozwól szerokości dopasować się do zawartości */
+            flex-basis: auto; /* Reset flex-basis, aby grid działał poprawnie */
+        }
+
+        #lucky-dice-column.three-dice-layout .dice:nth-child(1) {
+            grid-row: 1 / 2; /* Pierwsza kostka w pierwszym wierszu, pierwszej kolumnie */
+            grid-column: 1 / 2;
+        }
+
+        #lucky-dice-column.three-dice-layout .dice:nth-child(2) {
+            grid-row: 2 / 3; /* Druga kostka w drugim wierszu, pierwszej kolumnie */
+            grid-column: 1 / 2;
+        }
+
+        #lucky-dice-column.three-dice-layout .dice:nth-child(3) {
+            grid-row: 1 / 3; /* Trzecia kostka rozciąga się na oba wiersze, w drugiej kolumnie */
+            grid-column: 2 / 3;
+            align-self: center; /* Wyśrodkowanie pionowe w komórce siatki */
+            justify-self: center; /* Wyśrodkowanie poziome w komórce siatki */
+        }
+
+
+        /* Styl dla tekstowego numeru */
+        #lucky-number-text {
+            font-family: 'Bangers', cursive; /* Specyficzna czcionka */
+            font-size: 4.5em; /* ZWIĘKSZONY ROZMIAR CZCIONKI */
+            line-height: 1;
+            margin: 0; /* Usuń marginesy, aby flexbox zarządzał odstępami */
+            -webkit-text-stroke: 2px black; /* Obrys tekstu */
+            text-stroke: 2px black;
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.2); /* Cień tekstu */
+            color: var(--theme-number-color); /* Kolor z motywu */
+            z-index: 10;
+            transition: all 0.3s ease-out; /* Płynne przejście */
+            flex-grow: 1; /* Pozwól numerowi rosnąć */
+            flex-basis: 50%; /* Daj 50% szerokości */
+            text-align: center; /* Wyśrodkuj numer */
+        }
+
+        #lucky-number-text.is-seven {
+            transform: scale(1.1); /* Lekko większa i obrócona dla 7 */
+            text-shadow: 4px 4px 0px rgba(0, 255, 255, 0.3), 6px 6px 0px rgba(0,0,0,0.2); /* Dodatkowy cień w kolorze cyjanu */
         }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.02); } /* Zmniejszony puls, aby nie był zbyt agresywny na kostkach */
         }
 
         /* Gwiazdki w tle */
@@ -178,6 +241,117 @@
         }
         @keyframes twinkle { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 
+        /* STYLE DLA KOSTEK */
+        .dice {
+            width: 50px; /* ZWIĘKSZONY ROZMIAR KOSTKI */
+            height: 50px;
+            background-color: white;
+            border: 3px solid black;
+            border-radius: 8px; /* Lekko mniejsze zaokrąglenie */
+            display: grid; /* Użycie CSS Grid do pozycjonowania oczek */
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            padding: 6px; /* ZWIĘKSZONY PADDING */
+            box-sizing: border-box;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            flex-shrink: 0; /* Zapobiega zmniejszaniu się kostek */
+        }
+
+        .dot {
+            width: 10px; /* ZWIĘKSZONY ROZMIAR OCZKA */
+            height: 10px;
+            background-color: black;
+            border-radius: 50%;
+            align-self: center; /* Centrowanie oczka w komórce siatki */
+            justify-self: center; /* Centrowanie oczka w komórce siatki */
+        }
+
+        /* Pozycjonowanie oczek dla każdej wartości kostki */
+        .dice.value-1 .dot:nth-child(1) { grid-area: 2 / 2; } /* Środek */
+
+        .dice.value-2 .dot:nth-child(1) { grid-area: 1 / 1; } /* Lewy górny */
+        .dice.value-2 .dot:nth-child(2) { grid-area: 3 / 3; } /* Prawy dolny */
+
+        .dice.value-3 .dot:nth-child(1) { grid-area: 1 / 1; } /* Lewy górny */
+        .dice.value-3 .dot:nth-child(2) { grid-area: 2 / 2; } /* Środek */
+        .dice.value-3 .dot:nth-child(3) { grid-area: 3 / 3; } /* Prawy dolny */
+
+        .dice.value-4 .dot:nth-child(1) { grid-area: 1 / 1; } /* Lewy górny */
+        .dice.value-4 .dot:nth-child(2) { grid-area: 1 / 3; } /* Prawy górny */
+        .dice.value-4 .dot:nth-child(3) { grid-area: 3 / 1; } /* Lewy dolny */
+        .dice.value-4 .dot:nth-child(4) { grid-area: 3 / 3; } /* Prawy dolny */
+
+        .dice.value-5 .dot:nth-child(1) { grid-area: 1 / 1; } /* Lewy górny */
+        .dice.value-5 .dot:nth-child(2) { grid-area: 1 / 3; } /* Prawy górny */
+        .dice.value-5 .dot:nth-child(3) { grid-area: 2 / 2; } /* Środek */
+        .dice.value-5 .dot:nth-child(4) { grid-area: 3 / 1; } /* Lewy dolny */
+        .dice.value-5 .dot:nth-child(5) { grid-area: 3 / 3; } /* Prawy dolny */
+
+        .dice.value-6 .dot:nth-child(1) { grid-area: 1 / 1; } /* Lewy górny */
+        .dice.value-6 .dot:nth-child(2) { grid-area: 1 / 3; } /* Prawy górny */
+        .dice.value-6 .dot:nth-child(3) { grid-area: 2 / 1; } /* Lewy środek */
+        .dice.value-6 .dot:nth-child(4) { grid-area: 2 / 3; } /* Prawy środek */
+        .dice.value-6 .dot:nth-child(5) { grid-area: 3 / 1; } /* Lewy dolny */
+        .dice.value-6 .dot:nth-child(6) { grid-area: 3 / 3; } /* Prawy dolny */
+
+        /* Responsywność dla mniejszych ekranów */
+        @media (max-width: 600px) {
+            #main-wrapper {
+                width: 95%; /* Zmniejsz szerokość na mniejszych ekranach */
+                height: auto; /* Pozwól na zmianę wysokości */
+                flex-direction: column; /* Ułóż panele jeden pod drugim */
+            }
+
+            #left-panel, #right-panel {
+                border-right: none; /* Usuń pionową linię */
+                border-bottom: 1px solid #eee; /* Dodaj poziomą linię */
+                padding-top: 15px; /* Zmniejsz padding */
+                padding-bottom: 15px;
+            }
+
+            #lucky-number-container {
+                max-height: none; /* Usuń ograniczenie wysokości dla lepszego dopasowania */
+            }
+
+            #lucky-content-wrapper {
+                flex-direction: column; /* Na małych ekranach ułóż kostki i numer pionowo */
+            }
+
+            #lucky-dice-column {
+                flex-basis: auto; /* Resetuj flex-basis */
+                width: 100%; /* Pełna szerokość dla kolumny kostek */
+                margin-bottom: 10px; /* Odstęp między kostkami a numerem */
+                display: flex; /* Zapewnij, że na małych ekranach zawsze jest flex column */
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            /* Resetuj style grid dla trzech kostek na małych ekranach */
+            #lucky-dice-column.three-dice-layout {
+                display: flex; /* Wymuś flex column */
+                flex-direction: column;
+                grid-template-columns: unset; /* Usuń ustawienia grid */
+                grid-template-rows: unset;
+                gap: 5px;
+            }
+
+            #lucky-number-text {
+                flex-basis: auto; /* Resetuj flex-basis */
+                width: 100%; /* Pełna szerokość dla numeru */
+                font-size: 3.5em; /* Zwiększony rozmiar numeru na małych ekranach */
+            }
+
+            .dice {
+                width: 45px; /* Zwiększony rozmiar kostek na mniejszych ekranach */
+                height: 45px;
+                padding: 5px;
+            }
+
+            .dot {
+                width: 8px; /* Zwiększony rozmiar oczek */
+                height: 8px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -189,14 +363,21 @@
                 <div id="current-date"></div>
                 <div id="current-time"></div>
             </div>
-            <div class="bottom-spacer"></div> </div>
+            <div class="bottom-spacer"></div>
+        </div>
 
         <div id="right-panel" class="panel">
             <div id="lucky-number-container">
                 <h2 class="title">Szczęśliwy Numer</h2>
-                <h1 id="lucky-number-display" class="lucky-number-display">8</h1>
+                <div id="lucky-content-wrapper">
+                    <div id="lucky-dice-column">
+                        <!-- Kostki będą generowane tutaj przez JavaScript -->
+                    </div>
+                    <div id="lucky-number-text"></div>
+                </div>
             </div>
-            <div class="bottom-spacer"></div> </div>
+            <div class="bottom-spacer"></div>
+        </div>
     </div>
 
     <script>
@@ -294,45 +475,52 @@
 
         /**
          * Pobiera wartość dla bieżącego dnia z localStorage lub generuje nową.
-         * Dla szczęśliwego numeru zarządza pulą numerów (losowanie bez powtórzeń).
+         * Jeśli jest weekend, zwraca ostatnią zapisaną wartość bez generowania nowej.
          * @param {string} keyPrefix Prefiks klucza w localStorage (np. 'luckyNumber_').
-         * @param {function} generateValueFn Funkcja generująca nową wartość (dla motywów).
+         * @param {function} generateValueFn Funkcja generująca nową wartość (dla motywów/numerów).
+         * @param {boolean} isWeekend Czy bieżący dzień to weekend.
          * @returns {any} Wartość dla bieżącego dnia.
          */
-        function getDailyValue(keyPrefix, generateValueFn) {
-            const today = new Date().toDateString(); // Format 'Mon Jul 14 2025'
+        function getDailyValue(keyPrefix, generateValueFn, isWeekend) {
+            const todayDateString = new Date().toDateString();
             const storedDate = localStorage.getItem(keyPrefix + 'date');
             let storedValue = localStorage.getItem(keyPrefix + 'value');
 
-            if (storedDate === today && storedValue !== null) {
-                // Jeśli data się zgadza i wartość istnieje, zwróć ją
+            if (storedDate === todayDateString && storedValue !== null) {
+                // Wartość już istnieje dla dzisiaj, zwróć ją.
+                return JSON.parse(storedValue);
+            } else if (isWeekend && storedValue !== null) {
+                // Jest weekend i mamy zapisaną wartość (z poprzedniego dnia roboczego lub wcześniejszego weekendu).
+                // Nie generuj nowej, po prostu zwróć ostatnią.
+                // Aktualizuj datę na dzisiejszą, aby zapobiec ponownemu generowaniu, jeśli odświeżono w ten sam dzień weekendu.
+                localStorage.setItem(keyPrefix + 'date', todayDateString);
                 return JSON.parse(storedValue);
             } else {
-                // Jeśli nowa data lub brak wartości, wygeneruj nową i zapisz
+                // Nowy dzień (dzień roboczy) lub pierwsze uruchomienie, lub weekend bez zapisanej wartości.
+                // Wygeneruj nową wartość.
                 const newValue = generateValueFn();
-                localStorage.setItem(keyPrefix + 'date', today);
+                localStorage.setItem(keyPrefix + 'date', todayDateString);
                 localStorage.setItem(keyPrefix + 'value', JSON.stringify(newValue));
                 return newValue;
             }
         }
 
         // Funkcja do pobierania dziennego szczęśliwego numeru z puli (bez powtórzeń)
-        function getDailyLuckyNumberFromPool() {
-            const today = new Date().toDateString();
-            
-            let storedLuckyNumberDate = localStorage.getItem('luckyNumber_date');
+        function getDailyLuckyNumberFromPool(isWeekend) { // Dodano parametr isWeekend
+            const todayDateString = new Date().toDateString();
+            const storedDate = localStorage.getItem('luckyNumber_date');
             let storedLuckyNumberValue = localStorage.getItem('luckyNumber_value');
             let storedNumbersPool = JSON.parse(localStorage.getItem('luckyNumbersPool_'));
 
-            // Sprawdź, czy mamy zapisaną wartość dla dzisiaj
-            if (storedLuckyNumberDate === today && storedLuckyNumberValue !== null) {
-                return JSON.parse(storedLuckyNumberValue); // Jeśli tak, zwróć ją
-            } 
-            // Jeśli nowy dzień lub brak zapisanej wartości dla dzisiaj
-            else {
+            if (storedDate === todayDateString && storedLuckyNumberValue !== null) {
+                return JSON.parse(storedLuckyNumberValue);
+            } else if (isWeekend && storedLuckyNumberValue !== null) {
+                // Jest weekend i mamy zapisaną wartość. Nie generuj nowej.
+                localStorage.setItem('luckyNumber_date', todayDateString); // Aktualizuj datę na dzisiejszą
+                return JSON.parse(storedLuckyNumberValue);
+            } else {
+                // Nowy dzień (dzień roboczy) lub pierwsze uruchomienie, lub weekend bez zapisanej wartości.
                 let currentPool = storedNumbersPool;
-
-                // Jeśli pula jest pusta lub nie istnieje, stwórz nową i ją potasuj
                 if (!currentPool || currentPool.length === 0) {
                     currentPool = [];
                     for (let i = 1; i <= LUCKY_NUMBER_MAX; i++) {
@@ -341,14 +529,10 @@
                     currentPool = shuffleArray(currentPool);
                     console.log("Utworzono i potasowano nową pulę szczęśliwych numerów:", currentPool);
                 }
-
                 const drawnNumber = currentPool.shift(); // Pobierz pierwszy numer z puli
-                
-                // Zapisz wylosowany numer, aktualną pulę i datę
-                localStorage.setItem('luckyNumber_date', today);
+                localStorage.setItem('luckyNumber_date', todayDateString);
                 localStorage.setItem('luckyNumber_value', JSON.stringify(drawnNumber));
                 localStorage.setItem('luckyNumbersPool_', JSON.stringify(currentPool)); 
-
                 console.log(`Wylosowano numer: ${drawnNumber}, Pozostałe w puli:`, currentPool);
                 return drawnNumber;
             }
@@ -360,28 +544,97 @@
             return comicThemes[randomIndex];
         }
 
+        // Funkcja: Tworzy element HTML dla pojedynczej kostki z oczkami
+        function createDiceElement(value) {
+            const diceDiv = document.createElement('div');
+            diceDiv.classList.add('dice', `value-${value}`);
+
+            // Dodaj oczka w zależności od wartości kostki
+            for (let i = 0; i < value; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                diceDiv.appendChild(dot);
+            }
+            return diceDiv;
+        }
+
+        // Funkcja: Określa kombinację kostek dla danego numeru
+        function getDiceCombination(number) {
+            if (number < 1 || number > LUCKY_NUMBER_MAX) {
+                console.error("Number out of valid dice range (1-18):", number);
+                return []; // Zwróć pustą tablicę lub obsłuż błąd
+            }
+
+            if (number <= 6) {
+                return [number]; // Jedna kostka
+            } else if (number <= 12) {
+                // Dwie kostki: jedna kostka to 6, druga to reszta
+                // np. 7 -> [6, 1], 12 -> [6, 6]
+                return [6, number - 6].sort((a, b) => a - b); // Sortuj dla spójnej kolejności
+            } else { // number <= 18
+                // Trzy kostki: dwie kostki to 6, trzecia to reszta
+                // np. 13 -> [6, 6, 1], 18 -> [6, 6, 6]
+                return [6, 6, number - 12].sort((a, b) => a - b); // Sortuj dla spójnej kolejności
+            }
+        }
+
         // Funkcja aktualizująca szczęśliwy numer i motyw
         function updateLuckyNumberAndTheme() {
-            const luckyNumberElement = document.getElementById('lucky-number-display');
-            const root = document.documentElement; // Element :root
+            const luckyDiceColumnElement = document.getElementById('lucky-dice-column');
+            const luckyNumberTextElement = document.getElementById('lucky-number-text');
+            const root = document.documentElement;
+            const now = new Date();
+            const dayOfWeek = now.getDay(); // 0 = Sunday, 6 = Saturday
+            const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
 
-            // Pobierz dzienny szczęśliwy numer (z puli bez powtórzeń)
-            const currentLuckyNumber = getDailyLuckyNumberFromPool();
-            if (luckyNumberElement) {
-                luckyNumberElement.textContent = currentLuckyNumber;
-                
-                // Dodaj/usuń klasę 'is-seven' w zależności od numeru
-                if (currentLuckyNumber === 7) {
-                    luckyNumberElement.classList.add('is-seven');
+            let currentLuckyNumber;
+            let currentTheme;
+
+            // Pobierz dzienny szczęśliwy numer (z puli bez powtórzeń, z uwzględnieniem weekendu)
+            currentLuckyNumber = getDailyLuckyNumberFromPool(isWeekend);
+            // Pobierz dzienny motyw (losowy, z uwzględnieniem weekendu)
+            currentTheme = getDailyValue('luckyTheme_', generateRandomTheme, isWeekend);
+            
+            if (luckyDiceColumnElement && luckyNumberTextElement) {
+                // Wyczyść poprzednią zawartość kostek
+                luckyDiceColumnElement.innerHTML = '';
+
+                // Wyświetl numer tekstowo
+                luckyNumberTextElement.textContent = currentLuckyNumber;
+
+                // Pobierz kombinację kostek dla wylosowanego numeru
+                const diceValues = getDiceCombination(currentLuckyNumber);
+
+                // Dodaj/usuń klasę 'three-dice-layout' w zależności od liczby kostek
+                if (diceValues.length === 3) {
+                    luckyDiceColumnElement.classList.add('three-dice-layout');
                 } else {
-                    luckyNumberElement.classList.remove('is-seven');
+                    luckyDiceColumnElement.classList.remove('three-dice-layout');
+                }
+
+                // Stwórz i dodaj elementy kostek do kontenera
+                diceValues.forEach(value => {
+                    const dice = createDiceElement(value);
+                    luckyDiceColumnElement.appendChild(dice);
+                });
+                
+                // Dodaj/usuń klasę 'is-seven' w zależności od numeru dla kostek
+                if (currentLuckyNumber === 7) {
+                    luckyDiceColumnElement.classList.add('is-seven');
+                } else {
+                    luckyDiceColumnElement.classList.remove('is-seven');
+                }
+
+                // Dodaj/usuń klasę 'is-seven' w zależności od numeru dla tekstu
+                if (currentLuckyNumber === 7) {
+                    luckyNumberTextElement.classList.add('is-seven');
+                } else {
+                    luckyNumberTextElement.classList.remove('is-seven');
                 }
             }
 
-            // Pobierz dzienny motyw (losowy)
-            const currentTheme = getDailyValue('luckyTheme_', generateRandomTheme);
+            // Zastosuj zmienne CSS dla wybranego motywu
             if (currentTheme) {
-                // Zastosuj zmienne CSS dla wybranego motywu
                 root.style.setProperty('--theme-title-color', currentTheme.titleColor);
                 root.style.setProperty('--theme-number-color', currentTheme.numberColor);
                 root.style.setProperty('--theme-bg-gradient-start', currentTheme.bgGradientStart);
@@ -397,15 +650,36 @@
         // Funkcja planująca aktualizację na następną północ
         function scheduleDailyUpdate() {
             const now = new Date();
-            const tomorrow = new Date(now);
-            tomorrow.setDate(now.getDate() + 1);
-            tomorrow.setHours(0, 0, 0, 0); // Ustaw na północ następnego dnia
+            const dayOfWeek = now.getDay(); // 0 = Sunday, 6 = Saturday
+            let nextUpdate = new Date(now);
 
-            const timeUntilMidnight = tomorrow.getTime() - now.getTime();
+            nextUpdate.setHours(0, 0, 0, 0); // Ustaw na północ obecnego dnia
+
+            if (dayOfWeek === 6) { // Sobota
+                nextUpdate.setDate(now.getDate() + 2); // Zaplanuj na poniedziałek o północy
+            } else if (dayOfWeek === 0) { // Niedziela
+                nextUpdate.setDate(now.getDate() + 1); // Zaplanuj na poniedziałek o północy
+            } else { // Dzień roboczy (poniedziałek-piątek)
+                nextUpdate.setDate(now.getDate() + 1); // Zaplanuj na północ następnego dnia
+            }
+
+            // Jeśli czas aktualizacji jest w przeszłości (np. uruchomiono skrypt po północy),
+            // przesuń na następny odpowiedni dzień.
+            if (nextUpdate.getTime() <= now.getTime()) {
+                if (dayOfWeek === 6) { // Sobota
+                    nextUpdate.setDate(now.getDate() + 2); // Następny poniedziałek
+                } else if (dayOfWeek === 0) { // Niedziela
+                    nextUpdate.setDate(now.getDate() + 1); // Następny poniedziałek
+                } else { // Dzień roboczy
+                    nextUpdate.setDate(now.getDate() + 1); // Następny dzień roboczy
+                }
+                nextUpdate.setHours(0, 0, 0, 0);
+            }
+
+            const timeUntilNextUpdate = nextUpdate.getTime() - now.getTime();
             
-            // Ustaw timer, który wywoła updateLuckyNumberAndTheme o północy
-            setTimeout(updateLuckyNumberAndTheme, timeUntilMidnight);
-            console.log(`Następna aktualizacja numeru/motywu zaplanowana za ${timeUntilMidnight / 1000 / 60} minut.`);
+            setTimeout(updateLuckyNumberAndTheme, timeUntilNextUpdate);
+            console.log(`Następna aktualizacja numeru/motywu zaplanowana na ${nextUpdate.toLocaleString('pl-PL')} (za ${timeUntilNextUpdate / 1000 / 60} minut).`);
         }
 
         // Wywołaj funkcje od razu po załadowaniu strony
