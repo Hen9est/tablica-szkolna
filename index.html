@@ -145,7 +145,7 @@
         #lucky-content-wrapper {
             display: flex;
             flex-direction: row; /* Kostki po lewej, numer po prawej */
-            justify-content: center;
+            justify-content: space-around; /* Rozłożenie przestrzeni równomiernie */
             align-items: center;
             width: 100%;
             flex-grow: 1; /* Wypełnij dostępną przestrzeń */
@@ -160,8 +160,9 @@
             gap: 8px; /* Odstęp między kostkami */
             padding: 5px;
             box-sizing: border-box;
-            flex-grow: 1; /* Pozwól kolumnie kostek rosnąć */
-            flex-basis: 50%; /* Daj 50% szerokości */
+            width: 120px; /* Ustalona szerokość dla kolumny kostek */
+            flex-shrink: 0; /* Zapobiega kurczeniu się */
+            flex-grow: 0; /* Zapobiega rozszerzaniu się */
             animation: pulse 2s infinite ease-in-out; /* Animacja pulsująca na kolumnie kostek */
             transition: all 0.3s ease-out;
         }
@@ -171,7 +172,25 @@
             transform: scale(1.05); /* Lekko większa */
         }
 
-        /* NOWY STYL: Układ dla trzech kostek */
+        /* Układ dla jednej kostki */
+        #lucky-dice-column.one-dice-layout {
+            display: flex;
+            flex-direction: column; /* Upewnij się, że jest to kolumna */
+            justify-content: center;
+            align-items: center;
+            gap: 0; /* Brak odstępu, bo jest tylko jedna kostka */
+        }
+
+        /* Układ dla dwóch kostek (pionowo) */
+        #lucky-dice-column.two-dice-layout {
+            display: flex; /* Upewnij się, że jest to flex container */
+            flex-direction: column; /* Ułożenie pionowe */
+            justify-content: center;
+            align-items: center;
+            gap: 8px; /* Odstęp między kostkami */
+        }
+
+        /* Układ dla trzech kostek */
         #lucky-dice-column.three-dice-layout {
             display: grid;
             grid-template-columns: 1fr 1fr; /* Dwie kolumny: jedna dla dwóch kostek, druga dla trzeciej */
@@ -179,8 +198,7 @@
             gap: 5px; /* Mniejszy odstęp dla elementów w siatce */
             align-items: center; /* Wyśrodkowanie pionowe w komórkach siatki */
             justify-items: center; /* Wyśrodkowanie poziome w komórkach siatki */
-            width: auto; /* Pozwól szerokości dopasować się do zawartości */
-            flex-basis: auto; /* Reset flex-basis, aby grid działał poprawnie */
+            width: 120px; /* Utrzymaj szerokość dla układu grid */
         }
 
         #lucky-dice-column.three-dice-layout .dice:nth-child(1) {
@@ -204,7 +222,7 @@
         /* Styl dla tekstowego numeru */
         #lucky-number-text {
             font-family: 'Bangers', cursive; /* Specyficzna czcionka */
-            font-size: 4.5em; /* ZWIĘKSZONY ROZMIAR CZCIONKI */
+            font-size: 5em; /* ZWIĘKSZONY ROZMIAR CZCIONKI */
             line-height: 1;
             margin: 0; /* Usuń marginesy, aby flexbox zarządzał odstępami */
             -webkit-text-stroke: 2px black; /* Obrys tekstu */
@@ -213,8 +231,7 @@
             color: var(--theme-number-color); /* Kolor z motywu */
             z-index: 10;
             transition: all 0.3s ease-out; /* Płynne przejście */
-            flex-grow: 1; /* Pozwól numerowi rosnąć */
-            flex-basis: 50%; /* Daj 50% szerokości */
+            flex-grow: 1; /* Pozwól numerowi rosnąć i wypełniać przestrzeń */
             text-align: center; /* Wyśrodkuj numer */
         }
 
@@ -243,8 +260,8 @@
 
         /* STYLE DLA KOSTEK */
         .dice {
-            width: 50px; /* ZWIĘKSZONY ROZMIAR KOSTKI */
-            height: 50px;
+            width: 55px; /* ZWIĘKSZONY ROZMIAR KOSTKI */
+            height: 55px;
             background-color: white;
             border: 3px solid black;
             border-radius: 8px; /* Lekko mniejsze zaokrąglenie */
@@ -258,8 +275,8 @@
         }
 
         .dot {
-            width: 10px; /* ZWIĘKSZONY ROZMIAR OCZKA */
-            height: 10px;
+            width: 11px; /* ZWIĘKSZONY ROZMIAR OCZKA */
+            height: 11px;
             background-color: black;
             border-radius: 50%;
             align-self: center; /* Centrowanie oczka w komórce siatki */
@@ -332,6 +349,13 @@
                 flex-direction: column;
                 grid-template-columns: unset; /* Usuń ustawienia grid */
                 grid-template-rows: unset;
+                gap: 5px;
+            }
+
+            /* Resetuj style flex dla dwóch kostek na małych ekranach */
+            #lucky-dice-column.two-dice-layout {
+                display: flex; /* Wymuś flex column */
+                flex-direction: column;
                 gap: 5px;
             }
 
@@ -605,11 +629,16 @@
                 // Pobierz kombinację kostek dla wylosowanego numeru
                 const diceValues = getDiceCombination(currentLuckyNumber);
 
-                // Dodaj/usuń klasę 'three-dice-layout' w zależności od liczby kostek
-                if (diceValues.length === 3) {
+                // Usuń wszystkie poprzednie klasy układu
+                luckyDiceColumnElement.classList.remove('one-dice-layout', 'two-dice-layout', 'three-dice-layout');
+
+                // Dodaj odpowiednią klasę układu w zależności od liczby kostek
+                if (diceValues.length === 1) {
+                    luckyDiceColumnElement.classList.add('one-dice-layout');
+                } else if (diceValues.length === 2) {
+                    luckyDiceColumnElement.classList.add('two-dice-layout');
+                } else if (diceValues.length === 3) {
                     luckyDiceColumnElement.classList.add('three-dice-layout');
-                } else {
-                    luckyDiceColumnElement.classList.remove('three-dice-layout');
                 }
 
                 // Stwórz i dodaj elementy kostek do kontenera
