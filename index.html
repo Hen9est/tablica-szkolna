@@ -488,20 +488,59 @@
         // Stała dla zakresu liczb szczęśliwych
         const LUCKY_NUMBER_MAX = 18;
 
-        // Funkcja do tasowania tablicy (algorytm Fishera-Yatesa)
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]]; // Zamiana elementów
-            }
-            return array;
+        // --- NOWA LOGIKA: WSTĘPNIE ZDEFINIOWANE "WORKI" Z NUMERAMI ---
+        
+        // 10 "worków", każdy zawiera potasowaną listę numerów 1-18
+        const PRE_DEFINED_BAGS = [
+            [3, 5, 17, 1, 9, 14, 6, 8, 12, 4, 10, 15, 2, 13, 7, 11, 18, 16], // Worek 1 (zmieniony)
+            [10, 4, 15, 2, 13, 7, 1, 18, 9, 16, 5, 11, 17, 3, 8, 14, 6, 12], // Worek 2
+            [7, 14, 2, 16, 9, 12, 5, 1, 11, 17, 3, 10, 6, 15, 18, 4, 13, 8], // Worek 3
+            [16, 6, 13, 8, 3, 18, 10, 2, 15, 5, 1, 14, 9, 11, 4, 17, 7, 12], // Worek 4
+            [5, 12, 17, 4, 11, 8, 15, 7, 2, 13, 9, 1, 18, 6, 10, 16, 3, 14], // Worek 5
+            [9, 1, 14, 6, 10, 16, 3, 13, 4, 17, 7, 12, 15, 2, 11, 18, 8, 5], // Worek 6
+            [2, 15, 8, 11, 4, 7, 13, 18, 6, 10, 16, 3, 14, 9, 1, 12, 5, 17], // Worek 7
+            [14, 3, 10, 12, 5, 17, 7, 4, 13, 9, 1, 18, 2, 8, 15, 6, 11, 16], // Worek 8
+            [11, 16, 6, 1, 8, 15, 9, 3, 12, 14, 17, 5, 13, 7, 2, 10, 18, 4], // Worek 9
+            [4, 18, 7, 13, 2, 10, 1, 16, 8, 15, 6, 11, 12, 5, 17, 9, 14, 3]  // Worek 10
+        ];
+
+        // Data startowa, od której liczymy dni (można zmienić na dowolną datę w przeszłości)
+        const START_DATE = new Date('2025-10-25T00:00:00Z');
+        const MS_PER_DAY = 1000 * 60 * 60 * 24;
+        // Całkowita długość cyklu: 10 worków * 18 numerów = 180 dni
+        const CYCLE_LENGTH_DAYS = PRE_DEFINED_BAGS.length * PRE_DEFINED_BAGS[0].length; 
+
+        // Funkcja obliczająca deterministyczny numer na podstawie daty
+        function getDeterministicDailyNumber() {
+            const now = new Date();
+            // Używamy dat UTC, aby uniknąć problemów ze strefami czasowymi i czasem letnim
+            const todayUTC = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+            const startUTC = Date.UTC(START_DATE.getFullYear(), START_DATE.getMonth(), START_DATE.getDate());
+
+            // Liczba dni, które minęły od daty startowej
+            const dayIndex = Math.floor((todayUTC - startUTC) / MS_PER_DAY);
+            
+            // Znajdź indeks w ramach 180-dniowego cyklu
+            // Używamy Math.abs na wypadek, gdyby data była ustawiona przed START_DATE
+            const indexInCycle = Math.abs(dayIndex) % CYCLE_LENGTH_DAYS; 
+            
+            // Oblicz, który worek (0-9)
+            const bagIndex = Math.floor(indexInCycle / 18); 
+            // Oblicz, który numer z worka (0-17)
+            const numberIndex = indexInCycle % 18;
+
+            return PRE_DEFINED_BAGS[bagIndex][numberIndex];
         }
+
+        // --- KONIEC NOWEJ LOGIKI ---
+
 
         /**
          * Pobiera wartość dla bieżącego dnia z localStorage lub generuje nową.
+         * Ta funkcja jest teraz używana TYLKO DLA MOTYWU.
          * Jeśli jest weekend, zwraca ostatnią zapisaną wartość bez generowania nowej.
-         * @param {string} keyPrefix Prefiks klucza w localStorage (np. 'luckyNumber_').
-         * @param {function} generateValueFn Funkcja generująca nową wartość (dla motywów/numerów).
+         * @param {string} keyPrefix Prefiks klucza w localStorage (np. 'luckyTheme_').
+         * @param {function} generateValueFn Funkcja generująca nową wartość (dla motywów).
          * @param {boolean} isWeekend Czy bieżący dzień to weekend.
          * @returns {any} Wartość dla bieżącego dnia.
          */
@@ -526,39 +565,6 @@
                 localStorage.setItem(keyPrefix + 'date', todayDateString);
                 localStorage.setItem(keyPrefix + 'value', JSON.stringify(newValue));
                 return newValue;
-            }
-        }
-
-        // Funkcja do pobierania dziennego szczęśliwego numeru z puli (bez powtórzeń)
-        function getDailyLuckyNumberFromPool(isWeekend) { // Dodano parametr isWeekend
-            const todayDateString = new Date().toDateString();
-            const storedDate = localStorage.getItem('luckyNumber_date');
-            let storedLuckyNumberValue = localStorage.getItem('luckyNumber_value');
-            let storedNumbersPool = JSON.parse(localStorage.getItem('luckyNumbersPool_'));
-
-            if (storedDate === todayDateString && storedLuckyNumberValue !== null) {
-                return JSON.parse(storedLuckyNumberValue);
-            } else if (isWeekend && storedLuckyNumberValue !== null) {
-                // Jest weekend i mamy zapisaną wartość. Nie generuj nowej.
-                localStorage.setItem('luckyNumber_date', todayDateString); // Aktualizuj datę na dzisiejszą
-                return JSON.parse(storedLuckyNumberValue);
-            } else {
-                // Nowy dzień (dzień roboczy) lub pierwsze uruchomienie, lub weekend bez zapisanej wartości.
-                let currentPool = storedNumbersPool;
-                if (!currentPool || currentPool.length === 0) {
-                    currentPool = [];
-                    for (let i = 1; i <= LUCKY_NUMBER_MAX; i++) {
-                        currentPool.push(i);
-                    }
-                    currentPool = shuffleArray(currentPool);
-                    console.log("Utworzono i potasowano nową pulę szczęśliwych numerów:", currentPool);
-                }
-                const drawnNumber = currentPool.shift(); // Pobierz pierwszy numer z puli
-                localStorage.setItem('luckyNumber_date', todayDateString);
-                localStorage.setItem('luckyNumber_value', JSON.stringify(drawnNumber));
-                localStorage.setItem('luckyNumbersPool_', JSON.stringify(currentPool)); 
-                console.log(`Wylosowano numer: ${drawnNumber}, Pozostałe w puli:`, currentPool);
-                return drawnNumber;
             }
         }
 
@@ -608,15 +614,18 @@
             const luckyNumberTextElement = document.getElementById('lucky-number-text');
             const root = document.documentElement;
             const now = new Date();
+
+            // Logika weekendu jest teraz używana TYLKO DLA MOTYWU
             const dayOfWeek = now.getDay(); // 0 = Sunday, 6 = Saturday
             const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
 
             let currentLuckyNumber;
             let currentTheme;
 
-            // Pobierz dzienny szczęśliwy numer (z puli bez powtórzeń, z uwzględnieniem weekendu)
-            currentLuckyNumber = getDailyLuckyNumberFromPool(isWeekend);
-            // Pobierz dzienny motyw (losowy, z uwzględnieniem weekendu)
+            // 1. Pobierz deterministyczny szczęśliwy numer (zmienia się codziennie, także w weekendy)
+            currentLuckyNumber = getDeterministicDailyNumber();
+
+            // 2. Pobierz dzienny motyw (losowy, z uwzględnieniem weekendu - zamraża się na weekend)
             currentTheme = getDailyValue('luckyTheme_', generateRandomTheme, isWeekend);
             
             if (luckyDiceColumnElement && luckyNumberTextElement) {
@@ -676,34 +685,11 @@
             scheduleDailyUpdate();
         }
 
-        // Funkcja planująca aktualizację na następną północ
+        // Uproszczona funkcja planująca aktualizację na następną północ
         function scheduleDailyUpdate() {
             const now = new Date();
-            const dayOfWeek = now.getDay(); // 0 = Sunday, 6 = Saturday
-            let nextUpdate = new Date(now);
-
-            nextUpdate.setHours(0, 0, 0, 0); // Ustaw na północ obecnego dnia
-
-            if (dayOfWeek === 6) { // Sobota
-                nextUpdate.setDate(now.getDate() + 2); // Zaplanuj na poniedziałek o północy
-            } else if (dayOfWeek === 0) { // Niedziela
-                nextUpdate.setDate(now.getDate() + 1); // Zaplanuj na poniedziałek o północy
-            } else { // Dzień roboczy (poniedziałek-piątek)
-                nextUpdate.setDate(now.getDate() + 1); // Zaplanuj na północ następnego dnia
-            }
-
-            // Jeśli czas aktualizacji jest w przeszłości (np. uruchomiono skrypt po północy),
-            // przesuń na następny odpowiedni dzień.
-            if (nextUpdate.getTime() <= now.getTime()) {
-                if (dayOfWeek === 6) { // Sobota
-                    nextUpdate.setDate(now.getDate() + 2); // Następny poniedziałek
-                } else if (dayOfWeek === 0) { // Niedziela
-                    nextUpdate.setDate(now.getDate() + 1); // Następny poniedziałek
-                } else { // Dzień roboczy
-                    nextUpdate.setDate(now.getDate() + 1); // Następny dzień roboczy
-                }
-                nextUpdate.setHours(0, 0, 0, 0);
-            }
+            // Ustaw czas na północ JUTRO
+            const nextUpdate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
 
             const timeUntilNextUpdate = nextUpdate.getTime() - now.getTime();
             
@@ -717,10 +703,8 @@
 
         // Ustaw interwał, aby aktualizować wszystkie elementy zegara co sekundę
         setInterval(updateDateTime, 1000);
-
-        // Funkcja scheduleDailyUpdate() jest wywoływana w updateLuckyNumberAndTheme(),
-        // więc nie ma potrzeby wywoływania jej osobno tutaj.
     </script>
 
 </body>
 </html>
+
