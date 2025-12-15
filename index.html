@@ -3,45 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zespół Szkół Prywatnych "Twoja Przyszłość" - Projekt</title>
+    <title>Zespół Szkół Prywatnych "Twoja Przyszłość" - Sosnowiec</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-/* 1. USTAWIENIA - MOTYW ASTRA (Mockup) */
-* { box-sizing: border-box; }
-body {
-  background-color: #f3f4f6;
-  display: grid;
-  gap: 20px;
-  grid-template-columns: 1fr;
-  margin: 0;
-  min-height: 100vh;
-  padding: 20px 0;
-  place-items: center;
-  font-family: 'Lato', sans-serif;
-}
-
-.slide-container {
-  align-items: center;
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
-  padding: 0;
-  position: relative;
-  width: 1280px; /* Szerokość desktopowa */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
-
-/* Dostosowanie wysokości sekcji */
-.hero-slide { height: 720px; }
-.content-slide { padding: 80px 0; min-height: 500px; }
-
-/* 2. KOLORYSTYKA (Zgodna z brandingiem ZSP) */
+/* 1. GLOBALNE STYLE (Astra Theme Style) */
 :root {
   --primary-navy: #0f172a; /* Ciemny granat */
   --accent-yellow: #fbbf24; /* Ciepły żółty */
@@ -49,455 +17,489 @@ body {
   --text-dark: #1f2937;
   --text-gray: #4b5563;
   --bg-light: #f9fafb;
+  --white: #ffffff;
 }
 
-h1, h2, h3 {
+* { box-sizing: border-box; }
+body {
+  background-color: var(--bg-light);
+  margin: 0;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
   font-family: 'Poppins', sans-serif;
   color: var(--primary-navy);
   margin: 0;
 }
 
-h1 { font-size: 56px; font-weight: 700; line-height: 1.1; margin-bottom: 20px; }
-h2 { font-size: 42px; font-weight: 600; margin-bottom: 20px; }
-h3 { font-size: 24px; font-weight: 600; margin-bottom: 15px; }
-h4 { font-family: 'Poppins', sans-serif; font-size: 18px; font-weight: 600; margin-bottom: 10px; color: var(--primary-navy); }
-p { font-size: 16px; color: var(--text-gray); line-height: 1.6; margin-bottom: 15px; }
-
-/* 3. KOMPONENTY */
-.btn {
-  background-color: var(--accent-yellow);
-  color: var(--primary-navy);
-  padding: 16px 40px;
-  border-radius: 50px;
-  font-weight: 700;
-  text-decoration: none;
-  display: inline-block;
-  font-family: 'Poppins', sans-serif;
-  margin-top: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-  border: none;
-  cursor: pointer;
+/* 2. NAWIGACJA */
+.main-nav {
+    background: var(--white);
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
-.btn:hover { transform: translateY(-2px); }
+.nav-logo { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 20px; color: var(--primary-navy); display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.nav-links { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; }
+.nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 15px; transition: 0.3s; }
+.nav-links a:hover { color: var(--accent-blue); }
+.nav-btn { background: var(--primary-navy); color: var(--white) !important; padding: 10px 25px; border-radius: 50px; transition: 0.3s; }
+.nav-btn:hover { background: var(--accent-blue); }
 
-.section-wrapper { 
-    max-width: 1100px; 
-    width: 100%; 
-    padding: 0 20px;
+/* 3. HERO SECTION */
+.hero-section {
+    position: relative;
+    height: 600px;
+    background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2000&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
 }
-
-/* 4. SEKCJE */
-
-/* HERO */
 .hero-overlay {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.8));
-  z-index: 1;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.8));
 }
-.hero-content {
-  position: relative; z-index: 2; text-align: center; color: white; max-width: 900px;
+.hero-content { position: relative; z-index: 2; max-width: 900px; padding: 20px; }
+.hero-badge {
+    background: var(--accent-yellow); color: var(--primary-navy);
+    padding: 8px 20px; border-radius: 20px; font-weight: 700;
+    text-transform: uppercase; font-size: 13px; letter-spacing: 1px;
+    display: inline-block; margin-bottom: 20px;
 }
-.hero-content h1 { color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-.hero-content p { color: #e5e7eb; font-size: 20px; margin-bottom: 30px; }
-.trust-badge {
-    background: rgba(255,255,255,0.1); backdrop-filter: blur(5px);
-    border: 1px solid rgba(255,255,255,0.2); color: white;
-    padding: 10px 20px; border-radius: 30px; margin-top: 40px;
-    display: inline-flex; align-items: center; gap: 10px; font-size: 14px;
+.hero-title { font-size: 48px; font-weight: 700; margin-bottom: 20px; line-height: 1.2; }
+.hero-desc { font-size: 20px; color: #e2e8f0; margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto; }
+.btn-primary {
+    background-color: var(--accent-yellow); color: var(--primary-navy);
+    padding: 15px 40px; border-radius: 50px; font-weight: 700;
+    text-decoration: none; display: inline-block; transition: transform 0.2s; border: none; cursor: pointer;
 }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3); }
 
-/* GRIDY */
-.features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-top: 40px; }
+/* 4. ATUTY (Dlaczego My - Sekcja Sprzedażowa) */
+.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
 .feature-card {
-  background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 30px 20px; text-align: center;
-  transition: transform 0.3s;
-  height: 100%; position: relative;
+    background: var(--white); padding: 35px; border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05); transition: 0.3s; border-bottom: 4px solid transparent; position: relative; overflow: hidden;
 }
-.feature-card:hover { transform: translateY(-5px); border-bottom: 4px solid var(--accent-yellow); }
-.feature-icon { 
-    font-size: 32px; color: var(--primary-navy); margin-bottom: 20px; 
-    background: #f0f9ff; width: 80px; height: 80px; 
-    border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; 
+.feature-card:hover { transform: translateY(-5px); border-bottom-color: var(--accent-yellow); }
+.feature-icon { font-size: 36px; color: var(--primary-navy); margin-bottom: 20px; display: inline-block; background: #eff6ff; padding: 15px; border-radius: 50%; }
+.feature-card h3 { font-size: 20px; margin-bottom: 10px; }
+.feature-card p { font-size: 15px; color: var(--text-gray); margin: 0; }
+
+/* 5. SEKCJE TREŚCI */
+.section { padding: 80px 0; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.section-header { text-align: center; margin-bottom: 50px; max-width: 800px; margin-left: auto; margin-right: auto; }
+.section-title { font-size: 36px; font-weight: 700; margin-bottom: 15px; }
+.section-subtitle { font-size: 18px; color: var(--text-gray); max-width: 700px; margin: 0 auto; }
+
+/* 6. CODZIENNOŚĆ (3 FILARY) */
+.pillars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+.pillar-card { 
+    background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+    display: flex; flex-direction: column; height: 100%; transition: transform 0.3s;
+}
+.pillar-card:hover { transform: translateY(-5px); }
+.pillar-img { height: 240px; width: 100%; object-fit: cover; }
+.pillar-content { padding: 30px; flex-grow: 1; }
+.pillar-content h3 { font-size: 22px; margin-bottom: 10px; color: var(--accent-blue); }
+.pillar-content ul { padding-left: 20px; margin-top: 15px; color: var(--text-gray); }
+.pillar-content li { margin-bottom: 8px; font-size: 15px; }
+
+/* 7. CO ZAWIERA CZESNE (Lista korzyści) */
+.tuition-box {
+    background: var(--white); border-radius: 20px; padding: 50px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.06); margin-top: 30px;
+    border: 1px solid #e2e8f0;
+}
+.tuition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.tuition-list { list-style: none; padding: 0; margin: 0; }
+.tuition-list li {
+    display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px;
+    font-size: 16px; color: var(--text-dark);
+}
+.tuition-list li i {
+    color: var(--accent-yellow); background: var(--primary-navy);
+    width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; margin-top: 3px; flex-shrink: 0;
 }
 
-/* OFFER TABLE */
-.offer-table { 
-    width: 100%; border-collapse: collapse; margin-top: 30px; 
-    background: white; border-radius: 12px; overflow: hidden; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+/* 8. REKRUTACJA (Nowa sekcja) */
+.recruitment-box {
+    background: white; border-radius: 16px; padding: 40px; border: 1px solid #e2e8f0;
+    text-align: left; box-shadow: 0 5px 20px rgba(0,0,0,0.04);
 }
-.offer-table th { background: var(--primary-navy); color: white; padding: 20px; text-align: left; }
-.offer-table td { padding: 15px 20px; border-bottom: 1px solid #e5e7eb; color: var(--text-dark); font-size: 15px; }
-.check-icon { color: #16a34a; margin-right: 10px; }
-
-/* PROFILES */
-.profiles-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
-.profile-card { 
-    padding: 40px; border-radius: 16px; color: white; position: relative; overflow: hidden; 
-    display: flex; flex-direction: column; justify-content: space-between; min-height: 350px;
+.recruitment-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; margin-top: 30px; }
+.recruitment-steps { counter-reset: step; list-style: none; padding: 0; }
+.recruitment-steps li { position: relative; padding-left: 50px; margin-bottom: 25px; }
+.recruitment-steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute; left: 0; top: 0;
+    width: 35px; height: 35px; background: var(--accent-yellow); color: var(--primary-navy);
+    border-radius: 50%; font-weight: 700; display: flex; align-items: center; justify-content: center;
 }
-.bg-navy { background-color: var(--primary-navy); }
-.bg-blue { background-color: var(--accent-blue); }
+.recruitment-form-data { background: #f8fafc; padding: 25px; border-radius: 12px; font-size: 14px; }
 
-/* LIFESTYLE SECTION */
-.lifestyle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
-.lifestyle-card { 
-    background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
-    transition: transform 0.3s;
-}
-.lifestyle-card:hover { transform: translateY(-5px); }
-.lifestyle-img { height: 220px; width: 100%; object-fit: cover; }
-.lifestyle-content { padding: 25px; text-align: center; }
+/* 9. PROGRAMY */
+.programs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
+.program-item { display: flex; gap: 20px; background: var(--white); padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; }
+.program-icon { width: 60px; height: 60px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-blue); font-size: 24px; flex-shrink: 0; }
 
-/* KADRA / STAFF GRID */
-.staff-container { display: grid; grid-template-columns: 1fr 2fr; gap: 40px; margin-top: 30px; align-items: center; }
-.director-card { text-align: center; border-right: 1px solid #e5e7eb; padding-right: 20px; }
-.director-img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 4px solid var(--accent-yellow); }
-.team-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.stat-item { background: #f0f9ff; padding: 20px; border-radius: 10px; text-align: center; }
-.stat-val { display: block; font-size: 28px; font-weight: 700; color: var(--primary-navy); }
-.stat-desc { font-size: 14px; color: var(--text-gray); }
+/* 10. KADRA */
+.staff-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.staff-item { background: var(--white); padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 15px; }
+.staff-avatar { width: 50px; height: 50px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary-navy); font-weight: 700; }
+.staff-info h4 { font-size: 16px; margin-bottom: 2px; }
+.staff-info span { font-size: 13px; color: var(--text-gray); }
 
-/* GALERIA */
-.gallery-grid {
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr); 
-    grid-template-rows: repeat(2, 200px);
-    gap: 15px;
-    margin-top: 30px;
-}
-.gallery-item { position: relative; overflow: hidden; border-radius: 10px; }
-.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-.gallery-item:hover img { transform: scale(1.1); }
-.g-large { grid-column: span 2; grid-row: span 2; }
+/* Stopka */
+.footer { background: var(--primary-navy); color: #94a3b8; padding: 60px 0 30px; }
+.footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+.footer h4 { color: var(--white); font-size: 18px; margin-bottom: 20px; }
+.footer ul { list-style: none; padding: 0; }
+.footer li { margin-bottom: 12px; display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.footer i { color: var(--accent-yellow); }
+.copyright { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center; font-size: 13px; }
 
-/* FOOTER */
-.footer-row { 
-    background-color: #111827; color: white; width: 100%; 
-    padding: 60px 40px; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 40px; 
-}
-.footer-col h4 { color: var(--accent-yellow); margin-bottom: 20px; font-size: 18px; text-transform: uppercase; }
-.footer-col ul { list-style: none; padding: 0; }
-.footer-col li { margin-bottom: 10px; font-size: 14px; color: #d1d5db; display: flex; align-items: start; }
-.footer-col i { margin-right: 10px; color: var(--accent-yellow); margin-top: 3px; }
-
-    </style>
+</style>
 </head>
 <body>
 
-<!-- 1. HERO SECTION -->
-<div class="slide-container hero-slide" style="background-image: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop'); background-size: cover; background-position: center;">
+<!-- NAWIGACJA -->
+<nav class="main-nav">
+    <div class="nav-logo">
+        <i class="fa-solid fa-graduation-cap" style="color: var(--accent-yellow);"></i>
+        Twoja Przyszłość
+    </div>
+    <ul class="nav-links">
+        <li><a href="#atuty">Dlaczego my?</a></li>
+        <li><a href="#codziennosc">Życie Szkoły</a></li>
+        <li><a href="#czesne">Oferta</a></li>
+        <li><a href="#rekrutacja" style="color: var(--accent-blue);">Rekrutacja</a></li>
+        <li><a href="#programy">Programy</a></li>
+        <li><a href="#kadra">Kadra</a></li>
+    </ul>
+    <a href="#rekrutacja" class="nav-btn">Zapisz dziecko</a>
+</nav>
+
+<!-- HERO: SKIEROWANE DO NOWYCH RODZICÓW -->
+<header class="hero-section">
     <div class="hero-overlay"></div>
     <div class="hero-content">
-        <div style="background: var(--accent-yellow); color: var(--primary-navy); display: inline-block; padding: 8px 20px; border-radius: 20px; font-weight: 700; margin-bottom: 25px; text-transform: uppercase; font-size: 13px; letter-spacing: 1px;">
-            Rekrutacja 2025/2026 Otwarta
-        </div>
-        <h1>Zespół Szkół Prywatnych<br>"Twoja Przyszłość"</h1>
-        <p>Edukacja z pasją od 1994 roku. Szkoła bez dzwonków.<br>Wspieramy talenty, uczymy myślenia, dbamy o relacje.</p>
-        
-        <div style="margin-top: 30px;">
-            <a href="#" class="btn">Umów spotkanie z Dyrekcją</a>
-        </div>
-        
-        <div class="trust-badge">
-            <i class="fa-solid fa-certificate"></i> Posiadamy certyfikat "Śląska Szkoła Jakości"
+        <span class="hero-badge">Szkoła Podstawowa w Sosnowcu</span>
+        <h1 class="hero-title">Wybierz szkołę, która<br>rozumie Twoje dziecko</h1>
+        <p class="hero-desc">Indywidualne podejście, brak dzwonków i nauka przez doświadczenie. Zapewnij swojemu dziecku start, na jaki zasługuje.</p>
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <a href="#czesne" class="btn-primary">Sprawdź ofertę</a>
+            <a href="#atuty" class="btn-primary" style="background: transparent; border: 2px solid var(--white); color: var(--white);">Dlaczego warto?</a>
         </div>
     </div>
-</div>
+</header>
 
-<!-- 2. DLACZEGO MY (ATUTY) -->
-<div class="slide-container content-slide">
-    <div class="section-wrapper">
-        <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-            <h2>Więcej niż szkoła</h2>
-            <p>Jesteśmy kameralną placówką, w której każdy uczeń jest ważny. Łączymy 30 lat tradycji z nowoczesnymi metodami CMI (Centrum Mistrzostwa Informatycznego).</p>
+<!-- DLACZEGO WARTO? (SEKCJA SPRZEDAŻOWA) -->
+<section id="atuty" class="section" style="padding-bottom: 40px;">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Więcej niż szkoła publiczna</h2>
+            <p class="section-subtitle">Tworzymy warunki, w których nauka przychodzi z łatwością, a stres znika.</p>
         </div>
-        
         <div class="features-grid">
             <div class="feature-card">
-                <i class="fa-solid fa-users-rectangle feature-icon"></i>
+                <div class="feature-icon"><i class="fa-solid fa-users"></i></div>
                 <h3>Klasy do 18 osób</h3>
-                <p>Indywidualne podejście. Nauczyciel ma czas dla każdego ucznia, w tym dla dzieci zdolnych i wymagających wsparcia.</p>
+                <p>Nauczyciel ma czas dla każdego ucznia. Twoje dziecko nie jest anonimowe – znamy jego talenty i potrzeby.</p>
             </div>
             <div class="feature-card">
-                <i class="fa-solid fa-earth-americas feature-icon"></i>
-                <h3>Języki od startu</h3>
-                <p>Angielski 5h w tygodniu. Drugi język (Hiszpański lub Niemiecki) obowiązkowy już od 1. klasy.</p>
+                <div class="feature-icon"><i class="fa-solid fa-language"></i></div>
+                <h3>Języki to priorytet</h3>
+                <p>Angielski 5x w tygodniu. Drugi język (Niemiecki/Hiszpański) już od 4. klasy. Native Speakerzy.</p>
             </div>
             <div class="feature-card">
-                <i class="fa-solid fa-star feature-icon"></i>
-                <h3>System Punktowy</h3>
-                <p>Zamiast stresujących ocen 1-6 stosujemy system punktowo-procentowy. Motywujemy do rozwoju, nie do "kucia".</p>
+                <div class="feature-icon"><i class="fa-solid fa-person-shelter"></i></div>
+                <h3>Bezpieczeństwo i Opieka</h3>
+                <p>Szkoła wolna od przemocy. Opieka świetlicowa od 7:00 do 17:00 w cenie. Psycholog i pedagog na miejscu.</p>
             </div>
             <div class="feature-card">
-                <i class="fa-solid fa-person-swimming feature-icon"></i>
-                <h3>Baza Sportowa</h3>
-                <p>Własna sala gimnastyczna, siłownia oraz basen (nauka pływania). Zajęcia z Capoeiry i tańca.</p>
+                <div class="feature-icon"><i class="fa-solid fa-star"></i></div>
+                <h3>System bez "jedynek"</h3>
+                <p>Nowatorski system punktowy (kl. 4-8) motywuje do systematyczności zamiast stresować ocenami.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-flask"></i></div>
+                <h3>Nowoczesna Nauka</h3>
+                <p>Metoda badawcza (Uniwersytet Dzieci), informatyka od 1. klasy, monitory interaktywne w salach.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-person-swimming"></i></div>
+                <h3>Sport i Zdrowie</h3>
+                <p>Własny basen (nauka pływania), sala gimnastyczna, siłownia, taniec i Capoeira.</p>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- 3. WYBÓR PROFILU -->
-<div class="slide-container content-slide" style="background-color: #f8fafc;">
-    <div class="section-wrapper">
-        <h2 style="text-align: center;">Dwie Ścieżki w Jednym Miejscu</h2>
-        <p style="text-align: center; margin-bottom: 40px;">W ramach naszego Zespołu funkcjonują dwie szkoły podstawowe o różnym charakterze.</p>
-
-        <div class="profiles-container">
-            <!-- Profil 1 -->
-            <div class="profile-card bg-navy">
-                <i class="fa-solid fa-book-open-reader" style="position: absolute; bottom: -20px; right: -20px; font-size: 150px; opacity: 0.1;"></i>
-                <div>
-                    <h3>PSP nr 5 "Twoja Przyszłość"</h3>
-                    <p style="color: #cbd5e1; margin-top: 15px;">Profil klasyczny. Idealny dla dzieci ceniących spokój i tradycyjne wartości. Duży nacisk na kulturę, historię i języki.</p>
-                    <ul style="margin-top: 20px; list-style: none; padding: 0; font-size: 15px; color: #e2e8f0;">
-                        <li><i class="fa-solid fa-check" style="color: var(--accent-yellow); margin-right: 10px;"></i> Program "Odkrywcy Świata"</li>
-                        <li><i class="fa-solid fa-check" style="color: var(--accent-yellow); margin-right: 10px;"></i> Spokojne tempo pracy</li>
-                    </ul>
-                </div>
-                <button class="btn" style="background: white; color: var(--primary-navy); width: fit-content; margin-top: 30px;">Wybierz ten profil</button>
-            </div>
-
-            <!-- Profil 2 -->
-            <div class="profile-card bg-blue">
-                <i class="fa-solid fa-rocket" style="position: absolute; bottom: -20px; right: -20px; font-size: 150px; opacity: 0.15;"></i>
-                <div>
-                    <h3>PSP "Akademia Młodych"</h3>
-                    <p style="color: #dbeafe; margin-top: 15px;">Profil nowoczesny. Współpraca z Politechniką Łódzką (CMI). Dla dzieci ciekawych technologii i świata cyfrowego.</p>
-                    <ul style="margin-top: 20px; list-style: none; padding: 0; font-size: 15px; color: #dbeafe;">
-                        <li><i class="fa-solid fa-check" style="color: white; margin-right: 10px;"></i> SuperKoderzy & Druk 3D</li>
-                        <li><i class="fa-solid fa-check" style="color: white; margin-right: 10px;"></i> Laboratoria Przyszłości</li>
-                    </ul>
-                </div>
-                <button class="btn" style="background: white; color: var(--accent-blue); width: fit-content; margin-top: 30px;">Wybierz ten profil</button>
-            </div>
+<!-- CODZIENNOŚĆ (3 FILARY) -->
+<section id="codziennosc" class="section" style="background-color: #f8fafc;">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Jak wygląda dzień Twojego dziecka?</h2>
+            <p class="section-subtitle">Zbalansowany rozwój: Mądra nauka, świetna zabawa i czas na pasje.</p>
         </div>
-    </div>
-</div>
-
-<!-- 4. ATMOSFERA / LIFESTYLE -->
-<div class="slide-container content-slide">
-    <div class="section-wrapper">
-        <h2 style="text-align: center;">Tak wygląda nasza codzienność</h2>
-        <p style="text-align: center; max-width: 700px; margin: 0 auto;">
-            Edukacja to relacje. Budujemy społeczność opartą na wartościach: Prawda, Dobro, Piękno i Zasady Fair Play.
-        </p>
-
-        <div class="lifestyle-grid">
-            <div class="lifestyle-card">
-                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2000&auto=format&fit=crop" class="lifestyle-img" alt="Uczniowie w klasie">
-                <div class="lifestyle-content">
-                    <h3>Tak się uczymy</h3>
-                    <p>Metoda badawcza i eksperymenty (Uniwersytet Dzieci). System punktowy jasno określa postępy. Klasy są nowoczesne (Aktywna Tablica).</p>
-                </div>
-            </div>
-            <div class="lifestyle-card">
-                <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a782?q=80&w=2000&auto=format&fit=crop" class="lifestyle-img" alt="Robotyka">
-                <div class="lifestyle-content">
-                    <h3>Tak rozwijamy pasje</h3>
-                    <p>Szachy, Scrabble, Robotyka Lego, Kółko Teatralne. Dla sportowców: Capoeira, Taniec, Basen. Każdy talent jest ważny.</p>
-                </div>
-            </div>
-            <div class="lifestyle-card">
-                <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2000&auto=format&fit=crop" class="lifestyle-img" alt="Wycieczka szkolna">
-                <div class="lifestyle-content">
-                    <h3>Tak się bawimy</h3>
-                    <p>Wyjazdy na "Zielone Szkoły", obozy narciarskie i wycieczki "Poznaj Polskę". Brak dzwonków sprzyja atmosferze spokoju.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- 5. NOWA SEKCJA: KADRA I GALERIA -->
-<div class="slide-container content-slide" style="background-color: #f3f4f6;">
-    <div class="section-wrapper">
-        <!-- Sekcja KADRA -->
-        <h2 style="margin-bottom: 30px;">Kadra, która inspiruje</h2>
-        <div class="staff-container">
-            <div class="director-card">
-                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop" class="director-img" alt="Dyrektor Szkoły">
-                <h3 style="font-size: 20px; color: var(--primary-navy);">mgr Magdalena Wontek</h3>
-                <p style="color: var(--text-gray); font-size: 14px; font-weight: 700; margin-bottom: 5px;">DYREKTOR ZESPOŁU SZKÓŁ</p>
-                <p style="font-size: 13px; font-style: italic;">"Tworzymy szkołę, w której nauka jest przygodą, a każdy uczeń czuje się bezpiecznie."</p>
-            </div>
-            <div class="team-stats">
-                <div class="stat-item">
-                    <i class="fa-solid fa-chalkboard-user" style="font-size: 30px; color: var(--accent-blue); margin-bottom: 10px;"></i>
-                    <span class="stat-val">50+</span>
-                    <span class="stat-desc">Nauczycieli z pasją i doświadczeniem</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fa-solid fa-comments" style="font-size: 30px; color: var(--accent-yellow); margin-bottom: 10px;"></i>
-                    <span class="stat-val">Eksperci</span>
-                    <span class="stat-desc">Wieloletnie doświadczenie (Ang, Hiszp, Niem)</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fa-solid fa-user-doctor" style="font-size: 30px; color: #ef4444; margin-bottom: 10px;"></i>
-                    <span class="stat-val">Wsparcie</span>
-                    <span class="stat-desc">Psycholog, Pedagog, Logopeda, Terapeuta SI</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fa-solid fa-handshake" style="font-size: 30px; color: #10b981; margin-bottom: 10px;"></i>
-                    <span class="stat-val">Stabilność</span>
-                    <span class="stat-desc">Większość kadry uczy u nas od wielu lat</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sekcja GALERIA -->
-        <h2 style="margin-top: 60px; margin-bottom: 20px;">Zobacz naszą szkołę</h2>
-        <p>Nowoczesne sale, bezpieczne korytarze i mnóstwo zieleni. Zobacz, gdzie uczą się Twoje dzieci.</p>
         
-        <div class="gallery-grid">
-            <div class="gallery-item g-large">
-                <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=2000&auto=format&fit=crop" alt="Nowoczesna klasa">
+        <div class="pillars-grid">
+            <!-- Filar 1 -->
+            <div class="pillar-card">
+                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2000&auto=format&fit=crop" class="pillar-img" alt="Nauka w szkole">
+                <div class="pillar-content">
+                    <h3>1. Tak się uczymy</h3>
+                    <p>Bez dzwonków, bez hałasu. Stawiamy na eksperymenty i zrozumienie, a nie "kucie na pamięć".</p>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> Projekty naukowe i badawcze</li>
+                        <li><i class="fa-solid fa-check"></i> Indywidualne wsparcie nauczyciela</li>
+                        <li><i class="fa-solid fa-check"></i> E-dziennik i nowoczesne pomoce</li>
+                    </ul>
+                </div>
             </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=1000&auto=format&fit=crop" alt="Biblioteka szkolna">
+
+            <!-- Filar 2 -->
+            <div class="pillar-card">
+                <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2000&auto=format&fit=crop" class="pillar-img" alt="Wycieczka szkolna">
+                <div class="pillar-content">
+                    <h3>2. Tak się bawimy</h3>
+                    <p>Budujemy relacje i wspólnotę. Szkoła to miejsce, do którego dzieci przychodzą z uśmiechem.</p>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> "Zielone Szkoły" co roku</li>
+                        <li><i class="fa-solid fa-check"></i> Obozy narciarskie i letnie</li>
+                        <li><i class="fa-solid fa-check"></i> Wyjścia do kina, teatru, muzeum</li>
+                    </ul>
+                </div>
             </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1000&auto=format&fit=crop" alt="Zajęcia w grupie">
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1596495577886-d920f1fb7238?q=80&w=1000&auto=format&fit=crop" alt="Sala gimnastyczna">
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1427504746696-ea5abd73e322?q=80&w=1000&auto=format&fit=crop" alt="Korytarz szkolny">
+
+            <!-- Filar 3 -->
+            <div class="pillar-card">
+                <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a782?q=80&w=2000&auto=format&fit=crop" class="pillar-img" alt="Zajęcia dodatkowe">
+                <div class="pillar-content">
+                    <h3>3. Tak rozwijamy pasje</h3>
+                    <p>Twoje dziecko nie musi jeździć na zajęcia dodatkowe po całym mieście. Wszystko ma na miejscu.</p>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> Szachy i Robotyka</li>
+                        <li><i class="fa-solid fa-check"></i> Taniec, Capoeira, Basen</li>
+                        <li><i class="fa-solid fa-check"></i> Koła zainteresowań (plastyczne, teatralne)</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- 6. OFERTA SZCZEGÓŁOWA -->
-<div class="slide-container content-slide">
-    <div class="section-wrapper">
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
+<!-- OFERTA I CZESNE (KLUCZOWE DLA RODZICA SZUKAJĄCEGO) -->
+<section id="czesne" class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Wszystko w ramach jednej opłaty</h2>
+            <p class="section-subtitle">Przejrzyste zasady. Zobacz, co zyskuje Twoje dziecko w ramach czesnego.</p>
+        </div>
+
+        <div class="tuition-box">
+            <div class="tuition-grid">
+                <div>
+                    <h3 style="color: var(--primary-navy); margin-bottom: 25px; border-bottom: 2px solid var(--accent-yellow); display: inline-block; padding-bottom: 10px;">Edukacja i Opieka</h3>
+                    <ul class="tuition-list">
+                        <li><i class="fa-solid fa-check"></i> Opieka pedagogiczna w godzinach 7:00 - 17:00</li>
+                        <li><i class="fa-solid fa-check"></i> Małe zespoły klasowe (max 18 osób)</li>
+                        <li><i class="fa-solid fa-check"></i> Zajęcia dydaktyczno-wyrównawcze</li>
+                        <li><i class="fa-solid fa-check"></i> Opieka logopedy i pedagoga</li>
+                        <li><i class="fa-solid fa-check"></i> Współpraca z Poradnią Psychologiczno-Pedagogiczną</li>
+                        <li><i class="fa-solid fa-check"></i> Zwiększona liczba godzin dydaktycznych</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: var(--primary-navy); margin-bottom: 25px; border-bottom: 2px solid var(--accent-yellow); display: inline-block; padding-bottom: 10px;">Rozwój i Zajęcia Dodatkowe</h3>
+                    <ul class="tuition-list">
+                        <li><i class="fa-solid fa-check"></i> Język angielski: 4h (kl. 1) lub 5h (kl. 2-8) tygodniowo</li>
+                        <li><i class="fa-solid fa-check"></i> Drugi język obcy od 4. klasy (Niemiecki/Hiszpański)</li>
+                        <li><i class="fa-solid fa-check"></i> Nauka pływania na basenie</li>
+                        <li><i class="fa-solid fa-check"></i> Informatyka już od 1. klasy</li>
+                        <li><i class="fa-solid fa-check"></i> Szeroka oferta warsztatów (szachy, robotyka, plastyka)</li>
+                        <li><i class="fa-solid fa-check"></i> Przygotowanie do egzaminu ósmoklasisty</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <p style="margin-bottom: 20px; font-size: 14px; color: var(--text-gray);">* Możliwość wykupienia obiadów oraz udziału w dodatkowych wycieczkach i "zielonej szkole".</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- REKRUTACJA (Nowa sekcja) -->
+<section id="rekrutacja" class="section" style="background-color: #f8fafc;">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Rekrutacja na rok 2026/2027</h2>
+            <p class="section-subtitle">Nabór do klas 1 rozpocznie się <strong>1 września 2025 r.</strong> o godzinie 7:00.</p>
+        </div>
+
+        <div class="recruitment-box">
+            <h3 style="margin-bottom: 20px; color: var(--primary-navy);">Jak zapisać dziecko?</h3>
+            <div class="recruitment-grid">
+                <div>
+                    <ol class="recruitment-steps">
+                        <li>
+                            <strong>Rejestracja Elektroniczna (Formularz)</strong><br>
+                            Pierwszy etap to wypełnienie prostego formularza online. Decyduje kolejność zgłoszeń.
+                        </li>
+                        <li>
+                            <strong>Spotkanie z Dyrekcją</strong><br>
+                            Po weryfikacji zgłoszenia zaprosimy Państwa na indywidualne spotkanie, aby poznać Was i Wasze dziecko.
+                        </li>
+                        <li>
+                            <strong>Podpisanie Umowy</strong><br>
+                            Gwarancją miejsca jest podpisanie umowy o kształcenie i wniesienie opłaty wpisowej.
+                        </li>
+                    </ol>
+                    <a href="#" class="btn-primary" style="margin-top: 20px;">Wypełnij Formularz Zgłoszeniowy</a>
+                </div>
+                
+                <div class="recruitment-form-data">
+                    <h4 style="margin-bottom: 15px; color: var(--primary-navy);"><i class="fa-solid fa-circle-info" style="color: var(--accent-blue); margin-right: 10px;"></i> Przygotuj dane do formularza:</h4>
+                    <p style="margin-bottom: 10px;">Aby proces przebiegł sprawnie, przygotuj wcześniej:</p>
+                    <ul style="list-style: disc; padding-left: 20px; color: var(--text-gray);">
+                        <li>Adres e-mail do kontaktu</li>
+                        <li>PESEL dziecka (Niezmienny!)</li>
+                        <li>Imię i nazwisko dziecka</li>
+                        <li>Imię i nazwisko rodzica/opiekuna</li>
+                        <li>Numer telefonu do kontaktu</li>
+                    </ul>
+                    <p style="font-size: 12px; margin-top: 15px; color: #94a3b8;">* PESEL dziecka jest przypisany do danego zgłoszenia i jest niezmienialny na dalszym etapie.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROGRAMY -->
+<section id="programy" class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Programy Partnerskie</h2>
+            <p class="section-subtitle">Współpracujemy z najlepszymi, aby dać dzieciom wiedzę na światowym poziomie.</p>
+        </div>
+        <div class="programs-grid">
+            <div class="program-item">
+                <div class="program-icon"><i class="fa-solid fa-flask"></i></div>
+                <div>
+                    <h4>Uniwersytet Dzieci</h4>
+                    <p style="font-size: 14px;">Warsztaty z naukowcami. Metoda badawcza. Projekty "Planeta Zdrowia" i "Kosmos w klasie".</p>
+                </div>
+            </div>
+            <div class="program-item">
+                <div class="program-icon"><i class="fa-solid fa-leaf"></i></div>
+                <div>
+                    <h4>WWF "Program z Pandą"</h4>
+                    <p style="font-size: 14px;">Edukacja ekologiczna. Kształtowanie postaw prospołecznych i odpowiedzialności za planetę.</p>
+                </div>
+            </div>
+            <div class="program-item">
+                <div class="program-icon"><i class="fa-solid fa-earth-europe"></i></div>
+                <div>
+                    <h4>eTwinning (Erasmus+)</h4>
+                    <p style="font-size: 14px;">Międzynarodowa współpraca szkół. Projekty online z rówieśnikami z całej Europy.</p>
+                </div>
+            </div>
+            <div class="program-item">
+                <div class="program-icon"><i class="fa-solid fa-book-open"></i></div>
+                <div>
+                    <h4>Lekturki spod chmurki</h4>
+                    <p style="font-size: 14px;">Międzynarodowy projekt czytelniczy. Odczarowujemy lektury i uczymy miłości do książek.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- KADRA -->
+<section id="kadra" class="section" style="background-color: #f1f5f9;">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Kadra, która inspiruje</h2>
+            <p class="section-subtitle">Profesjonaliści z pasją i sercem do dzieci.</p>
+        </div>
+        
+        <div class="staff-list">
+            <div class="staff-item">
+                <div class="staff-avatar">MW</div>
+                <div class="staff-info"><h4>mgr Magdalena Wontek</h4><span>Dyrektor Szkoły</span></div>
+            </div>
+            <div class="staff-item">
+                <div class="staff-avatar">BB</div>
+                <div class="staff-info"><h4>mgr Barbara Bucka</h4><span>Wicedyrektor ds. Dydaktycznych</span></div>
+            </div>
+            <div class="staff-item">
+                <div class="staff-avatar">RG</div>
+                <div class="staff-info"><h4>mgr Robert Górniak</h4><span>Wicedyrektor ds. Komunikacji</span></div>
+            </div>
+            <div class="staff-item">
+                <div class="staff-avatar">AP</div>
+                <div class="staff-info"><h4>dr Anna Pierzchała</h4><span>Psycholog, Terapeuta</span></div>
+            </div>
+            <div class="staff-item">
+                <div class="staff-avatar">UR</div>
+                <div class="staff-info"><h4>mgr Urszula Rogalska</h4><span>Pedagog specjalny</span></div>
+            </div>
+            <div class="staff-item">
+                <div class="staff-avatar">SW</div>
+                <div class="staff-info"><h4>mgr Szymon Wojciechowski</h4><span>Psycholog</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STOPKA -->
+<footer id="kontakt" class="footer">
+    <div class="container">
+        <div class="footer-grid">
             <div>
-                <h2>Oferta Edukacyjna</h2>
-                <p>Przejrzyste zasady. Pełne wsparcie dla ucznia i rodzica.</p>
+                <h4 style="color: var(--accent-yellow);">ZSP "Twoja Przyszłość"</h4>
+                <p>Szkoła podstawowa z uprawnieniami szkoły publicznej. Edukacja z pasją od 1994 roku.</p>
+                <div style="margin-top: 20px;">
+                    NIP: 6443353628<br>
+                    REGON: 243095660
+                </div>
             </div>
-            <div style="text-align: right;">
-                 <div style="font-size: 32px; font-weight: 700; color: var(--primary-navy);">700 zł <span style="font-size: 16px; color: var(--text-gray); font-weight: 400;">/ mies.</span></div>
-                 <div style="font-size: 13px; color: var(--text-gray);">Wpisowe: 700 zł (jednorazowo)</div>
+            <div>
+                <h4>Kontakt</h4>
+                <ul>
+                    <li><i class="fa-solid fa-location-dot"></i> ul. Zegadłowicza 1, 41-200 Sosnowiec</li>
+                    <li><i class="fa-solid fa-phone"></i> 32 299 91 79</li>
+                    <li><i class="fa-solid fa-envelope"></i> szkola@psp5.pl</li>
+                    <li><i class="fa-solid fa-clock"></i> Pon - Pt: 7:00 - 17:00</li>
+                </ul>
             </div>
-        </div>
-
-        <table class="offer-table">
-            <thead>
-                <tr>
-                    <th style="width: 55%;">W cenie czesnego otrzymujesz:</th>
-                    <th>Dodatkowo (fakultatywne/projekty):</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><i class="fa-solid fa-check check-icon"></i> Opieka świetlicowa (7:00 - 17:00)</td>
-                    <td><i class="fa-solid fa-utensils" style="color: var(--primary-navy); margin-right: 8px;"></i> Wyżywienie (Catering "Lubię Am!")</td>
-                </tr>
-                <tr>
-                    <td><i class="fa-solid fa-check check-icon"></i> Angielski (5h) + 2. język (od 1. kl.)</td>
-                    <td><i class="fa-solid fa-bus" style="color: var(--primary-navy); margin-right: 8px;"></i> Wyjazdy (narty, zielone szkoły)</td>
-                </tr>
-                <tr>
-                    <td><i class="fa-solid fa-check check-icon"></i> Terapia pedagogiczna i SI (dla potrzebujących)</td>
-                    <td><i class="fa-solid fa-ticket" style="color: var(--primary-navy); margin-right: 8px;"></i> Wyjścia (Kino, Teatr, Muzeum)</td>
-                </tr>
-                <tr>
-                    <td><i class="fa-solid fa-check check-icon"></i> Zajęcia sportowe: Basen, Siłownia</td>
-                    <td><i class="fa-solid fa-graduation-cap" style="color: var(--primary-navy); margin-right: 8px;"></i> Egzaminy międzynarodowe</td>
-                </tr>
-                <tr>
-                    <td><i class="fa-solid fa-check check-icon"></i> Koła: Szachowe, Scrabble, Programistyczne</td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- 7. REKRUTACJA -->
-<div class="slide-container content-slide" style="background-color: #f0fdf4;">
-    <div class="section-wrapper">
-        <h2 style="text-align: center;">Rekrutacja Krok po Kroku</h2>
-        <p style="text-align: center; max-width: 700px; margin: 0 auto 40px auto;">
-            Nabór do klas 1 na rok szkolny <strong>2027/2028</strong> rozpocznie się <strong>1 września 2026 r. o godzinie 7:00</strong>.<br>
-            Proces odbywa się elektronicznie – decyduje kolejność zgłoszeń w systemie.
-        </p>
-
-        <div style="display: flex; justify-content: space-between; position: relative; margin-top: 50px;">
-            <div style="position: absolute; top: 25px; left: 50px; right: 50px; height: 2px; background: #cbd5e1; z-index: 0;"></div>
-            
-            <div style="position: relative; z-index: 1; text-align: center; width: 30%;">
-                <div style="width: 50px; height: 50px; background: var(--primary-navy); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-weight: 700;">1</div>
-                <h3>Rejestracja Online</h3>
-                <p style="font-size: 14px;">Wypełnij formularz elektroniczny dostępny na stronie. Przygotuj: <strong>PESEL dziecka</strong> (kluczowy do zgłoszenia), e-mail i nr telefonu.</p>
-            </div>
-
-            <div style="position: relative; z-index: 1; text-align: center; width: 30%;">
-                <div style="width: 50px; height: 50px; background: white; border: 2px solid var(--primary-navy); color: var(--primary-navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-weight: 700;">2</div>
-                <h3>Weryfikacja i Spotkanie</h3>
-                <p style="font-size: 14px;">Po pomyślnej rejestracji skontaktujemy się, aby umówić indywidualne spotkanie z Dyrekcją i zwiedzanie szkoły.</p>
-            </div>
-
-            <div style="position: relative; z-index: 1; text-align: center; width: 30%;">
-                <div style="width: 50px; height: 50px; background: white; border: 2px solid var(--primary-navy); color: var(--primary-navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-weight: 700;">3</div>
-                <h3>Umowa</h3>
-                <p style="font-size: 14px;">Podpisanie umowy i wpłata wpisowego (700 zł) gwarantuje miejsce na liście uczniów.</p>
+            <div>
+                <h4>Rekrutacja</h4>
+                <p>Nabór do klas 1 na rok 2026/2027 rozpocznie się 1 września 2025 r.</p>
+                <a href="#rekrutacja" style="color: var(--accent-yellow); text-decoration: none; font-weight: 700;">Wypełnij formularz zgłoszeniowy <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
-
-        <div style="text-align: center; margin-top: 40px;">
-            <a href="#" class="btn" style="background-color: #cbd5e1; cursor: not-allowed;">Formularz aktywny od 01.09.2026</a>
-            <p style="font-size: 12px; margin-top: 10px; color: #6b7280;">*PESEL dziecka jest przypisany do danego zgłoszenia i jest niezmienialny na dalszym etapie.</p>
-        </div>
-
-        <!-- Nowy box z informacją o klasach starszych -->
-        <div style="background: white; border: 1px solid #16a34a; border-radius: 10px; padding: 20px; margin-top: 30px; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
-            <h3 style="font-size: 18px; color: #16a34a; margin-bottom: 10px;"><i class="fa-solid fa-circle-info"></i> Klasy Starsze (2-8)</h3>
-            <p style="margin: 0; font-size: 15px;">Interesuje Cię dołączenie do starszej klasy? Prosimy o bezpośredni kontakt z Sekretariatem (32 299 91 79) w celu sprawdzenia dostępności pojedynczych wolnych miejsc.</p>
+        <div class="copyright">
+            &copy; 2025 Zespół Szkół Prywatnych "Twoja Przyszłość". Wszelkie prawa zastrzeżone.
         </div>
     </div>
-</div>
-
-<!-- 8. FOOTER -->
-<div class="slide-container" style="margin-bottom: 0;">
-    <div class="footer-row">
-        <div class="footer-col">
-            <h4>Zespół Szkół Prywatnych<br>"Twoja Przyszłość"</h4>
-            <p style="color: #9ca3af; margin-bottom: 10px;">Dyrektor: mgr Magdalena Wontek</p>
-            <p style="color: #9ca3af; font-size: 13px;">NIP: 6443353628 | REGON: 243095660</p>
-            <p style="color: #9ca3af; font-size: 13px; line-height: 1.6; margin-top: 15px;">
-                Edukacja niepubliczna z uprawnieniami szkoły publicznej. Działamy nieprzerwanie od 1994 roku, kształcąc pokolenia sosnowiczan.
-            </p>
-            <div style="margin-top: 20px; display: flex; gap: 15px;">
-                <i class="fa-brands fa-facebook" style="font-size: 24px; color: white;"></i>
-            </div>
-        </div>
-        
-        <div class="footer-col">
-            <h4>Kontakt</h4>
-            <ul>
-                <li><i class="fa-solid fa-location-dot"></i> ul. Emila Zegadłowicza 1<br>41-200 Sosnowiec</li>
-                <li><i class="fa-solid fa-phone"></i> 32 299 91 79</li>
-                <li><i class="fa-solid fa-envelope"></i> szkola@psp5.pl</li>
-            </ul>
-        </div>
-
-        <div class="footer-col">
-            <h4>Godziny Otwarcia</h4>
-            <ul>
-                <li><i class="fa-regular fa-clock"></i> <strong>Sekretariat:</strong><br>Pn - Pt: 7:00 - 15:30</li>
-                <li style="margin-top: 15px;"><i class="fa-solid fa-child-reaching"></i> <strong>Świetlica:</strong><br>Pn - Pt: 7:00 - 17:00</li>
-            </ul>
-        </div>
-    </div>
-    <div style="width: 100%; background: #0b0f19; text-align: center; padding: 15px; color: #4b5563; font-size: 12px; border-top: 1px solid #1f2937;">
-        &copy; 2025 Zespół Szkół Prywatnych w Sosnowcu. Wszelkie prawa zastrzeżone.
-    </div>
-</div>
+</footer>
 
 </body>
 </html>
