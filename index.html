@@ -3,503 +3,521 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zespół Szkół Prywatnych "Twoja Przyszłość" - Sosnowiec</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Quiz: Nasze Ciało – Super Drużyna</title>
+    <!-- Import czcionki Fredoka dla dziecięcego stylu -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-/* 1. GLOBALNE STYLE (Astra Theme Style) */
-:root {
-  --primary-navy: #0f172a; /* Ciemny granat */
-  --accent-yellow: #fbbf24; /* Ciepły żółty */
-  --accent-blue: #3b82f6; /* Niebieski - technologia */
-  --text-dark: #1f2937;
-  --text-gray: #4b5563;
-  --bg-light: #f9fafb;
-  --white: #ffffff;
-}
+        :root {
+            --primary-color: #007bff; /* Niebieski koszulki */
+            --grass-color: #4caf50;   /* Zielona murawa */
+            --accent-color: #ffc107;  /* Żółty gwizdek/puchar */
+            --white: #ffffff;
+            --correct-color: #2ecc71;
+            --wrong-color: #e74c3c;
+            --text-color: #2c3e50;
+        }
 
-* { box-sizing: border-box; }
-body {
-  background-color: var(--bg-light);
-  margin: 0;
-  padding: 0;
-  font-family: 'Lato', sans-serif;
-  color: var(--text-dark);
-  line-height: 1.6;
-}
+        body {
+            font-family: 'Fredoka', sans-serif; /* Przyjazna czcionka */
+            background-color: var(--grass-color);
+            /* Wzór trawy/boiska */
+            background-image: 
+                linear-gradient(45deg, rgba(255,255,255,.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.1) 50%, rgba(255,255,255,.1) 75%, transparent 75%, transparent);
+            background-size: 50px 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+        }
 
-h1, h2, h3, h4 {
-  font-family: 'Poppins', sans-serif;
-  color: var(--primary-navy);
-  margin: 0;
-}
+        .quiz-container {
+            background-color: var(--white);
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            width: 100%;
+            max-width: 650px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 8px solid var(--white);
+        }
 
-/* 2. NAWIGACJA */
-.main-nav {
-    background: var(--white);
-    padding: 15px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-.nav-logo { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 20px; color: var(--primary-navy); display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-.nav-links { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; }
-.nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 15px; transition: 0.3s; }
-.nav-links a:hover { color: var(--accent-blue); }
-.nav-btn { background: var(--primary-navy); color: var(--white) !important; padding: 10px 25px; border-radius: 50px; transition: 0.3s; }
-.nav-btn:hover { background: var(--accent-blue); }
+        /* Ozdobny nagłówek "stadionowy" */
+        .header-deco {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+        }
 
-/* 3. HERO SECTION */
-.hero-section {
-    position: relative;
-    height: 600px;
-    background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2000&auto=format&fit=crop');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: var(--white);
-}
-.hero-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.8));
-}
-.hero-content { position: relative; z-index: 2; max-width: 900px; padding: 20px; }
-.hero-badge {
-    background: var(--accent-yellow); color: var(--primary-navy);
-    padding: 8px 20px; border-radius: 20px; font-weight: 700;
-    text-transform: uppercase; font-size: 13px; letter-spacing: 1px;
-    display: inline-block; margin-bottom: 20px;
-}
-.hero-title { font-size: 48px; font-weight: 700; margin-bottom: 20px; line-height: 1.2; }
-.hero-desc { font-size: 20px; color: #e2e8f0; margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto; }
-.btn-primary {
-    background-color: var(--accent-yellow); color: var(--primary-navy);
-    padding: 15px 40px; border-radius: 50px; font-weight: 700;
-    text-decoration: none; display: inline-block; transition: transform 0.2s; border: none; cursor: pointer;
-}
-.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3); }
+        h1 {
+            color: var(--primary-color);
+            font-size: 32px;
+            margin: 10px 0 20px 0;
+            line-height: 1.2;
+        }
 
-/* 4. ATUTY (Dlaczego My - Sekcja Sprzedażowa) */
-.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
-.feature-card {
-    background: var(--white); padding: 35px; border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05); transition: 0.3s; border-bottom: 4px solid transparent; position: relative; overflow: hidden;
-}
-.feature-card:hover { transform: translateY(-5px); border-bottom-color: var(--accent-yellow); }
-.feature-icon { font-size: 36px; color: var(--primary-navy); margin-bottom: 20px; display: inline-block; background: #eff6ff; padding: 15px; border-radius: 50%; }
-.feature-card h3 { font-size: 20px; margin-bottom: 10px; }
-.feature-card p { font-size: 15px; color: var(--text-gray); margin: 0; }
+        p {
+            font-size: 18px;
+            line-height: 1.5;
+            color: #555;
+        }
 
-/* 5. SEKCJE TREŚCI */
-.section { padding: 80px 0; }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-.section-header { text-align: center; margin-bottom: 50px; max-width: 800px; margin-left: auto; margin-right: auto; }
-.section-title { font-size: 36px; font-weight: 700; margin-bottom: 15px; }
-.section-subtitle { font-size: 18px; color: var(--text-gray); max-width: 700px; margin: 0 auto; }
+        /* Pasek postępu */
+        .progress-container {
+            background-color: #eef2f7;
+            border-radius: 50px;
+            height: 20px;
+            width: 100%;
+            margin-bottom: 30px;
+            overflow: hidden;
+            border: 2px solid #dfe6ed;
+            position: relative;
+        }
 
-/* 6. CODZIENNOŚĆ (3 FILARY) */
-.pillars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-.pillar-card { 
-    background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-    display: flex; flex-direction: column; height: 100%; transition: transform 0.3s;
-}
-.pillar-card:hover { transform: translateY(-5px); }
-.pillar-img { height: 240px; width: 100%; object-fit: cover; }
-.pillar-content { padding: 30px; flex-grow: 1; }
-.pillar-content h3 { font-size: 22px; margin-bottom: 10px; color: var(--accent-blue); }
-.pillar-content ul { padding-left: 20px; margin-top: 15px; color: var(--text-gray); }
-.pillar-content li { margin-bottom: 8px; font-size: 15px; }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            width: 0%;
+            border-radius: 50px;
+            transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
 
-/* 7. CO ZAWIERA CZESNE (Lista korzyści) */
-.tuition-box {
-    background: var(--white); border-radius: 20px; padding: 50px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.06); margin-top: 30px;
-    border: 1px solid #e2e8f0;
-}
-.tuition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-.tuition-list { list-style: none; padding: 0; margin: 0; }
-.tuition-list li {
-    display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px;
-    font-size: 16px; color: var(--text-dark);
-}
-.tuition-list li i {
-    color: var(--accent-yellow); background: var(--primary-navy);
-    width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; margin-top: 3px; flex-shrink: 0;
-}
+        /* Pytania */
+        .question-box {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-/* 8. REKRUTACJA (Nowa sekcja) */
-.recruitment-box {
-    background: white; border-radius: 16px; padding: 40px; border: 1px solid #e2e8f0;
-    text-align: left; box-shadow: 0 5px 20px rgba(0,0,0,0.04);
-}
-.recruitment-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; margin-top: 30px; }
-.recruitment-steps { counter-reset: step; list-style: none; padding: 0; }
-.recruitment-steps li { position: relative; padding-left: 50px; margin-bottom: 25px; }
-.recruitment-steps li::before {
-    counter-increment: step;
-    content: counter(step);
-    position: absolute; left: 0; top: 0;
-    width: 35px; height: 35px; background: var(--accent-yellow); color: var(--primary-navy);
-    border-radius: 50%; font-weight: 700; display: flex; align-items: center; justify-content: center;
-}
-.recruitment-form-data { background: #f8fafc; padding: 25px; border-radius: 12px; font-size: 14px; }
+        /* Siatka odpowiedzi */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
 
-/* 9. PROGRAMY */
-.programs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
-.program-item { display: flex; gap: 20px; background: var(--white); padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; }
-.program-icon { width: 60px; height: 60px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-blue); font-size: 24px; flex-shrink: 0; }
+        .option-btn {
+            background-color: var(--white);
+            border: 3px solid #e0e7ff;
+            color: var(--text-color);
+            padding: 18px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            top: 0;
+            /* Efekt 3D przycisku */
+            box-shadow: 0 5px 0 #d1d9e6; 
+        }
 
-/* 10. KADRA */
-.staff-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-.staff-item { background: var(--white); padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 15px; }
-.staff-avatar { width: 50px; height: 50px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary-navy); font-weight: 700; }
-.staff-info h4 { font-size: 16px; margin-bottom: 2px; }
-.staff-info span { font-size: 13px; color: var(--text-gray); }
+        .option-btn:hover {
+            border-color: var(--primary-color);
+            background-color: #f0f7ff;
+            top: -2px;
+            box-shadow: 0 7px 0 #d1d9e6;
+        }
 
-/* Stopka */
-.footer { background: var(--primary-navy); color: #94a3b8; padding: 60px 0 30px; }
-.footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
-.footer h4 { color: var(--white); font-size: 18px; margin-bottom: 20px; }
-.footer ul { list-style: none; padding: 0; }
-.footer li { margin-bottom: 12px; display: flex; align-items: center; gap: 10px; font-size: 14px; }
-.footer i { color: var(--accent-yellow); }
-.copyright { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center; font-size: 13px; }
+        .option-btn:active {
+            top: 5px;
+            box-shadow: 0 0 0 #d1d9e6;
+        }
 
-</style>
+        .option-btn.correct {
+            background-color: var(--correct-color);
+            border-color: #27ae60;
+            color: white;
+            box-shadow: 0 5px 0 #219150;
+        }
+
+        .option-btn.wrong {
+            background-color: var(--wrong-color);
+            border-color: #c0392b;
+            color: white;
+            opacity: 0.9;
+            box-shadow: 0 5px 0 #a93226;
+        }
+
+        /* Feedback text */
+        .feedback {
+            margin-top: 25px;
+            font-size: 22px;
+            font-weight: 700;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Ekrany */
+        #quiz-screen, #result-screen {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+        
+        #start-screen {
+            display: block;
+            animation: fadeIn 0.6s ease;
+        }
+
+        /* Główny przycisk start */
+        .big-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 24px;
+            border-radius: 50px;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #0056b3;
+            transition: transform 0.2s;
+            margin-top: 20px;
+        }
+
+        .big-btn:hover {
+            transform: scale(1.05);
+            background-color: #0069d9;
+        }
+
+        .big-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 #0056b3;
+            transform: translateY(8px);
+        }
+
+        /* Ikony i Emojis */
+        .main-icon {
+            font-size: 80px;
+            margin-bottom: 10px;
+            display: block;
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+        }
+
+        .score-display {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin: 20px 0;
+            font-weight: 800;
+        }
+
+        /* Animacje */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse-anim {
+            animation: pulse 2s infinite;
+        }
+
+        /* Konfetti */
+        .confetti-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            display: none;
+            z-index: 10;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #f00;
+            animation: fall linear forwards;
+            border-radius: 4px;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(720deg); }
+        }
+
+    </style>
 </head>
 <body>
 
-<!-- NAWIGACJA -->
-<nav class="main-nav">
-    <div class="nav-logo">
-        <i class="fa-solid fa-graduation-cap" style="color: var(--accent-yellow);"></i>
-        Twoja Przyszłość
-    </div>
-    <ul class="nav-links">
-        <li><a href="#atuty">Dlaczego my?</a></li>
-        <li><a href="#codziennosc">Życie Szkoły</a></li>
-        <li><a href="#czesne">Oferta</a></li>
-        <li><a href="#rekrutacja" style="color: var(--accent-blue);">Rekrutacja</a></li>
-        <li><a href="#programy">Programy</a></li>
-        <li><a href="#kadra">Kadra</a></li>
-    </ul>
-    <a href="#rekrutacja" class="nav-btn">Zapisz dziecko</a>
-</nav>
+<div class="quiz-container">
+    <div class="confetti-container" id="confetti-box"></div>
 
-<!-- HERO: SKIEROWANE DO NOWYCH RODZICÓW -->
-<header class="hero-section">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <span class="hero-badge">Szkoła Podstawowa w Sosnowcu</span>
-        <h1 class="hero-title">Wybierz szkołę, która<br>rozumie Twoje dziecko</h1>
-        <p class="hero-desc">Indywidualne podejście, brak dzwonków i nauka przez doświadczenie. Zapewnij swojemu dziecku start, na jaki zasługuje.</p>
-        <div style="display: flex; gap: 15px; justify-content: center;">
-            <a href="#czesne" class="btn-primary">Sprawdź ofertę</a>
-            <a href="#atuty" class="btn-primary" style="background: transparent; border: 2px solid var(--white); color: var(--white);">Dlaczego warto?</a>
-        </div>
+    <!-- 1. TABLICA STARTOWA (NOWE) -->
+    <div id="start-screen">
+        <span class="header-deco">Liga Mistrzów Zdrowia</span>
+        <div class="main-icon pulse-anim">🏟️</div>
+        <h1>Mecz o Zdrowie</h1>
+        <p>Twoje ciało to Super Drużyna. Czy wiesz, jak o nią dbać?<br>Odpowiedz na pytania i zdobądź Złoty Puchar!</p>
+        <button class="big-btn" onclick="startQuiz()">ROZPOCZNIJ MECZ! ⚽</button>
     </div>
-</header>
 
-<!-- DLACZEGO WARTO? (SEKCJA SPRZEDAŻOWA) -->
-<section id="atuty" class="section" style="padding-bottom: 40px;">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Więcej niż szkoła publiczna</h2>
-            <p class="section-subtitle">Tworzymy warunki, w których nauka przychodzi z łatwością, a stres znika.</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-solid fa-users"></i></div>
-                <h3>Klasy do 18 osób</h3>
-                <p>Nauczyciel ma czas dla każdego ucznia. Twoje dziecko nie jest anonimowe – znamy jego talenty i potrzeby.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-solid fa-language"></i></div>
-                <h3>Języki to priorytet</h3>
-                <p>Angielski 5x w tygodniu. Drugi język (Niemiecki/Hiszpański) już od 4. klasy. Native Speakerzy.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-solid fa-person-shelter"></i></div>
-                <h3>Bezpieczeństwo i Opieka</h3>
-                <p>Szkoła wolna od przemocy. Opieka świetlicowa od 7:00 do 17:00 w cenie. Psycholog i pedagog na miejscu.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-solid fa-star"></i></div>
-                <h3>System bez "jedynek"</h3>
-                <p>Nowatorski system punktowy (kl. 4-8) motywuje do systematyczności zamiast stresować ocenami.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-solid fa-flask"></i></div>
-                <h3>Nowoczesna Nauka</h3>
-                <p>Metoda badawcza (Uniwersytet Dzieci), informatyka od 1. klasy, monitory interaktywne w salach.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-solid fa-person-swimming"></i></div>
-                <h3>Sport i Zdrowie</h3>
-                <p>Własny basen (nauka pływania), sala gimnastyczna, siłownia, taniec i Capoeira.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- CODZIENNOŚĆ (3 FILARY) -->
-<section id="codziennosc" class="section" style="background-color: #f8fafc;">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Jak wygląda dzień Twojego dziecka?</h2>
-            <p class="section-subtitle">Zbalansowany rozwój: Mądra nauka, świetna zabawa i czas na pasje.</p>
+    <!-- 2. EKRAN QUIZU -->
+    <div id="quiz-screen">
+        <div class="progress-container">
+            <div class="progress-fill" id="progress"></div>
         </div>
         
-        <div class="pillars-grid">
-            <!-- Filar 1 -->
-            <div class="pillar-card">
-                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2000&auto=format&fit=crop" class="pillar-img" alt="Nauka w szkole">
-                <div class="pillar-content">
-                    <h3>1. Tak się uczymy</h3>
-                    <p>Bez dzwonków, bez hałasu. Stawiamy na eksperymenty i zrozumienie, a nie "kucie na pamięć".</p>
-                    <ul>
-                        <li><i class="fa-solid fa-check"></i> Projekty naukowe i badawcze</li>
-                        <li><i class="fa-solid fa-check"></i> Indywidualne wsparcie nauczyciela</li>
-                        <li><i class="fa-solid fa-check"></i> E-dziennik i nowoczesne pomoce</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Filar 2 -->
-            <div class="pillar-card">
-                <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2000&auto=format&fit=crop" class="pillar-img" alt="Wycieczka szkolna">
-                <div class="pillar-content">
-                    <h3>2. Tak się bawimy</h3>
-                    <p>Budujemy relacje i wspólnotę. Szkoła to miejsce, do którego dzieci przychodzą z uśmiechem.</p>
-                    <ul>
-                        <li><i class="fa-solid fa-check"></i> "Zielone Szkoły" co roku</li>
-                        <li><i class="fa-solid fa-check"></i> Obozy narciarskie i letnie</li>
-                        <li><i class="fa-solid fa-check"></i> Wyjścia do kina, teatru, muzeum</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Filar 3 -->
-            <div class="pillar-card">
-                <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a782?q=80&w=2000&auto=format&fit=crop" class="pillar-img" alt="Zajęcia dodatkowe">
-                <div class="pillar-content">
-                    <h3>3. Tak rozwijamy pasje</h3>
-                    <p>Twoje dziecko nie musi jeździć na zajęcia dodatkowe po całym mieście. Wszystko ma na miejscu.</p>
-                    <ul>
-                        <li><i class="fa-solid fa-check"></i> Szachy i Robotyka</li>
-                        <li><i class="fa-solid fa-check"></i> Taniec, Capoeira, Basen</li>
-                        <li><i class="fa-solid fa-check"></i> Koła zainteresowań (plastyczne, teatralne)</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- OFERTA I CZESNE (KLUCZOWE DLA RODZICA SZUKAJĄCEGO) -->
-<section id="czesne" class="section">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Wszystko w ramach jednej opłaty</h2>
-            <p class="section-subtitle">Przejrzyste zasady. Zobacz, co zyskuje Twoje dziecko w ramach czesnego.</p>
-        </div>
-
-        <div class="tuition-box">
-            <div class="tuition-grid">
-                <div>
-                    <h3 style="color: var(--primary-navy); margin-bottom: 25px; border-bottom: 2px solid var(--accent-yellow); display: inline-block; padding-bottom: 10px;">Edukacja i Opieka</h3>
-                    <ul class="tuition-list">
-                        <li><i class="fa-solid fa-check"></i> Opieka pedagogiczna w godzinach 7:00 - 17:00</li>
-                        <li><i class="fa-solid fa-check"></i> Małe zespoły klasowe (max 18 osób)</li>
-                        <li><i class="fa-solid fa-check"></i> Zajęcia dydaktyczno-wyrównawcze</li>
-                        <li><i class="fa-solid fa-check"></i> Opieka logopedy i pedagoga</li>
-                        <li><i class="fa-solid fa-check"></i> Współpraca z Poradnią Psychologiczno-Pedagogiczną</li>
-                        <li><i class="fa-solid fa-check"></i> Zwiększona liczba godzin dydaktycznych</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 style="color: var(--primary-navy); margin-bottom: 25px; border-bottom: 2px solid var(--accent-yellow); display: inline-block; padding-bottom: 10px;">Rozwój i Zajęcia Dodatkowe</h3>
-                    <ul class="tuition-list">
-                        <li><i class="fa-solid fa-check"></i> Język angielski: 4h (kl. 1) lub 5h (kl. 2-8) tygodniowo</li>
-                        <li><i class="fa-solid fa-check"></i> Drugi język obcy od 4. klasy (Niemiecki/Hiszpański)</li>
-                        <li><i class="fa-solid fa-check"></i> Nauka pływania na basenie</li>
-                        <li><i class="fa-solid fa-check"></i> Informatyka już od 1. klasy</li>
-                        <li><i class="fa-solid fa-check"></i> Szeroka oferta warsztatów (szachy, robotyka, plastyka)</li>
-                        <li><i class="fa-solid fa-check"></i> Przygotowanie do egzaminu ósmoklasisty</li>
-                    </ul>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 40px;">
-                <p style="margin-bottom: 20px; font-size: 14px; color: var(--text-gray);">* Możliwość wykupienia obiadów oraz udziału w dodatkowych wycieczkach i "zielonej szkole".</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- REKRUTACJA (Nowa sekcja) -->
-<section id="rekrutacja" class="section" style="background-color: #f8fafc;">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Rekrutacja na rok 2026/2027</h2>
-            <p class="section-subtitle">Nabór do klas 1 rozpocznie się <strong>1 września 2025 r.</strong> o godzinie 7:00.</p>
-        </div>
-
-        <div class="recruitment-box">
-            <h3 style="margin-bottom: 20px; color: var(--primary-navy);">Jak zapisać dziecko?</h3>
-            <div class="recruitment-grid">
-                <div>
-                    <ol class="recruitment-steps">
-                        <li>
-                            <strong>Rejestracja Elektroniczna (Formularz)</strong><br>
-                            Pierwszy etap to wypełnienie prostego formularza online. Decyduje kolejność zgłoszeń.
-                        </li>
-                        <li>
-                            <strong>Spotkanie z Dyrekcją</strong><br>
-                            Po weryfikacji zgłoszenia zaprosimy Państwa na indywidualne spotkanie, aby poznać Was i Wasze dziecko.
-                        </li>
-                        <li>
-                            <strong>Podpisanie Umowy</strong><br>
-                            Gwarancją miejsca jest podpisanie umowy o kształcenie i wniesienie opłaty wpisowej.
-                        </li>
-                    </ol>
-                    <a href="#" class="btn-primary" style="margin-top: 20px;">Wypełnij Formularz Zgłoszeniowy</a>
-                </div>
-                
-                <div class="recruitment-form-data">
-                    <h4 style="margin-bottom: 15px; color: var(--primary-navy);"><i class="fa-solid fa-circle-info" style="color: var(--accent-blue); margin-right: 10px;"></i> Przygotuj dane do formularza:</h4>
-                    <p style="margin-bottom: 10px;">Aby proces przebiegł sprawnie, przygotuj wcześniej:</p>
-                    <ul style="list-style: disc; padding-left: 20px; color: var(--text-gray);">
-                        <li>Adres e-mail do kontaktu</li>
-                        <li>PESEL dziecka (Niezmienny!)</li>
-                        <li>Imię i nazwisko dziecka</li>
-                        <li>Imię i nazwisko rodzica/opiekuna</li>
-                        <li>Numer telefonu do kontaktu</li>
-                    </ul>
-                    <p style="font-size: 12px; margin-top: 15px; color: #94a3b8;">* PESEL dziecka jest przypisany do danego zgłoszenia i jest niezmienialny na dalszym etapie.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- PROGRAMY -->
-<section id="programy" class="section">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Programy Partnerskie</h2>
-            <p class="section-subtitle">Współpracujemy z najlepszymi, aby dać dzieciom wiedzę na światowym poziomie.</p>
-        </div>
-        <div class="programs-grid">
-            <div class="program-item">
-                <div class="program-icon"><i class="fa-solid fa-flask"></i></div>
-                <div>
-                    <h4>Uniwersytet Dzieci</h4>
-                    <p style="font-size: 14px;">Warsztaty z naukowcami. Metoda badawcza. Projekty "Planeta Zdrowia" i "Kosmos w klasie".</p>
-                </div>
-            </div>
-            <div class="program-item">
-                <div class="program-icon"><i class="fa-solid fa-leaf"></i></div>
-                <div>
-                    <h4>WWF "Program z Pandą"</h4>
-                    <p style="font-size: 14px;">Edukacja ekologiczna. Kształtowanie postaw prospołecznych i odpowiedzialności za planetę.</p>
-                </div>
-            </div>
-            <div class="program-item">
-                <div class="program-icon"><i class="fa-solid fa-earth-europe"></i></div>
-                <div>
-                    <h4>eTwinning (Erasmus+)</h4>
-                    <p style="font-size: 14px;">Międzynarodowa współpraca szkół. Projekty online z rówieśnikami z całej Europy.</p>
-                </div>
-            </div>
-            <div class="program-item">
-                <div class="program-icon"><i class="fa-solid fa-book-open"></i></div>
-                <div>
-                    <h4>Lekturki spod chmurki</h4>
-                    <p style="font-size: 14px;">Międzynarodowy projekt czytelniczy. Odczarowujemy lektury i uczymy miłości do książek.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- KADRA -->
-<section id="kadra" class="section" style="background-color: #f1f5f9;">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Kadra, która inspiruje</h2>
-            <p class="section-subtitle">Profesjonaliści z pasją i sercem do dzieci.</p>
-        </div>
+        <span class="main-icon" id="question-icon" style="font-size: 60px;">⚽</span>
         
-        <div class="staff-list">
-            <div class="staff-item">
-                <div class="staff-avatar">MW</div>
-                <div class="staff-info"><h4>mgr Magdalena Wontek</h4><span>Dyrektor Szkoły</span></div>
-            </div>
-            <div class="staff-item">
-                <div class="staff-avatar">BB</div>
-                <div class="staff-info"><h4>mgr Barbara Bucka</h4><span>Wicedyrektor ds. Dydaktycznych</span></div>
-            </div>
-            <div class="staff-item">
-                <div class="staff-avatar">RG</div>
-                <div class="staff-info"><h4>mgr Robert Górniak</h4><span>Wicedyrektor ds. Komunikacji</span></div>
-            </div>
-            <div class="staff-item">
-                <div class="staff-avatar">AP</div>
-                <div class="staff-info"><h4>dr Anna Pierzchała</h4><span>Psycholog, Terapeuta</span></div>
-            </div>
-            <div class="staff-item">
-                <div class="staff-avatar">UR</div>
-                <div class="staff-info"><h4>mgr Urszula Rogalska</h4><span>Pedagog specjalny</span></div>
-            </div>
-            <div class="staff-item">
-                <div class="staff-avatar">SW</div>
-                <div class="staff-info"><h4>mgr Szymon Wojciechowski</h4><span>Psycholog</span></div>
-            </div>
+        <div class="question-box" id="question-text">
+            Ładowanie pytania...
         </div>
-    </div>
-</section>
 
-<!-- STOPKA -->
-<footer id="kontakt" class="footer">
-    <div class="container">
-        <div class="footer-grid">
-            <div>
-                <h4 style="color: var(--accent-yellow);">ZSP "Twoja Przyszłość"</h4>
-                <p>Szkoła podstawowa z uprawnieniami szkoły publicznej. Edukacja z pasją od 1994 roku.</p>
-                <div style="margin-top: 20px;">
-                    NIP: 6443353628<br>
-                    REGON: 243095660
-                </div>
-            </div>
-            <div>
-                <h4>Kontakt</h4>
-                <ul>
-                    <li><i class="fa-solid fa-location-dot"></i> ul. Zegadłowicza 1, 41-200 Sosnowiec</li>
-                    <li><i class="fa-solid fa-phone"></i> 32 299 91 79</li>
-                    <li><i class="fa-solid fa-envelope"></i> szkola@psp5.pl</li>
-                    <li><i class="fa-solid fa-clock"></i> Pon - Pt: 7:00 - 17:00</li>
-                </ul>
-            </div>
-            <div>
-                <h4>Rekrutacja</h4>
-                <p>Nabór do klas 1 na rok 2026/2027 rozpocznie się 1 września 2025 r.</p>
-                <a href="#rekrutacja" style="color: var(--accent-yellow); text-decoration: none; font-weight: 700;">Wypełnij formularz zgłoszeniowy <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
+        <div class="options-grid" id="options-container">
+            <!-- Przyciski generowane przez JS -->
         </div>
-        <div class="copyright">
-            &copy; 2025 Zespół Szkół Prywatnych "Twoja Przyszłość". Wszelkie prawa zastrzeżone.
-        </div>
+
+        <div class="feedback" id="feedback-text"></div>
     </div>
-</footer>
+
+    <!-- 3. EKRAN WYNIKU -->
+    <div id="result-screen">
+        <span class="main-icon pulse-anim" id="result-icon">🏆</span>
+        <h1 id="result-title">Koniec Meczu!</h1>
+        <p id="result-subtitle">Twoja drużyna spisała się na medal.</p>
+        <div class="score-display" id="final-score">Wynik: 0/0</div>
+        <p id="result-message" style="font-size: 20px; font-weight: 600;"></p>
+        <button class="big-btn" style="background-color: var(--accent-color); color: #333;" onclick="restartQuiz()">ZAGRAJ JESZCZE RAZ 🔄</button>
+    </div>
+</div>
+
+<script>
+    // Baza pytań (Wiedza o zdrowiu)
+    const questions = [
+        {
+            question: "Co robisz, gdy czujesz się źle (np. boli gardło)?",
+            icon: "🤒",
+            answers: [
+                "Nikomu nie mówię i idę biegać",
+                "Mówię rodzicom i odpoczywam",
+                "Jem dużo lodów na pocieszenie"
+            ],
+            correct: 1
+        },
+        {
+            question: "Dlaczego podczas choroby mamy gorączkę?",
+            icon: "🌡️",
+            answers: [
+                "Bo organizm walczy z wirusami (podgrzewa je)",
+                "Bo zjedliśmy za gorącą zupę",
+                "Bo na dworze jest upał"
+            ],
+            correct: 0
+        },
+        {
+            question: "Co to są 'choroby przewlekłe' (np. cukrzyca)?",
+            icon: "🗓️",
+            answers: [
+                "To katar, który trwa jeden dzień",
+                "To choroby, które są z nami długo, ale mamy na nie plan",
+                "To choroby, przez które nie można się bawić"
+            ],
+            correct: 1
+        },
+        {
+            question: "Jak pomóc choremu bratu lub siostrze?",
+            icon: "🤫",
+            answers: [
+                "Podać wodę i zachować ciszę",
+                "Skakać po ich łóżku",
+                "Włączyć głośno bajki"
+            ],
+            correct: 0
+        },
+        {
+            question: "Jaki jest najlepszy trening, żeby NIE zachorować?",
+            icon: "🛡️",
+            answers: [
+                "Granie na tablecie cały dzień",
+                "Mycie rąk, warzywa i sen",
+                "Jedzenie cukierków zamiast obiadu"
+            ],
+            correct: 1
+        },
+        {
+            question: "Po co idziemy do lekarza?",
+            icon: "🩺",
+            answers: [
+                "Żeby dostać naklejkę 'Dzielny Pacjent'",
+                "Żeby lekarz sprawdził, jak nas wyleczyć",
+                "Żeby pobawić się zabawkami w poczekalni"
+            ],
+            correct: 1
+        },
+        {
+            question: "Kiedy można brać lekarstwa?",
+            icon: "💊",
+            answers: [
+                "Kiedy tylko mamy ochotę",
+                "Tylko wtedy, gdy podają je rodzice",
+                "Zawsze, gdy są słodkie"
+            ],
+            correct: 1
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let isAnswering = false;
+
+    // Funkcja startująca quiz (przełącza ekrany)
+    function startQuiz() {
+        document.getElementById("start-screen").style.display = "none";
+        document.getElementById("quiz-screen").style.display = "block";
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        isAnswering = true;
+        const q = questions[currentQuestionIndex];
+        
+        document.getElementById("question-text").innerText = q.question;
+        document.getElementById("question-icon").innerText = q.icon;
+        document.getElementById("feedback-text").innerHTML = "";
+        
+        // Pasek postępu
+        const progressPercent = (currentQuestionIndex / questions.length) * 100;
+        document.getElementById("progress").style.width = progressPercent + "%";
+
+        // Generowanie przycisków
+        const optionsContainer = document.getElementById("options-container");
+        optionsContainer.innerHTML = ""; 
+
+        q.answers.forEach((answer, index) => {
+            const btn = document.createElement("button");
+            btn.innerText = answer;
+            btn.className = "option-btn";
+            btn.onclick = () => checkAnswer(index, btn);
+            
+            // Animacja wejścia przycisków
+            btn.style.animation = `fadeIn 0.5s ease ${index * 0.1}s forwards`;
+            btn.style.opacity = "0"; // Start ukryty
+            
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedIndex, btnElement) {
+        if (!isAnswering) return; 
+        isAnswering = false;
+
+        const q = questions[currentQuestionIndex];
+        const buttons = document.querySelectorAll(".option-btn");
+
+        // Zatrzymujemy animacje fadeIn, żeby style się nie gryzły
+        buttons.forEach(b => b.style.animation = 'none');
+        buttons.forEach(b => b.style.opacity = '1');
+
+        if (selectedIndex === q.correct) {
+            btnElement.classList.add("correct");
+            score++;
+            document.getElementById("feedback-text").innerHTML = "<span style='color:var(--correct-color)'>GOL! Brawo! ⚽</span>";
+        } else {
+            btnElement.classList.add("wrong");
+            buttons[q.correct].classList.add("correct");
+            document.getElementById("feedback-text").innerHTML = "<span style='color:var(--wrong-color)'>Pudło! Gramy dalej! ❌</span>";
+        }
+
+        setTimeout(() => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }, 2000);
+    }
+
+    function showResult() {
+        document.getElementById("quiz-screen").style.display = "none";
+        document.getElementById("result-screen").style.display = "block";
+        document.getElementById("progress").style.width = "100%";
+
+        document.getElementById("final-score").innerText = `Twój Wynik: ${score} / ${questions.length}`;
+
+        let title, subtitle, message, icon;
+        
+        if (score === questions.length) {
+            title = "MISTRZOWIE! 🏆";
+            icon = "🥇";
+            subtitle = "Złoty Puchar jest Twój!";
+            message = "Jesteś Kapitanem Zdrowia! Twoja wiedza jest bezbłędna.";
+            startConfetti();
+        } else if (score > questions.length / 2) {
+            title = "WICEMISTRZOWIE! 🥈";
+            icon = "🥈";
+            subtitle = "Świetny mecz!";
+            message = "Wiesz bardzo dużo! Jeszcze chwila treningu i będziesz ekspertem.";
+            startConfetti();
+        } else {
+            title = "DOBRY TRENING! 🥉";
+            icon = "🥉";
+            subtitle = "Dzięki za walkę!";
+            message = "Najważniejsza jest nauka. Spróbuj jeszcze raz, żeby poprawić taktykę!";
+        }
+
+        document.getElementById("result-title").innerText = title;
+        document.getElementById("result-icon").innerText = icon;
+        document.getElementById("result-subtitle").innerText = subtitle;
+        document.getElementById("result-message").innerText = message;
+    }
+
+    function restartQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        stopConfetti();
+        document.getElementById("result-screen").style.display = "none";
+        // Wracamy do ekranu startowego
+        document.getElementById("start-screen").style.display = "block";
+    }
+
+    function startConfetti() {
+        const container = document.getElementById("confetti-box");
+        container.style.display = "block";
+        container.innerHTML = "";
+        const colors = ['#007bff', '#ffc107', '#2ecc71', '#e74c3c'];
+
+        for (let i = 0; i < 60; i++) {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+            confetti.style.left = Math.random() * 100 + "%";
+            confetti.style.animationDuration = (Math.random() * 3 + 2) + "s";
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            container.appendChild(confetti);
+        }
+    }
+
+    function stopConfetti() {
+        document.getElementById("confetti-box").style.display = "none";
+    }
+
+</script>
 
 </body>
 </html>
